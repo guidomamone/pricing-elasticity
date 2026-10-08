@@ -1,0 +1,13 @@
+# Personal data and secrets: never commit these
+profile/
+ratings_*.csv
+final_*.csv
+list_*.csv
+cand_*.csv
+directors_you_like.csv
+tmdb_cache.json
+
+# IMDb public datasets (large, re-downloadable)
+imdb_data/
+
+__pycache__/
