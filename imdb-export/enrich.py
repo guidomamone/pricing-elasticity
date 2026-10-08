@@ -28,6 +28,23 @@ SERVICES = [
     ("Tubi", ("tubi",)),
 ]
 
+# Temporary overrides (they do not change your usual setup):
+#   ENRICH_ONLY=Netflix        keep only that service
+#   ENRICH_COUNTRIES=AR,US     countries to show (default: SHOW_COUNTRIES above)
+#   ENRICH_PREFIX=netflix_     write netflix_final_*.csv instead of final_*.csv
+ONLY = os.environ.get("ENRICH_ONLY", "").strip()
+if ONLY:
+    SERVICES = [s for s in SERVICES if s[0].lower() == ONLY.lower()]
+    if not SERVICES:
+        sys.exit(f"No conozco el servicio {ONLY!r}. Opciones: Paramount+, Peacock, Netflix, Disney+, Hulu, Prime Video, Apple TV, HBO Max, Crunchyroll, Tubi")
+    DISABLED_SERVICES = set()
+if os.environ.get("ENRICH_COUNTRIES", "").strip():
+    SHOW_COUNTRIES = tuple(x.strip().upper() for x in os.environ["ENRICH_COUNTRIES"].split(","))
+    if not set(SHOW_COUNTRIES) <= set(COUNTRIES):
+        sys.exit(f"Paises validos: {', '.join(COUNTRIES)}")
+PREFIX = os.environ.get("ENRICH_PREFIX", "")
+ALLOWED = {s[0] for s in SERVICES}
+
 try:
     import certifi
     CTX = ssl.create_default_context(cafile=certifi.where())
@@ -140,7 +157,7 @@ def my_services(names):
                 if low.startswith(prefixes):
                     label = lab
                     break
-        if label and label not in out and label not in DISABLED_SERVICES:
+        if label and label in ALLOWED and label not in out and label not in DISABLED_SERVICES:
             out.append(label)
     return out
 
@@ -175,7 +192,7 @@ def write(fn, rows, fields):
         w.writerows(rows)
 
 counts = {}
-for name, fn in (("a", "final_a.csv"), ("b", "final_b.csv")):
+for name, fn in (("a", PREFIX + "final_a.csv"), ("b", PREFIX + "final_b.csv")):
     rows = [dict(r, where=where(r["const"])) for r in lists[name] if ok(r["const"]) and long_enough(r["runtime"])]
     write(fn, rows, ["title", "year", "runtime", "imdb_rating", "director", "your_films_by_them",
                      "your_average_for_them", "where"])
@@ -189,8 +206,8 @@ for r in lists["anim"]:
     row = dict(r, where=where(c))
     (anime if cache[c]["lang"] == "ja" else western).append(row)
 fields = ["title", "year", "runtime", "imdb_rating", "director", "where"]
-write("final_anim.csv", western, fields)
-write("final_anime.csv", anime, fields)
+write(PREFIX + "final_anim.csv", western, fields)
+write(PREFIX + "final_anime.csv", anime, fields)
 counts["anim"] = (len(lists["anim"]), len(western))
 counts["anime"] = (len(lists["anim"]), len(anime))
 
@@ -200,7 +217,7 @@ for r in lists["c"]:
     if keep:
         start = "; ".join(f"{f['title']} ({f['year']}, {f['rt']}) {f['rating']} [{where(f['id'])}]" for f in keep)
         rows_c.append({"director": r["director"], "start_with": start})
-write("final_c.csv", rows_c, ["director", "start_with"])
+write(PREFIX + "final_c.csv", rows_c, ["director", "start_with"])
 counts["c"] = (len(lists["c"]), len(rows_c))
 
 print("\nResultado (candidatas -> en tus servicios, 60 min o mas):")

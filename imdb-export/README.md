@@ -63,6 +63,19 @@ Están como constantes al principio de cada script.
 
 Si cambiás `EXCLUDE_LANGS` en uno, ponelo igual en el otro.
 
+### Excepción temporal por servicio o país
+
+Sin tocar la configuración de siempre, `enrich.py` y `view.py` aceptan variables de entorno. Los resultados van a archivos con prefijo, así que los `final_*.csv` normales no se pisan:
+
+```
+ENRICH_ONLY=Netflix ENRICH_PREFIX=netflix_ python3 enrich.py
+VIEW_PREFIX=netflix_ python3 view.py
+```
+
+- `ENRICH_ONLY`: un solo servicio (Paramount+, Peacock, Netflix, Disney+, Hulu, Prime Video, Apple TV, HBO Max, Crunchyroll o Tubi).
+- `ENRICH_COUNTRIES`: `AR`, `US` o `AR,US` (por defecto, lo que diga `SHOW_COUNTRIES`).
+- `ENRICH_PREFIX` y `VIEW_PREFIX`: prefijo de los archivos de salida.
+
 ## Notas
 
 - El filtro de cine indio usa el idioma original que informa TMDB. `directors.py` hace una primera pasada aproximada con `title.akas` para no consultar de más.
