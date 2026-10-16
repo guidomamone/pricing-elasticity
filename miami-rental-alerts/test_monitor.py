@@ -79,13 +79,18 @@ class FilterTests(unittest.TestCase):
         self.assertIn("<b>1050 Brickell Ave, #1512</b>", msg)
         self.assertIn("Search on Zillow", msg)
 
+    def test_digest_single_message_with_empty_sections(self):
+        self.assertEqual(monitor.build_digest([("A", []), ("B", [])]),
+                         [("A\n\nNothing new today.\n\nB\n\nNothing new today.", [])])
+
     def test_digest_chunking(self):
         items = [(listing(str(i), "2333 Brickell Ave"), "x" * 1000) for i in range(10)]
-        parts = monitor.build_digests("HEAD", items, limit=3800)
+        parts = monitor.build_digest([("HEAD1", items), ("HEAD2", [])], limit=3800)
         self.assertGreater(len(parts), 1)
         self.assertTrue(all(len(text) <= 3800 for text, _ in parts))
         self.assertEqual(sum(len(g) for _, g in parts), 10)
-        self.assertEqual(monitor.build_digests("HEAD", []), [])
+        self.assertIn("HEAD1 (cont.)", parts[1][0])
+        self.assertTrue(parts[-1][0].endswith("HEAD2\n\nNothing new today."))
 
 
 class RunTests(unittest.TestCase):
@@ -101,7 +106,7 @@ class RunTests(unittest.TestCase):
     def texts(self, send):
         return [c.args[2] for c in send.call_args_list]
 
-    def test_two_lists_no_repeats(self):
+    def test_two_lists_one_message_no_repeats(self):
         data = [listing("a", "2333 Brickell Ave"),                       # tennis building
                 listing("b", "1627 Brickell Ave", zip_="33131"),         # tennis building, other zip
                 listing("c", "1050 Brickell Ave", zip_="33131"),         # general Brickell
@@ -109,20 +114,22 @@ class RunTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main(data, tmp)
             texts = self.texts(send)
-            self.assertEqual(len(texts), 2)
-            self.assertIn("Tennis-court buildings: 2 new", texts[0])
-            self.assertIn("Brickell, other buildings: 1 new", texts[1])
-            self.assertIn("2333 Brickell Ave", texts[0])
-            self.assertIn("1627 Brickell Ave", texts[0])
-            self.assertNotIn("2333 Brickell Ave", texts[1])
-            self.assertNotIn("1627 Brickell Ave", texts[1])
-            self.assertIn("1050 Brickell Ave", texts[1])
+            self.assertEqual(len(texts), 1)
+            tennis, brickell = texts[0].split("🏙")
+            self.assertIn("Tennis-court buildings: 2 new", tennis)
+            self.assertIn("Brickell, other buildings: 1 new", brickell)
+            self.assertIn("2333 Brickell Ave", tennis)
+            self.assertIn("1627 Brickell Ave", tennis)
+            self.assertNotIn("2333 Brickell Ave", brickell)
+            self.assertNotIn("1627 Brickell Ave", brickell)
+            self.assertIn("1050 Brickell Ave", brickell)
             self.assertEqual(sorted(state["seen"]), ["a", "b", "c"])
             self.assertEqual(state["quota"]["used"], 1)
             send, state = self.run_main(data, tmp)
-            texts = self.texts(send)  # nothing new: both lists still sent, saying so
-            self.assertEqual(len(texts), 2)
-            self.assertTrue(all("0 new" in x and "Nothing new today." in x for x in texts))
+            texts = self.texts(send)  # nothing new: still one message, both lists saying so
+            self.assertEqual(len(texts), 1)
+            self.assertEqual(texts[0].count("Nothing new today."), 2)
+            self.assertIn("Tennis-court buildings: 0 new", texts[0])
             self.assertEqual(state["quota"]["used"], 2)
 
     def test_lists_sorted_by_price(self):
@@ -138,8 +145,8 @@ class RunTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main(data, tmp)
             texts = self.texts(send)  # both lists empty, and no "filtered out" digest for non-tennis
-            self.assertEqual(len(texts), 2)
-            self.assertTrue(all("Nothing new today." in x for x in texts))
+            self.assertEqual(len(texts), 1)
+            self.assertEqual(texts[0].count("Nothing new today."), 2)
             self.assertEqual(state["seen"], {})
 
     def test_filters_and_skipped_digest(self):
@@ -149,16 +156,16 @@ class RunTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main(data, tmp)
             self.assertEqual(list(state["seen"]), ["a"])
-            texts = [c.args[2] for c in send.call_args_list]
-            self.assertEqual(len(texts), 3)  # tennis list, empty Brickell list, filtered-out digest
-            self.assertIn("Tennis-court buildings: 1 new", texts[0])
-            self.assertIn("Brickell, other buildings: 0 new", texts[1])
-            self.assertIn("Filtered out", texts[2])
-            self.assertEqual(sorted(state["skipped_reported"]), ["b", "c"])
-            send, _ = self.run_main(data, tmp)  # same data next day: empty lists, no repeated digest
             texts = self.texts(send)
-            self.assertEqual(len(texts), 2)
-            self.assertTrue(all("Nothing new today." in x for x in texts))
+            self.assertEqual(len(texts), 2)  # the two lists, then the filtered-out digest
+            self.assertIn("Tennis-court buildings: 1 new", texts[0])
+            self.assertIn("Brickell, other buildings: 0 new", texts[0])
+            self.assertIn("Filtered out", texts[1])
+            self.assertEqual(sorted(state["skipped_reported"]), ["b", "c"])
+            send, _ = self.run_main(data, tmp)  # same data next day: no repeated filtered-out digest
+            texts = self.texts(send)
+            self.assertEqual(len(texts), 1)
+            self.assertEqual(texts[0].count("Nothing new today."), 2)
 
     def test_schema_change_warning(self):
         data = [listing(str(i), "2333 Brickell Ave", bedrooms=None) for i in range(4)]

@@ -3,8 +3,8 @@
 
 One API request per run (search area in buildings.json). New listings are sent to
 Telegram as two lists: tennis-court buildings, and other listings in the Brickell zip
-codes (a tennis-court listing is never repeated in the second list). Both lists are sent
-every run; an empty one says "Nothing new today." State lives in
+codes (a tennis-court listing is never repeated in the second list). Both lists go in one
+message every run; an empty one says "Nothing new today." State lives in
 state.json.
 """
 import argparse
@@ -150,18 +150,27 @@ def format_entry(listing, name, warnings=()):
     return "\n".join(lines)
 
 
-def build_digests(header, items, limit=3800):
-    """items: [(listing, block)]. Returns [(message_text, [listings])], each under Telegram's size limit."""
-    out, text, group = [], header, []
-    for listing, block in items:
-        if group and len(text) + len(block) + 2 > limit:
-            out.append((text, group))
-            text, group = header + " (cont.)", []
-        text += "\n\n" + block
-        group.append(listing)
-    if group:
-        out.append((text, group))
-    return out
+def build_digest(sections, limit=3800):
+    """sections: [(header, [(listing, block)])]. Returns [(message_text, [listings])].
+
+    Everything goes in one message; it is split only if it would exceed Telegram's size
+    limit, repeating the section header with "(cont.)". An empty section says so."""
+    msgs, text, group = [], "", []
+    for header, items in sections:
+        first = True
+        for listing, block in items or [(None, "Nothing new today.")]:
+            piece = (header + "\n\n" if first or not text else "") + block
+            if text and len(text) + 2 + len(piece) > limit:
+                msgs.append((text, group))
+                text, group = "", []
+                piece = (header if first else header + " (cont.)") + "\n\n" + block
+            text = text + "\n\n" + piece if text else piece
+            if listing is not None:
+                group.append(listing)
+            first = False
+    if text:
+        msgs.append((text, group))
+    return msgs
 
 
 def send_telegram(token, chat_id, text):
@@ -241,22 +250,22 @@ def main(argv=None):
 
     headers = {"tennis": "🎾 <b>Tennis-court buildings: {n} new</b>",
                "brickell": "🏙 <b>Brickell, other buildings: {n} new</b>"}
-    new = {}
+    new, digest_sections = {}, []
     for key, entries in sections.items():
         entries.sort(key=lambda e: num(e[0].get("price")) or float("inf"))
         new[key] = len(entries)
         items = [(l, format_entry(l, b["name"] if b else None, w)) for l, b, w in entries]
-        header = headers[key].format(n=len(entries))
-        # An empty list is still sent, so a quiet day is visible and not mistaken for a broken bot.
-        digests = build_digests(header, items) or [(f"{header}\n\nNothing new today.", [])]
-        for text, group in digests:
-            if args.dry_run:
-                print(text + "\n")
-                continue
-            send_telegram(token, chat_id, text)
-            for l in group:
-                state["seen"][l["id"]] = {"first_seen": date.today().isoformat(), "price": l.get("price")}
-            save_state(state)
+        digest_sections.append((headers[key].format(n=len(entries)), items))
+    # One message with both lists. An empty list is still shown, so a quiet day is visible
+    # and not mistaken for a broken bot.
+    for text, group in build_digest(digest_sections):
+        if args.dry_run:
+            print(text + "\n")
+            continue
+        send_telegram(token, chat_id, text)
+        for l in group:
+            state["seen"][l["id"]] = {"first_seen": date.today().isoformat(), "price": l.get("price")}
+        save_state(state)
 
     # Safety nets for parsing problems, all visible in the Actions log.
     for listing, reason in skipped:
