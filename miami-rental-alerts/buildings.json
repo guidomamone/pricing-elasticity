@@ -1,0 +1,28 @@
+{
+  "search": {
+    "latitude": 25.758,
+    "longitude": -80.195,
+    "radius": 2,
+    "status": "Active",
+    "daysOld": 3,
+    "limit": 500
+  },
+  "max_requests_per_month": 45,
+  "buildings": [
+    {
+      "name": "Brickell Bay Club",
+      "street": "Brickell Ave",
+      "numbers": [2333]
+    },
+    {
+      "name": "Brickell Place",
+      "street": "Brickell Ave",
+      "number_range": [1865, 1925]
+    },
+    {
+      "name": "Asia Brickell Key",
+      "street": "Brickell Key Blvd",
+      "numbers": [900]
+    }
+  ]
+}
