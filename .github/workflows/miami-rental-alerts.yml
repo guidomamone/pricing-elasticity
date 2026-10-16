@@ -1,0 +1,39 @@
+name: Miami rental alerts
+
+on:
+  schedule:
+    - cron: "17 13 * * *"  # daily, 9:17am Miami (EDT)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Print alerts instead of sending to Telegram"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: miami-rental-alerts
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run monitor
+        env:
+          RENTCAST_API_KEY: ${{ secrets.RENTCAST_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python miami-rental-alerts/monitor.py ${{ inputs.dry_run && '--dry-run' || '' }}
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "rental-alerts-bot"
+          git config user.email "rental-alerts-bot@users.noreply.github.com"
+          git add miami-rental-alerts/state.json
+          git diff --cached --quiet || (git commit -m "Update rental alerts state" && git push)
