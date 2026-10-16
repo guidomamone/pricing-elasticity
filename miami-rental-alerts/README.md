@@ -1,8 +1,8 @@
 # Miami rental alerts
 
-Daily Telegram alerts for new rental listings in specific Brickell buildings, using the RentCast API (no scraping).
+Daily Telegram alerts for new rentals in Brickell, using the RentCast API (no scraping). Each run sends two lists: (1) new listings in the tennis-court buildings, and (2) new listings in the Brickell zip codes that are not in a tennis-court building, so nothing is repeated.
 
-- `buildings.json`: search area, monthly request cap, and the tracked buildings. Add a building by appending an entry (`numbers` or `number_range`, plus `street`).
+- `buildings.json`: search area, filters (`max_price`, `min_bedrooms`), `brickell_zips` (33129, 33130, 33131), monthly request cap, and the tennis-court buildings. Add a building by appending an entry (`numbers` or `number_range`, plus `street`).
 - `monitor.py`: one API request per run, matched locally to the buildings. New listings go to Telegram. `state.json` stores seen listings and the monthly request count.
 - The RentCast Developer plan includes 50 requests/month, then $0.20 each. The script stops at `max_requests_per_month` (45) so it cannot generate overage fees.
 

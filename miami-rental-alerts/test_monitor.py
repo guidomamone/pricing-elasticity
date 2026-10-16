@@ -9,8 +9,8 @@ import monitor
 BUILDINGS = json.loads(monitor.CONFIG_PATH.read_text())["buildings"]
 
 
-def listing(id_, line1, unit="#1512", price=3200, bedrooms=2):
-    return {"id": id_, "addressLine1": line1, "addressLine2": unit, "price": price,
+def listing(id_, line1, unit="#1512", price=3200, bedrooms=2, zip_="33129"):
+    return {"id": id_, "addressLine1": line1, "addressLine2": unit, "price": price, "zipCode": zip_,
             "bedrooms": bedrooms, "bathrooms": 2, "daysOnMarket": 4, "squareFootage": 1100,
             "formattedAddress": f"{line1}, {unit}, Miami, FL 33129", "listedDate": "2026-10-14T00:00:00.000Z"}
 
@@ -68,10 +68,24 @@ class FilterTests(unittest.TestCase):
     def test_numeric_strings_parse(self):
         self.assertEqual(self.check(price="3500", bedrooms="2"), (None, []))
 
-    def test_message_has_days_on_market_and_warning(self):
-        msg = monitor.format_message(listing("a", "2333 Brickell Ave"), BUILDINGS[0], ["bedrooms missing"])
-        self.assertIn("Days on market: 4", msg)
+    def test_entry_has_days_on_market_and_warning(self):
+        msg = monitor.format_entry(listing("a", "2333 Brickell Ave"), "Brickell Bay Club", ["bedrooms missing"])
+        self.assertIn("4d on market", msg)
         self.assertIn("⚠️ bedrooms missing", msg)
+        self.assertIn("<b>Brickell Bay Club #1512</b>", msg)
+
+    def test_general_brickell_entry_uses_address_as_title(self):
+        msg = monitor.format_entry(listing("a", "1050 Brickell Ave"), None)
+        self.assertIn("<b>1050 Brickell Ave, #1512</b>", msg)
+        self.assertIn("Search on Zillow", msg)
+
+    def test_digest_chunking(self):
+        items = [(listing(str(i), "2333 Brickell Ave"), "x" * 1000) for i in range(10)]
+        parts = monitor.build_digests("HEAD", items, limit=3800)
+        self.assertGreater(len(parts), 1)
+        self.assertTrue(all(len(text) <= 3800 for text, _ in parts))
+        self.assertEqual(sum(len(g) for _, g in parts), 10)
+        self.assertEqual(monitor.build_digests("HEAD", []), [])
 
 
 class RunTests(unittest.TestCase):
@@ -84,15 +98,45 @@ class RunTests(unittest.TestCase):
             monitor.main(list(argv))
         return send, json.loads((Path(tmp) / "state.json").read_text())
 
-    def test_alerts_once(self):
-        data = [listing("a", "2333 Brickell Ave"), listing("b", "10 Other St")]
+    def texts(self, send):
+        return [c.args[2] for c in send.call_args_list]
+
+    def test_two_lists_no_repeats(self):
+        data = [listing("a", "2333 Brickell Ave"),                       # tennis building
+                listing("b", "1627 Brickell Ave", zip_="33131"),         # tennis building, other zip
+                listing("c", "1050 Brickell Ave", zip_="33131"),         # general Brickell
+                listing("d", "10 Other St", zip_="33140")]               # outside Brickell
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main(data, tmp)
-            self.assertEqual(send.call_count, 1)
+            texts = self.texts(send)
+            self.assertEqual(len(texts), 2)
+            self.assertIn("Tennis-court buildings: 2 new", texts[0])
+            self.assertIn("Brickell, other buildings: 1 new", texts[1])
+            self.assertIn("2333 Brickell Ave", texts[0])
+            self.assertIn("1627 Brickell Ave", texts[0])
+            self.assertNotIn("2333 Brickell Ave", texts[1])
+            self.assertNotIn("1627 Brickell Ave", texts[1])
+            self.assertIn("1050 Brickell Ave", texts[1])
+            self.assertEqual(sorted(state["seen"]), ["a", "b", "c"])
             self.assertEqual(state["quota"]["used"], 1)
             send, state = self.run_main(data, tmp)
             self.assertEqual(send.call_count, 0)
             self.assertEqual(state["quota"]["used"], 2)
+
+    def test_lists_sorted_by_price(self):
+        data = [listing("a", "2333 Brickell Ave", price=4000), listing("b", "2333 Brickell Ave", price=3000)]
+        with tempfile.TemporaryDirectory() as tmp:
+            send, _ = self.run_main(data, tmp)
+            text = self.texts(send)[0]
+            self.assertLess(text.index("$3,000"), text.index("$4,000"))
+
+    def test_general_brickell_filtered_silently(self):
+        data = [listing("a", "1050 Brickell Ave", zip_="33131", price=5000),
+                listing("b", "1060 Brickell Ave", zip_="33131", bedrooms=1)]
+        with tempfile.TemporaryDirectory() as tmp:
+            send, state = self.run_main(data, tmp)
+            self.assertEqual(send.call_count, 0)  # no list, and no "filtered out" digest for non-tennis
+            self.assertEqual(state["seen"], {})
 
     def test_filters_and_skipped_digest(self):
         data = [listing("a", "2333 Brickell Ave", price=4200),
@@ -102,7 +146,8 @@ class RunTests(unittest.TestCase):
             send, state = self.run_main(data, tmp)
             self.assertEqual(list(state["seen"]), ["a"])
             texts = [c.args[2] for c in send.call_args_list]
-            self.assertEqual(len(texts), 2)  # 1 alert + 1 digest
+            self.assertEqual(len(texts), 2)  # tennis list + filtered-out digest
+            self.assertIn("Tennis-court buildings: 1 new", texts[0])
             self.assertIn("Filtered out", texts[1])
             self.assertEqual(sorted(state["skipped_reported"]), ["b", "c"])
             send, _ = self.run_main(data, tmp)  # same data next day: nothing new to report
