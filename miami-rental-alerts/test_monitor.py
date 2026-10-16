@@ -150,9 +150,10 @@ class RunTests(unittest.TestCase):
             send, state = self.run_main(data, tmp)
             self.assertEqual(list(state["seen"]), ["a"])
             texts = [c.args[2] for c in send.call_args_list]
-            self.assertEqual(len(texts), 2)  # tennis list + filtered-out digest
+            self.assertEqual(len(texts), 3)  # tennis list, empty Brickell list, filtered-out digest
             self.assertIn("Tennis-court buildings: 1 new", texts[0])
-            self.assertIn("Filtered out", texts[1])
+            self.assertIn("Brickell, other buildings: 0 new", texts[1])
+            self.assertIn("Filtered out", texts[2])
             self.assertEqual(sorted(state["skipped_reported"]), ["b", "c"])
             send, _ = self.run_main(data, tmp)  # same data next day: empty lists, no repeated digest
             texts = self.texts(send)
