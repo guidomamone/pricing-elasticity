@@ -1,0 +1,238 @@
+name,address,neighborhood,city,year_built,courts,status,note
+1000 Venetian Way,1000 Venetian Way,Venetian Islands,Miami Beach,1983,2,excluded,"Venetian Islands, Miami Beach: far from Brickell"
+400 Sunny Isles,400 Sunny Isles Blvd,Aventura,Aventura,2015,2,excluded,"Aventura, Aventura: far from Brickell"
+Admirals Port,2851 NE 183rd St,Aventura,Aventura,1974,3,excluded,"Aventura, Aventura: far from Brickell"
+Akoya,6365 Collins Ave,North Beach,Miami Beach,2004,1,excluded,"North Beach, Miami Beach: far from Brickell"
+Arlen House,100 Bayview,Sunny Isles Beach,Sunny Isles Beach,1984,4,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Artech,2950 NE 188th St,Aventura,Aventura,2008,2,excluded,"Aventura, Aventura: far from Brickell"
+Atlantic I at the Point,21200 Point Pl,Aventura,Aventura,2004,4,excluded,"Aventura, Aventura: far from Brickell"
+Atlantic II at the Point,21150 Point Pl,Aventura,Aventura,1996,4,excluded,"Aventura, Aventura: far from Brickell"
+Atlantic III at the Point,21050 Point Pl,Aventura,Aventura,2000,4,excluded,"Aventura, Aventura: far from Brickell"
+Atlantis on Brickell,2025 Brickell Ave,Brickell,Miami,1982,1,tracked,
+Aventura Marina,3340 NE 190th St,Aventura,Aventura,2005,,excluded,"Aventura, Aventura: far from Brickell"
+Aventura Marina II,3330 NE 190th St,Aventura,Aventura,2007,,excluded,"Aventura, Aventura: far from Brickell"
+Bal Harbour 101,10155 Collins Ave,Bal Harbour,Bal Harbour,1977,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
+Bal Harbour Tower,9999 Collins Ave,Bal Harbour,Bal Harbour,1990,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
+Balmoral,9801 Collins Ave,Bal Harbour,Bal Harbour,1977,3,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
+Bath Club,5959 Collins Ave,Mid-Beach,Miami Beach,2005,2,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Bay Park Towers,3301 NE 5th Ave,Edgewater,Miami,1961,1,excluded,Edgewater: excluded by owner
+Bayshore Yacht & Tennis,7904 West,North Bay Village,North Bay Village,1963,3,excluded,"North Bay Village, North Bay Village: far from Brickell"
+Bayside Village,2031 Fisher Island Dr,Fisher Island,Fisher Island,1988,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Belle Plaza,20 Island Ave,South Beach,Miami Beach,1962,1,excluded,"South Beach, Miami Beach: far from Brickell"
+Bellini Williams Island,4100 Island Blvd,Aventura,Aventura,2013,4,excluded,"Aventura, Aventura: far from Brickell"
+Biscayne 21,2121 N Bayshore Dr,Edgewater,Miami,1964,2,excluded,Edgewater: excluded by owner
+Biscayne Beach,2900 NE 7 Ave,Edgewater,Miami,2017,2,excluded,Edgewater: excluded by owner
+Biscayne Cove,18181 NE 31st Ct,Aventura,Aventura,1981,3,excluded,"Aventura, Aventura: far from Brickell"
+Blue Diamond,4779 Collins Ave,Mid-Beach,Miami Beach,2000,2,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Brickell Bay Club,2333 Brickell Ave,Brickell,Miami,1974,5,tracked,
+Brickell Harbour,200 SE 15th Rd,Brickell,Miami,1974,2,tracked,
+Brickell Key I,"520 Brickell Key Dr (address assumed, source list gave only 'Brickell Key Dr')",Brickell,Miami,1982,5,tracked,
+Brickell Key II,540 Brickell Key Dr,Brickell,Miami,1991,5,tracked,
+Brickell Place I,1901 Brickell Ave,Brickell,Miami,1975,6,tracked,
+Brickell Place II,1915 Brickell Ave,Brickell,Miami,1980,6,tracked,
+Brickell Place III,1925 Brickell Ave,Brickell,Miami,1980,6,tracked,
+Brickell Townhouse,2451 Brickell Ave,Brickell,Miami,1963,2,tracked,
+Bristol Tower,2127 Brickell Ave,Brickell,Miami,1993,1,tracked,
+Cape Florida Club,210 Seaview Dr,Key Biscayne,Key Biscayne,1972,1,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Carbonell,901 Brickell Key Blvd,Brickell,Miami,2005,5,tracked,
+Carriage House,5401 Collins Ave,Mid-Beach,Miami Beach,1990,3,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Casa Del Mar,881 Ocean Drive,Key Biscayne,Key Biscayne,1971,2,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Castle Beach Club,5445 Collins Ave,Mid-Beach,Miami Beach,1966,1,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Clipper,880 NE 69th St,Upper East Side,Miami,1965,1,excluded,"Upper East Side, Miami: far from Brickell"
+Cloisters On The Bay,3471 Main Hwy,Coconut Grove,Miami,2004,1,excluded,Coconut Grove: excluded by owner
+Coconut Grove Bayshore,2575 S Bayshore Dr,Coconut Grove,Miami,1982,1,excluded,Coconut Grove: excluded by owner
+Commodore Club East,177 Ocean Lane Dr,Key Biscayne,Key Biscayne,1971,4,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Commodore Club South,199 Ocean Lane Dr,Key Biscayne,Key Biscayne,1974,4,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Commodore Club West,155 Ocean Lane Dr,Key Biscayne,Key Biscayne,1973,4,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Commodore Plaza,2750 NE 183rd St,Aventura,Aventura,1971,2,excluded,"Aventura, Aventura: far from Brickell"
+Conrad Mayfield,1395 Brickell Ave,Brickell,Miami,2003,2,tracked,
+Continuum I South,100 S Pointe Dr,South Beach,Miami Beach,2002,3,excluded,"South Beach, Miami Beach: far from Brickell"
+Continuum II North,50 S Pointe Dr,South Beach,Miami Beach,2002,3,excluded,"South Beach, Miami Beach: far from Brickell"
+Coronado I,20335 W Country Club Dr,Aventura,Aventura,1975,,excluded,"Aventura, Aventura: far from Brickell"
+Coronado III,20379 W Country Club Dr,Aventura,Aventura,1975,,excluded,"Aventura, Aventura: far from Brickell"
+Costa Bella,1450 Brickell Bay Dr,Brickell,Miami,1977,2,tracked,
+Courts Condo Brickell Key,801 Brickell Key Blvd,Brickell,Miami,2002,5,tracked,
+Courtyards At The Point,3733 NE 214th St,Aventura,Aventura,1995,4,excluded,"Aventura, Aventura: far from Brickell"
+Courvoisier Courts,701 Brickell Key Blvd,Brickell,Miami,1997,5,tracked,
+Cricket Club Miami,1800 NE 114 St,Biscayne Corridor North,Miami,1975,7,excluded,"Biscayne Corridor North, Miami: far from Brickell"
+Del Prado on the Bay I,18031 Biscayne Blvd,Aventura,Aventura,1971,2,excluded,"Aventura, Aventura: far from Brickell"
+Del Prado on the Bay II,18081 Biscayne Blvd,Aventura,Aventura,1971,2,excluded,"Aventura, Aventura: far from Brickell"
+Delvista,20314 NE 34th Ct,Aventura,Aventura,1981,5,excluded,"Aventura, Aventura: far from Brickell"
+Eloquence on the Bay,7930 East Dr,North Bay Village,North Bay Village,2009,1,excluded,"North Bay Village, North Bay Village: far from Brickell"
+Floridian,650 West Ave,South Beach,Miami Beach,1997,1,excluded,"South Beach, Miami Beach: far from Brickell"
+G B Resort Hotel,455 Grand Bay Dr,Key Biscayne,Key Biscayne,2001,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Garden View,1530 Island Blvd,Aventura,Aventura,2007,,excluded,"Aventura, Aventura: far from Brickell"
+Gran Paraiso,480 NE 31 St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
+Grand Bay Residences,445 Grand Bay Dr,Key Biscayne,Key Biscayne,1996,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Grand Bay Ritz Carlton,455 Grand Bay Dr,Key Biscayne,Key Biscayne,2001,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Grand Bay Tower,430 Grand Bay Dr,Key Biscayne,Key Biscayne,1999,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Grand Venetian,10 Venetian Way,Venetian Islands,Miami Beach,2001,1,excluded,"Venetian Islands, Miami Beach: far from Brickell"
+Green Diamond,4775 Collins Ave,Mid-Beach,Miami Beach,2000,2,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Grove At Grand Bay,2675 S Bayshore Dr,Coconut Grove,Miami,2016,1,excluded,Coconut Grove: excluded by owner
+Grove Hill Tower,2645 S Bayshore Dr,Coconut Grove,Miami,1996,2,excluded,Coconut Grove: excluded by owner
+Grove Towers,2843 S Bayshore Dr,Coconut Grove,Miami,1982,2,excluded,Coconut Grove: excluded by owner
+Grovenor House,2627 S Bayshore Dr,Coconut Grove,Miami,2006,1,excluded,Coconut Grove: excluded by owner
+Hamptons South,20201 E Country Club Dr,Aventura,Aventura,2004,4,excluded,"Aventura, Aventura: far from Brickell"
+Harbor Towers,3598 Yacht Club Dr,Aventura,Aventura,1993,,excluded,"Aventura, Aventura: far from Brickell"
+Harborside,3640 Yacht Club Dr,Aventura,Aventura,1991,2,excluded,"Aventura, Aventura: far from Brickell"
+Harborview,4631 Fisher Island Dr,Fisher Island,Fisher Island,1989,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Hidden Bay,3370 Hidden Bay Dr,Aventura,Aventura,2000,3,excluded,"Aventura, Aventura: far from Brickell"
+Hyde Midtown,3401 NE 1 Ave,Midtown Miami,Miami,2018,1,excluded,"Midtown Miami, Miami: far from Brickell"
+Icon Bay,460 NE 28 St,Edgewater,Miami,2015,2,excluded,Edgewater: excluded by owner
+ICON South Beach,450 Alton Rd,South Beach,Miami Beach,2005,1,excluded,"South Beach, Miami Beach: far from Brickell"
+Imperial at Brickell,1627 Brickell Ave,Brickell,Miami,1983,1,tracked,
+Isola,770 Claughton Island Dr,Brickell,Miami,1990,1,tracked,
+Jockey Club,11111 Biscayne Blvd,Biscayne Corridor North,Miami,1968,13,excluded,"Biscayne Corridor North, Miami: far from Brickell"
+Jockey Club III,11111 Biscayne Blvd,Biscayne Corridor North,Miami,1968,13,excluded,"Biscayne Corridor North, Miami: far from Brickell"
+Key Colony,251 Crandon Blvd,Key Biscayne,Key Biscayne,1979,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Key Colony I,121 Crandon Blvd,Key Biscayne,Key Biscayne,1981,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Key Colony I - Tidemark,201 Crandon Blvd,Key Biscayne,Key Biscayne,1978,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Key Colony II,251 Crandon Blvd,Key Biscayne,Key Biscayne,1979,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Key Colony IV,181 Crandon Blvd,Key Biscayne,Key Biscayne,1981,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+L Hermitage,2000 S Bayshore Dr,Coconut Grove,Miami,1984,4,excluded,Coconut Grove: excluded by owner
+La Tour,4201 Collins Ave,Mid-Beach,Miami Beach,1995,1,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Lake Tower,765 Crandon Blvd,Key Biscayne,Key Biscayne,2002,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Lake Villa One,721 Crandon Blvd,Key Biscayne,Key Biscayne,2002,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Lake Villa Three,749 Crandon Blvd,Key Biscayne,Key Biscayne,1998,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Lake Villa Two,731 Crandon Blvd,Key Biscayne,Key Biscayne,1996,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Madison Downtown,800 N Miami Ave (map pin: 850 N Miami Ave),Downtown Miami,Miami,1989,2,tracked,
+Majestic Tower,9601 Collins Ave,Bal Harbour,Bal Harbour,1998,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
+Mar Azul,600 Grapetree Drive,Key Biscayne,Key Biscayne,1974,2,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Marina Palms Yacht Club and Residences,17301 Biscayne Blvd,North Miami Beach,North Miami Beach,2015,8,excluded,"North Miami Beach, North Miami Beach: far from Brickell"
+Marina Tower,19500 Turnberry Way,Aventura,Aventura,1982,8,excluded,"Aventura, Aventura: far from Brickell"
+Marina Village,42207 Fisher Island Dr,Fisher Island,Fisher Island,1990,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Mariner Village,21085 NE 34th Ave,Aventura,Aventura,1986,5,excluded,"Aventura, Aventura: far from Brickell"
+Mediterranean Village,3700 Island Blvd,Aventura,Aventura,1989,4,excluded,"Aventura, Aventura: far from Brickell"
+Metropolitan at Brickell,2475 Brickell Ave,Brickell,Miami,2001,2,tracked,
+Milano Condo at Deering Bay,13621 Deering Bay Dr,Coral Gables,Coral Gables,2003,7,excluded,"Coral Gables, Coral Gables: far from Brickell"
+Millenium,18671 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1999,1,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Missoni Baia,700 NE 26 Ter,Edgewater,Miami,2020,1,excluded,Edgewater: excluded by owner
+Murano at Portofino,1000 S Pointe Dr,South Beach,Miami Beach,2002,1,excluded,"South Beach, Miami Beach: far from Brickell"
+Murano Grande,400 Alton Rd,South Beach,Miami Beach,2003,1,excluded,"South Beach, Miami Beach: far from Brickell"
+Mystic Pointe Tower 100,19195 Mystic Pointe Dr,Aventura,Aventura,1989,8,excluded,"Aventura, Aventura: far from Brickell"
+Mystic Pointe Tower 200,19101 Mystic Pointe Dr,Aventura,Aventura,1989,8,excluded,"Aventura, Aventura: far from Brickell"
+Mystic Pointe Tower 300,3600 Mystic Pointe Dr,Aventura,Aventura,1988,8,excluded,"Aventura, Aventura: far from Brickell"
+Mystic Pointe Tower 400,3500 Mystic Pointe Dr,Aventura,Aventura,1991,8,excluded,"Aventura, Aventura: far from Brickell"
+Mystic Pointe Tower 500,3530 Mystic Pointe Dr,Aventura,Aventura,1991,8,excluded,"Aventura, Aventura: far from Brickell"
+Mystic Pointe Tower 600,3400 NE 192nd,Aventura,Aventura,1991,8,excluded,"Aventura, Aventura: far from Brickell"
+Neo Lofts,10 SW South River Dr,Brickell,Miami,2004,1,tracked,
+Nine Island Avenue,9 Island Ave,South Beach,Miami Beach,1981,2,excluded,"South Beach, Miami Beach: far from Brickell"
+North Tower At the Point,21205 Yacht Club Dr,Aventura,Aventura,1997,4,excluded,"Aventura, Aventura: far from Brickell"
+Ocean Club,735 Crandon Blvd,Key Biscayne,Key Biscayne,1996,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ocean Club Key Biscayne Tower One,789 Crandon Blvd,Key Biscayne,Key Biscayne,1998,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ocean Club Key Biscayne Tower Three,785 Crandon Blvd,Key Biscayne,Key Biscayne,1998,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ocean Club Key Biscayne Tower Two,781 Crandon Blvd,Key Biscayne,Key Biscayne,1999,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ocean Club Tower Three,781 Crandon Blvd,Key Biscayne,Key Biscayne,1999,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ocean One,19333 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1999,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Ocean Reserve,19370 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1972,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Ocean Three,18911 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,2003,1,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Ocean Tower One,799 Crandon Blvd,Key Biscayne,Key Biscayne,2002,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ocean Tower Two,791 Crandon Blvd,Key Biscayne,Key Biscayne,2001,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ocean Two,19111 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,2001,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Oceana Bal Harbour,10201 Collins Ave,Bal Harbour,Bal Harbour,2017,5,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
+Oceania I,16425 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1990,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Oceania II,16445 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1993,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Oceania III,16485 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1991,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Oceania IV,16400 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1995,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Oceania V,16500 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,2002,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Oceanside,7471 Fisher Island Dr,Fisher Island,Fisher Island,2002,17,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Oceanview,19390 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1971,,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+One Fifty One at Biscayne,14951 Royal Oaks,North Miami Beach,North Miami Beach,2007,,excluded,"North Miami Beach, North Miami Beach: far from Brickell"
+One Grove Isle Condo,1 Grove Isle Dr,Coconut Grove,Miami,1979,12,excluded,Coconut Grove: excluded by owner
+One Island Place,3801 NE 207th St,Aventura,Aventura,1990,2,excluded,"Aventura, Aventura: far from Brickell"
+One Paraiso,3131 NE 7th St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
+One Tequesta Point,888 Brickell Key Dr,Brickell,Miami,1995,5,tracked,
+Opera Tower,1750 N Bayshore Dr,Edgewater,Miami,2008,2,excluded,Edgewater: excluded by owner
+Palace at Bal Harbour,10101 Collins Ave,Bal Harbour,Bal Harbour,1994,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
+Palazzo Del Mar,7122 Fisher Island Dr,Fisher Island,Fisher Island,2007,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Palazzo Del Sol,7091 Fisher Island Dr,Fisher Island,Fisher Island,2016,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Palazzo Del Mare,19144 Fisher Island Dr,Fisher Island,Fisher Island,2007,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Palm Bay Condo,770 NE 69th St,Upper East Side,Miami,1965,4,excluded,"Upper East Side, Miami: far from Brickell"
+Palm Bay Towers,720 NE 69th St,Upper East Side,Miami,1972,1,excluded,"Upper East Side, Miami: far from Brickell"
+Palm Bay Yacht Club,780 NE 69th St,Upper East Side,Miami,1982,1,excluded,"Upper East Side, Miami: far from Brickell"
+Paraiso Bay,650 NE 32 St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
+Paraiso Bay Views,501 NE 31 St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
+Paramount Miami Worldcenter,851 NE 1st Ave,Downtown Miami,Miami,2019,2,tracked,
+Peninsula I,3201 NE 183,Aventura,Aventura,2003,3,excluded,"Aventura, Aventura: far from Brickell"
+Pinnacle,17555 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1998,1,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Plaza of the Americas,16919 N Bay Rd,Sunny Isles Beach,Sunny Isles Beach,1979,2,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Poinciana Island,303 Poinciana Dr,Sunny Isles Beach,Sunny Isles Beach,1980,3,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Porto Vita,3832 NE 199th Ter,Aventura,Aventura,2002,6,excluded,"Aventura, Aventura: far from Brickell"
+Porto Vita North,20165 NE 39th Pl,Aventura,Aventura,1998,6,excluded,"Aventura, Aventura: far from Brickell"
+Porto Vita North Tower,20155 NE 38th Ct,Aventura,Aventura,2003,6,excluded,"Aventura, Aventura: far from Brickell"
+Portofino Tower,300 S Pointe Dr,South Beach,Miami Beach,1996,2,excluded,"South Beach, Miami Beach: far from Brickell"
+Postview at the Waterways,3610 Yacht Club Dr,Aventura,Aventura,1987,2,excluded,"Aventura, Aventura: far from Brickell"
+Prive,5000 Island Estates Drive,Aventura,Aventura,2017,1,excluded,"Aventura, Aventura: far from Brickell"
+Reach Brickell City Centre,68 SE 6th St,Brickell,Miami,2016,7,tracked,
+Reef Club,16546 NE 26th Ave,North Miami Beach,North Miami Beach,1973,2,excluded,"North Miami Beach, North Miami Beach: far from Brickell"
+Reef East Condo,16558 NE 26th Ave,North Miami Beach,North Miami Beach,1974,2,excluded,"North Miami Beach, North Miami Beach: far from Brickell"
+Resort Villa One,705 Crandon Blvd,Key Biscayne,Key Biscayne,1998,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Resort Villa Two,719 Crandon Blvd,Key Biscayne,Key Biscayne,1997,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Ritz-Carlton Coconut Grove,3350 SW 27th Ave,Coconut Grove,Miami,2002,1,excluded,Coconut Grove: excluded by owner
+Sands Pointe,16711 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1996,1,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Santa Maria,1643 Brickell Ave,Brickell,Miami,1997,1,tracked,
+Seaside,19124 Fisher Island Dr,Fisher Island,Fisher Island,1989,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Seaside Villas,15612 Fisher Island Dr,Fisher Island,Fisher Island,1988,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
+Siena Condo at Deering Bay,13611 Deering Bay Dr,Coral Gables,Coral Gables,2001,7,excluded,"Coral Gables, Coral Gables: far from Brickell"
+Skyline on Brickell,2101 Brickell Ave,Brickell,Miami,2004,1,tracked,
+SLS Lux Brickell,801 S Miami Ave,Brickell,Miami,2018,1,tracked,
+South Pointe Tower,400 S Pointe Dr,South Beach,Miami Beach,1987,2,excluded,"South Beach, Miami Beach: far from Brickell"
+Spinnaker Bay,21062 NE 34th Ct,Aventura,Aventura,1993,5,excluded,"Aventura, Aventura: far from Brickell"
+St Regis Residences,9705 Collins Ave,Bal Harbour,Bal Harbour,2011,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
+St. Tropez,7330 Ocean Ter,North Beach,Miami Beach,1999,1,excluded,"North Beach, Miami Beach: far from Brickell"
+Terraces At Turnberry,20191 E Country Club Dr,Aventura,Aventura,1983,4,excluded,"Aventura, Aventura: far from Brickell"
+The Charter Club,600 NE 36th St,Edgewater,Miami,1973,5,excluded,Edgewater: excluded by owner
+The Emerald Bay,151 Crandon Blvd,Key Biscayne,Key Biscayne,1980,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+The Four Seasons Residences (Millenium Residences),1425 Brickell Ave,Brickell,Miami,2003,2,tracked,
+The Gables Club,10 Edgewater Dr,Coral Gables,Coral Gables,1996,4,excluded,"Coral Gables, Coral Gables: far from Brickell"
+The Grand,1717 N Bayshore Dr,Edgewater,Miami,1986,,excluded,Edgewater: excluded by owner
+The Harbour,16385 Biscayne Blvd,North Miami Beach,North Miami Beach,2018,,excluded,"North Miami Beach, North Miami Beach: far from Brickell"
+The Landmark,20185 E Country Club Dr,Aventura,Aventura,1990,7,excluded,"Aventura, Aventura: far from Brickell"
+The Mark,1155 Brickell Bay Dr,Brickell,Miami,2001,,tracked,
+The Mutiny,2951 S Bayshore Dr,Coconut Grove,Miami,1998,2,excluded,Coconut Grove: excluded by owner
+The Ocean Club,765 Crandon Blvd,Key Biscayne,Key Biscayne,2002,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+The Palace Condo,1541 Brickell Ave,Brickell,Miami,1981,3,tracked,
+The Townhomes of Quayside,3002 NE Quayside Ln,Biscayne Corridor North,Miami,2003,2,excluded,"Biscayne Corridor North, Miami: far from Brickell"
+The Venetia,555 NE 15th St,Edgewater,Miami,1980,2,excluded,Edgewater: excluded by owner
+The Yacht Club at Aventura,19999 E Country Club Dr,Aventura,Aventura,1994,,excluded,"Aventura, Aventura: far from Brickell"
+The Yatch Club,19555 E Country Club Dr,Aventura,Aventura,1994,,excluded,"Aventura, Aventura: far from Brickell"
+Three Grove Isle Condo,3 Grove Isle Dr,Coconut Grove,Miami,1981,12,excluded,Coconut Grove: excluded by owner
+Three Tequesta Point,848 Brickell Key Dr,Brickell,Miami,2001,,tracked,
+Tidemark,201 Crandon Blvd,Key Biscayne,Key Biscayne,1978,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Tower 41,4101 Pine Tree Dr,Mid-Beach,Miami Beach,1974,1,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Tower House,5500 Collins Ave,Mid-Beach,Miami Beach,1974,3,excluded,"Mid-Beach, Miami Beach: far from Brickell"
+Towers of Key Biscayne,1111 Crandon Blvd,Key Biscayne,Key Biscayne,1972,2,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
+Towers of Quayside Condo #1,1000 Quayside Ter,Biscayne Corridor North,Miami,1981,2,excluded,"Biscayne Corridor North, Miami: far from Brickell"
+Towers of Quayside Condo #2,2000 Towerside Ter,Biscayne Corridor North,Miami,1981,8,excluded,"Biscayne Corridor North, Miami: far from Brickell"
+Towers of Quayside Condo #4,4000 Towerside Ter,Biscayne Corridor North,Miami,1982,,excluded,"Biscayne Corridor North, Miami: far from Brickell"
+Trump International,18001 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,2003,3,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Trump Palace,18101 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,2006,3,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Turnberry on the Green,19501 W Country Club Dr,Aventura,Aventura,2002,,excluded,"Aventura, Aventura: far from Brickell"
+Turnberry Isle,19707 Turnberry Way,Aventura,Aventura,1979,8,excluded,"Aventura, Aventura: far from Brickell"
+Turnberry Village,20000 E Country Club Dr,Aventura,Aventura,2006,,excluded,"Aventura, Aventura: far from Brickell"
+Two Grove Isle Condo,2 Grove Isle Dr,Coconut Grove,Miami,1980,12,excluded,Coconut Grove: excluded by owner
+Two Tequesta Point,808 Brickell Key Dr,Brickell,Miami,1999,,tracked,
+Una,175 SE 25 Rd,Brickell,Miami,2021,1,tracked,
+Uptown Marina Loft,3029 NE 188th St,Aventura,Aventura,2006,,excluded,"Aventura, Aventura: far from Brickell"
+Venetian Isle,801 N Venetian Dr,Venetian Islands,Miami Beach,1981,1,excluded,"Venetian Islands, Miami Beach: far from Brickell"
+Verona Condo at Deering Bay,13627 Deering Bay Dr,Coral Gables,Coral Gables,2000,7,excluded,"Coral Gables, Coral Gables: far from Brickell"
+Villa Flora,1518 Island Blvd,Aventura,Aventura,2007,4,excluded,"Aventura, Aventura: far from Brickell"
+Village by the Bay,3255 NE 184th St,Aventura,Aventura,1997,2,excluded,"Aventura, Aventura: far from Brickell"
+Venice Condo at Deering Bay,13643 Deering Bay Dr,Coral Gables,Coral Gables,1993,7,excluded,"Coral Gables, Coral Gables: far from Brickell"
+W South Beach,2201 Collins Ave,South Beach,Miami Beach,2009,1,excluded,"South Beach, Miami Beach: far from Brickell"
+Waterview,20505 E Country Club Dr,Aventura,Aventura,1981,,excluded,"Aventura, Aventura: far from Brickell"
+Waverly,1330 West Ave,South Beach,Miami Beach,2001,2,excluded,"South Beach, Miami Beach: far from Brickell"
+Williams Island 1000,1000 Island Blvd,Aventura,Aventura,1990,4,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 2000,2000 Island Blvd,Aventura,Aventura,1995,16,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 2600,2600 Island Blvd,Aventura,Aventura,1997,16,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 2800,2800 Island Blvd,Aventura,Aventura,1990,16,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 3000,3000 Island Blvd,Aventura,Aventura,1989,16,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 3700,3700 Island Blvd,Aventura,Aventura,1989,4,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 3900,3900 Island Blvd,Aventura,Aventura,1988,4,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 4000,4000 Island Blvd,Aventura,Aventura,1985,16,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 6000,6000 Island Blvd,Aventura,Aventura,2005,16,excluded,"Aventura, Aventura: far from Brickell"
+Williams Island 7000,7000 Island Blvd,Aventura,Aventura,1998,16,excluded,"Aventura, Aventura: far from Brickell"
+Winston Towers,230 174th St,Sunny Isles Beach,Sunny Isles Beach,1973,,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
+Yacht Club at Portofino,90 Alton Rd,South Beach,Miami Beach,1999,2,excluded,"South Beach, Miami Beach: far from Brickell"
+Yacht Harbour,2901 S Bayshore Dr,Coconut Grove,Miami,1975,2,excluded,Coconut Grove: excluded by owner
+Asia Brickell Key,900 Brickell Key Blvd,Brickell Key,Miami,,1,tracked,added from earlier search (not in the source lists)
