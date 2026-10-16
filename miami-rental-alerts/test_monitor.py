@@ -23,6 +23,18 @@ class MatchTests(unittest.TestCase):
         self.assertEqual(monitor.match_building(listing("a", "1901 Brickell Avenue"), BUILDINGS)["name"], "Brickell Place")
         self.assertEqual(monitor.match_building(listing("a", "900 Brickell Key Blvd"), BUILDINGS)["name"], "Asia Brickell Key")
 
+    def test_streets_with_ordinals_and_directions(self):
+        for line1, name in [("175 SE 25 Rd", "Una"), ("175 SE 25th Rd", "Una"), ("200 SE 15th Rd", "Brickell Harbour"),
+                            ("10 SW South River Dr", "Neo Lofts"), ("68 SE 6th St", "Reach Brickell City Centre"),
+                            ("801 S Miami Ave", "SLS Lux Brickell"), ("850 N Miami Ave", "Madison Downtown"),
+                            ("851 NE 1st Ave", "Paramount Miami Worldcenter"), ("888 Brickell Key Dr", "One Tequesta Point"),
+                            ("901 Brickell Key Blvd", "Carbonell"), ("1450 Brickell Bay Dr", "Costa Bella")]:
+            self.assertEqual(monitor.match_building(listing("a", line1), BUILDINGS)["name"], name, line1)
+
+    def test_no_duplicate_buildings(self):
+        keys = [(tuple(monitor.normalize_street(b["street"])), n) for b in BUILDINGS for n in b.get("numbers", [])]
+        self.assertEqual(len(keys), len(set(keys)))
+
     def test_no_match(self):
         self.assertIsNone(monitor.match_building(listing("a", "2200 Brickell Ave"), BUILDINGS))
         self.assertIsNone(monitor.match_building(listing("a", "1918 Brickell Ave"), BUILDINGS))

@@ -27,6 +27,7 @@ DIRECTIONS = {"n", "s", "e", "w", "ne", "nw", "se", "sw"}
 
 def normalize_street(street):
     tokens = re.sub(r"[^a-z0-9 ]", " ", street.lower()).split()
+    tokens = [re.sub(r"^(\d+)(st|nd|rd|th)$", r"\1", t) for t in tokens]  # 25th -> 25
     return [SUFFIXES.get(t, t) for t in tokens if t not in DIRECTIONS]
 
 
