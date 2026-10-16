@@ -50,6 +50,13 @@ class RunTests(unittest.TestCase):
             self.assertEqual(send.call_count, 0)
             self.assertEqual(state["quota"]["used"], 2)
 
+    def test_max_price_filter(self):
+        data = [listing("a", "2333 Brickell Ave", price=4200), listing("b", "2333 Brickell Ave", price=4201)]
+        with tempfile.TemporaryDirectory() as tmp:
+            send, state = self.run_main(data, tmp)
+            self.assertEqual(send.call_count, 1)
+            self.assertEqual(list(state["seen"]), ["a"])
+
     def test_dry_run_does_not_mark_seen(self):
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main([listing("a", "2333 Brickell Ave")], tmp, ["--dry-run"])

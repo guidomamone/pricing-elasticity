@@ -156,6 +156,10 @@ def main(argv=None):
         building = match_building(listing, config["buildings"])
         if not building or listing["id"] in state["seen"]:
             continue
+        max_price = config.get("max_price")
+        # Not marked as seen, so a later price drop under the cap still alerts.
+        if max_price and (listing.get("price") or 0) > max_price:
+            continue
         msg = format_message(listing, building)
         new += 1
         if args.dry_run:
