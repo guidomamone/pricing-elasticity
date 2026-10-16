@@ -102,6 +102,7 @@ def send_telegram(token, chat_id, text):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="print alerts, do not send or mark as seen")
+    ap.add_argument("--days", type=int, help="override search daysOld (useful with --dry-run to look further back)")
     args = ap.parse_args(argv)
 
     config = load_json(CONFIG_PATH, None)
@@ -130,10 +131,19 @@ def main(argv=None):
     # Count before calling so a crash mid-request still counts against the cap.
     state["quota"]["used"] += 1
     save_state(state)
+    search = dict(config["search"])
+    if args.days:
+        search["daysOld"] = args.days
     try:
-        listings = fetch_listings(api_key, config["search"])
+        listings = fetch_listings(api_key, search)
     except urllib.error.HTTPError as e:
         sys.exit(f"RentCast error {e.code}: {e.read().decode(errors='replace')[:300]}")
+
+    if args.dry_run:
+        print("Brickell-area addresses returned (check these against buildings.json):")
+        for l in listings:
+            if "brickell" in (l.get("addressLine1") or "").lower():
+                print(f"  {l.get('formattedAddress')}")
 
     limit = config["search"].get("limit")
     if limit and len(listings) >= limit:
