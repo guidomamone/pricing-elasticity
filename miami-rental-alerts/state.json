@@ -1,7 +1,19 @@
 {
   "quota": {
     "month": "2026-10",
-    "used": 3
+    "used": 4
   },
-  "seen": {}
+  "seen": {},
+  "skipped_reported": {
+    "540-Brickell-Key-Dr,-Apt-916,-Miami,-FL-33131": "2026-10-16",
+    "540-Brickell-Key-Dr,-Miami,-FL-33131": "2026-10-16",
+    "68-Se-6th-St,-Apt-1701,-Miami,-FL-33131": "2026-10-16",
+    "701-Brickell-Key-Blvd,-Apt-2404,-Miami,-FL-33131": "2026-10-16",
+    "770-Claughton-Island-Dr,-Apt-1007,-Miami,-FL-33131": "2026-10-16",
+    "770-Claughton-Island-Dr,-Apt-2116,-Miami,-FL-33131": "2026-10-16",
+    "801-S-Miami-Ave,-Unit-3107,-Miami,-FL-33130": "2026-10-16",
+    "808-Brickell-Key-Dr,-Apt-1006,-Miami,-FL-33131": "2026-10-16",
+    "808-Brickell-Key-Dr,-Apt-2102,-Miami,-FL-33131": "2026-10-16",
+    "851-Ne-1st-Ave,-Unit-2309,-Miami,-FL-33132": "2026-10-16"
+  }
 }
