@@ -9,6 +9,9 @@ on:
         description: "Print alerts instead of sending to Telegram"
         type: boolean
         default: false
+      days:
+        description: "Look back this many days (blank = config default)"
+        required: false
 
 permissions:
   contents: write
@@ -29,7 +32,7 @@ jobs:
           RENTCAST_API_KEY: ${{ secrets.RENTCAST_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python miami-rental-alerts/monitor.py ${{ inputs.dry_run && '--dry-run' || '' }}
+        run: python miami-rental-alerts/monitor.py ${{ inputs.dry_run && '--dry-run' || '' }} ${{ inputs.days && format('--days {0}', inputs.days) || '' }}
       - name: Save state
         if: always()
         run: |

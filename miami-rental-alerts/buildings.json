@@ -2,27 +2,235 @@
   "search": {
     "latitude": 25.758,
     "longitude": -80.195,
-    "radius": 2,
+    "radius": 2.5,
     "status": "Active",
     "daysOld": 3,
     "limit": 500
   },
+  "max_price": 4200,
+  "min_bedrooms": 2,
+  "notify_skipped": true,
   "max_requests_per_month": 45,
   "buildings": [
     {
       "name": "Brickell Bay Club",
       "street": "Brickell Ave",
-      "numbers": [2333]
+      "numbers": [
+        2333
+      ]
     },
     {
       "name": "Brickell Place",
       "street": "Brickell Ave",
-      "number_range": [1865, 1925]
+      "number_range": [
+        1865,
+        1925
+      ],
+      "odd_only": true
     },
     {
       "name": "Asia Brickell Key",
       "street": "Brickell Key Blvd",
-      "numbers": [900]
+      "numbers": [
+        900
+      ]
+    },
+    {
+      "name": "Atlantis on Brickell",
+      "street": "Brickell Ave",
+      "numbers": [
+        2025
+      ]
+    },
+    {
+      "name": "Bristol Tower",
+      "street": "Brickell Ave",
+      "numbers": [
+        2127
+      ]
+    },
+    {
+      "name": "Brickell Townhouse",
+      "street": "Brickell Ave",
+      "numbers": [
+        2451
+      ]
+    },
+    {
+      "name": "Metropolitan at Brickell",
+      "street": "Brickell Ave",
+      "numbers": [
+        2475
+      ]
+    },
+    {
+      "name": "Skyline on Brickell",
+      "street": "Brickell Ave",
+      "numbers": [
+        2101
+      ]
+    },
+    {
+      "name": "Imperial at Brickell",
+      "street": "Brickell Ave",
+      "numbers": [
+        1627
+      ]
+    },
+    {
+      "name": "Santa Maria",
+      "street": "Brickell Ave",
+      "numbers": [
+        1643
+      ]
+    },
+    {
+      "name": "The Palace",
+      "street": "Brickell Ave",
+      "numbers": [
+        1541
+      ]
+    },
+    {
+      "name": "Conrad Mayfield",
+      "street": "Brickell Ave",
+      "numbers": [
+        1395
+      ]
+    },
+    {
+      "name": "Four Seasons Residences",
+      "street": "Brickell Ave",
+      "numbers": [
+        1425
+      ]
+    },
+    {
+      "name": "Costa Bella",
+      "street": "Brickell Bay Dr",
+      "numbers": [
+        1450
+      ]
+    },
+    {
+      "name": "The Mark",
+      "street": "Brickell Bay Dr",
+      "numbers": [
+        1155
+      ]
+    },
+    {
+      "name": "Brickell Harbour",
+      "street": "SE 15th Rd",
+      "numbers": [
+        200
+      ]
+    },
+    {
+      "name": "Una",
+      "street": "SE 25th Rd",
+      "numbers": [
+        175
+      ]
+    },
+    {
+      "name": "Neo Lofts",
+      "street": "SW South River Dr",
+      "numbers": [
+        10
+      ]
+    },
+    {
+      "name": "Reach Brickell City Centre",
+      "street": "SE 6th St",
+      "numbers": [
+        68
+      ]
+    },
+    {
+      "name": "SLS Lux Brickell",
+      "street": "S Miami Ave",
+      "numbers": [
+        801
+      ]
+    },
+    {
+      "name": "Brickell Key I",
+      "street": "Brickell Key Dr",
+      "numbers": [
+        520
+      ]
+    },
+    {
+      "name": "Brickell Key II",
+      "street": "Brickell Key Dr",
+      "numbers": [
+        540
+      ]
+    },
+    {
+      "name": "Two Tequesta Point",
+      "street": "Brickell Key Dr",
+      "numbers": [
+        808
+      ]
+    },
+    {
+      "name": "Three Tequesta Point",
+      "street": "Brickell Key Dr",
+      "numbers": [
+        848
+      ]
+    },
+    {
+      "name": "One Tequesta Point",
+      "street": "Brickell Key Dr",
+      "numbers": [
+        888
+      ]
+    },
+    {
+      "name": "Courvoisier Courts",
+      "street": "Brickell Key Blvd",
+      "numbers": [
+        701
+      ]
+    },
+    {
+      "name": "Courts at Brickell Key",
+      "street": "Brickell Key Blvd",
+      "numbers": [
+        801
+      ]
+    },
+    {
+      "name": "Carbonell",
+      "street": "Brickell Key Blvd",
+      "numbers": [
+        901
+      ]
+    },
+    {
+      "name": "Isola",
+      "street": "Claughton Island Dr",
+      "numbers": [
+        770
+      ]
+    },
+    {
+      "name": "Madison Downtown",
+      "street": "N Miami Ave",
+      "numbers": [
+        800,
+        850
+      ]
+    },
+    {
+      "name": "Paramount Miami Worldcenter",
+      "street": "NE 1st Ave",
+      "numbers": [
+        851
+      ]
     }
   ]
 }
