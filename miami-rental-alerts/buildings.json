@@ -8,6 +8,8 @@
     "limit": 500
   },
   "max_price": 4200,
+  "min_bedrooms": 2,
+  "notify_skipped": true,
   "max_requests_per_month": 45,
   "buildings": [
     {

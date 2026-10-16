@@ -72,24 +72,73 @@ def fetch_listings(api_key, search):
         return json.load(resp)
 
 
-def format_message(listing, building):
+def num(value):
+    """Parse a numeric API field. Returns None when missing or unparseable (never guesses)."""
+    if isinstance(value, bool) or value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def days_on_market(listing):
+    d = num(listing.get("daysOnMarket"))
+    if d is not None:
+        return int(d)
+    try:
+        return (date.today() - date.fromisoformat(str(listing.get("listedDate"))[:10])).days
+    except ValueError:
+        return None
+
+
+def check_filters(listing, config):
+    """Returns (skip_reason, warnings). Missing/unparseable data never filters a listing out:
+    it passes with a warning, so a parsing problem shows up in the alert instead of hiding it."""
+    warnings = []
+    price, beds = num(listing.get("price")), num(listing.get("bedrooms"))
+    max_price, min_beds = config.get("max_price"), config.get("min_bedrooms")
+    if max_price:
+        if price is None:
+            warnings.append("price missing, could not apply max price filter")
+        elif price > max_price:
+            return f"price ${price:,.0f} > {max_price}", warnings
+    if min_beds is not None:
+        if beds is None:
+            warnings.append("bedrooms missing, could not apply bedroom filter")
+        elif beds < min_beds:
+            return f"{beds:g} bedrooms < {min_beds}", warnings
+    return None, warnings
+
+
+def describe(listing):
+    price, beds = num(listing.get("price")), num(listing.get("bedrooms"))
+    return (f"{listing.get('formattedAddress')} | price={listing.get('price')!r} "
+            f"beds={listing.get('bedrooms')!r}" if price is None or beds is None else
+            f"{listing.get('formattedAddress')} | ${price:,.0f} | {beds:g}bd")
+
+
+def format_message(listing, building, warnings=()):
     unit = listing.get("addressLine2") or ""
     title = f"{building['name']} {unit}".strip()
-    price = listing.get("price")
+    price, beds = num(listing.get("price")), num(listing.get("bedrooms"))
     bits = [f"${price:,.0f}/mo" if price else "price n/a"]
-    if listing.get("bedrooms") is not None:
-        bits.append(f"{listing['bedrooms']:g}bd/{listing.get('bathrooms', '?')}ba")
+    if beds is not None:
+        bits.append(f"{beds:g}bd/{listing.get('bathrooms', '?')}ba")
     if listing.get("squareFootage"):
         bits.append(f"{listing['squareFootage']:,} sqft")
+    dom = days_on_market(listing)
     addr = listing.get("formattedAddress", "")
     link = "https://www.zillow.com/homes/" + urllib.parse.quote(addr.replace(" ", "-")) + "_rb/"
-    return (
-        f"<b>{html.escape(title)}</b>\n"
-        f"{html.escape(' · '.join(bits))}\n"
-        f"Listed {html.escape(str(listing.get('listedDate', '?'))[:10])}\n"
-        f"{html.escape(addr)}\n"
-        f'<a href="{html.escape(link)}">Search on Zillow</a>'
-    )
+    lines = [
+        f"<b>{html.escape(title)}</b>",
+        html.escape(" · ".join(bits)),
+        f"Days on market: {dom if dom is not None else 'n/a'} (listed {html.escape(str(listing.get('listedDate', '?'))[:10])})",
+        html.escape(addr),
+        f'<a href="{html.escape(link)}">Search on Zillow</a>',
+    ]
+    lines += [f"⚠️ {html.escape(w)}" for w in warnings]
+    return "\n".join(lines)
 
 
 def send_telegram(token, chat_id, text):
@@ -141,26 +190,27 @@ def main(argv=None):
     except urllib.error.HTTPError as e:
         sys.exit(f"RentCast error {e.code}: {e.read().decode(errors='replace')[:300]}")
 
-    if args.dry_run:
-        print("Brickell-area addresses returned (check these against buildings.json):")
-        for l in listings:
-            if "brickell" in (l.get("addressLine1") or "").lower():
-                print(f"  {l.get('formattedAddress')}")
-
     limit = config["search"].get("limit")
     if limit and len(listings) >= limit:
         print(f"WARNING: got {len(listings)} listings (limit {limit}); results may be truncated.")
 
-    new = 0
+    new, skipped, unmatched, missing, matched = 0, [], [], 0, 0
     for listing in listings:
         building = match_building(listing, config["buildings"])
-        if not building or listing["id"] in state["seen"]:
+        if not building:
+            if "brickell" in (listing.get("addressLine1") or "").lower():
+                unmatched.append(listing)
             continue
-        max_price = config.get("max_price")
-        # Not marked as seen, so a later price drop under the cap still alerts.
-        if max_price and (listing.get("price") or 0) > max_price:
+        matched += 1
+        reason, warnings = check_filters(listing, config)
+        missing += bool(warnings)
+        if listing["id"] in state["seen"]:
             continue
-        msg = format_message(listing, building)
+        if reason:
+            # Not marked as seen, so a later change (price drop) still alerts.
+            skipped.append((listing, reason))
+            continue
+        msg = format_message(listing, building, warnings)
         new += 1
         if args.dry_run:
             print(msg + "\n")
@@ -169,7 +219,32 @@ def main(argv=None):
         state["seen"][listing["id"]] = {"first_seen": date.today().isoformat(), "price": listing.get("price")}
         save_state(state)
 
-    print(f"{len(listings)} listings in area, {new} new in tracked buildings. "
+    # Safety nets for parsing problems, all visible in the Actions log.
+    for listing, reason in skipped:
+        print(f"SKIPPED ({reason}): {describe(listing)}")
+    for listing in unmatched:
+        print(f"UNMATCHED Brickell address (not in buildings.json): {listing.get('formattedAddress')}")
+
+    problems = []
+    if matched >= 4 and missing / matched >= 0.5:
+        problems.append(f"{missing} of {matched} matched listings are missing price or bedrooms. RentCast data format may have changed.")
+    for text in problems:
+        print("WARNING:", text)
+    if not args.dry_run:
+        if problems:
+            send_telegram(token, chat_id, "⚠️ " + html.escape(problems[0]))
+        if config.get("notify_skipped"):
+            reported = state.setdefault("skipped_reported", {})
+            fresh = [(l, r) for l, r in skipped if l["id"] not in reported]
+            if fresh:
+                body = "\n".join(f"• {html.escape(describe(l))} ({html.escape(r)})" for l, r in fresh)
+                send_telegram(token, chat_id, f"<b>Filtered out, not alerted</b>\n{body}")
+                for l, _ in fresh:
+                    reported[l["id"]] = date.today().isoformat()
+                save_state(state)
+
+    print(f"{len(listings)} listings in area, {matched} in tracked buildings, {new} new alerts, "
+          f"{len(skipped)} filtered out, {len(unmatched)} unmatched Brickell addresses. "
           f"Requests this month: {state['quota']['used']}/{cap}")
     return 0
 
