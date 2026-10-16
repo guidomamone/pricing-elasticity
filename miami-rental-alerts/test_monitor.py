@@ -120,7 +120,9 @@ class RunTests(unittest.TestCase):
             self.assertEqual(sorted(state["seen"]), ["a", "b", "c"])
             self.assertEqual(state["quota"]["used"], 1)
             send, state = self.run_main(data, tmp)
-            self.assertEqual(send.call_count, 0)
+            texts = self.texts(send)  # nothing new: both lists still sent, saying so
+            self.assertEqual(len(texts), 2)
+            self.assertTrue(all("0 new" in x and "Nothing new today." in x for x in texts))
             self.assertEqual(state["quota"]["used"], 2)
 
     def test_lists_sorted_by_price(self):
@@ -135,7 +137,9 @@ class RunTests(unittest.TestCase):
                 listing("b", "1060 Brickell Ave", zip_="33131", bedrooms=1)]
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main(data, tmp)
-            self.assertEqual(send.call_count, 0)  # no list, and no "filtered out" digest for non-tennis
+            texts = self.texts(send)  # both lists empty, and no "filtered out" digest for non-tennis
+            self.assertEqual(len(texts), 2)
+            self.assertTrue(all("Nothing new today." in x for x in texts))
             self.assertEqual(state["seen"], {})
 
     def test_filters_and_skipped_digest(self):
@@ -150,8 +154,10 @@ class RunTests(unittest.TestCase):
             self.assertIn("Tennis-court buildings: 1 new", texts[0])
             self.assertIn("Filtered out", texts[1])
             self.assertEqual(sorted(state["skipped_reported"]), ["b", "c"])
-            send, _ = self.run_main(data, tmp)  # same data next day: nothing new to report
-            self.assertEqual(send.call_count, 0)
+            send, _ = self.run_main(data, tmp)  # same data next day: empty lists, no repeated digest
+            texts = self.texts(send)
+            self.assertEqual(len(texts), 2)
+            self.assertTrue(all("Nothing new today." in x for x in texts))
 
     def test_schema_change_warning(self):
         data = [listing(str(i), "2333 Brickell Ave", bedrooms=None) for i in range(4)]

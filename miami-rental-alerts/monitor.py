@@ -3,7 +3,8 @@
 
 One API request per run (search area in buildings.json). New listings are sent to
 Telegram as two lists: tennis-court buildings, and other listings in the Brickell zip
-codes (a tennis-court listing is never repeated in the second list). State lives in
+codes (a tennis-court listing is never repeated in the second list). Both lists are sent
+every run; an empty one says "Nothing new today." State lives in
 state.json.
 """
 import argparse
@@ -245,7 +246,10 @@ def main(argv=None):
         entries.sort(key=lambda e: num(e[0].get("price")) or float("inf"))
         new[key] = len(entries)
         items = [(l, format_entry(l, b["name"] if b else None, w)) for l, b, w in entries]
-        for text, group in build_digests(headers[key].format(n=len(entries)), items):
+        header = headers[key].format(n=len(entries))
+        # An empty list is still sent, so a quiet day is visible and not mistaken for a broken bot.
+        digests = build_digests(header, items) or [(f"{header}\n\nNothing new today.", [])]
+        for text, group in digests:
             if args.dry_run:
                 print(text + "\n")
                 continue
