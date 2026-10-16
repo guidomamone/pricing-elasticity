@@ -17,7 +17,8 @@
     {
       "name": "Brickell Place",
       "street": "Brickell Ave",
-      "number_range": [1865, 1925]
+      "number_range": [1865, 1925],
+      "odd_only": true
     },
     {
       "name": "Asia Brickell Key",

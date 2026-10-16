@@ -48,6 +48,8 @@ def match_building(listing, buildings):
             return b
         lo_hi = b.get("number_range")
         if lo_hi and lo_hi[0] <= number <= lo_hi[1]:
+            if b.get("odd_only") and number % 2 == 0:
+                continue
             return b
     return None
 

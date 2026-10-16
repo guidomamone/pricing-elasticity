@@ -25,6 +25,7 @@ class MatchTests(unittest.TestCase):
 
     def test_no_match(self):
         self.assertIsNone(monitor.match_building(listing("a", "2200 Brickell Ave"), BUILDINGS))
+        self.assertIsNone(monitor.match_building(listing("a", "1918 Brickell Ave"), BUILDINGS))
         self.assertIsNone(monitor.match_building(listing("a", "2333 SW 8th St"), BUILDINGS))
         self.assertIsNone(monitor.match_building({"addressLine1": None}, BUILDINGS))
 
