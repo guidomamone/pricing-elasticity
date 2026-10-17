@@ -9,6 +9,11 @@
   },
   "max_price": 4200,
   "min_bedrooms": 2,
+  "brickell_zips": [
+    "33129",
+    "33130",
+    "33131"
+  ],
   "notify_skipped": true,
   "max_requests_per_month": 45,
   "buildings": [

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Daily check of RentCast rental listings for a short list of Miami buildings.
 
-One API request per run (search area in buildings.json), matched locally to the
-buildings, new listings sent to Telegram. State lives in state.json.
+One API request per run (search area in buildings.json). New listings are sent to
+Telegram as two lists: tennis-court buildings, and other listings in the Brickell zip
+codes (a tennis-court listing is never repeated in the second list). Both lists go in one
+message every run; an empty one says "Nothing new today." State lives in
+state.json.
 """
 import argparse
 import html
@@ -119,9 +122,15 @@ def describe(listing):
             f"{listing.get('formattedAddress')} | ${price:,.0f} | {beds:g}bd")
 
 
-def format_message(listing, building, warnings=()):
+def zip_of(listing):
+    return str(listing.get("zipCode") or "").strip()[:5]
+
+
+def format_entry(listing, name, warnings=()):
+    """Compact 3-line block. name is the tracked building's name, or None for a general Brickell listing."""
     unit = listing.get("addressLine2") or ""
-    title = f"{building['name']} {unit}".strip()
+    short = ", ".join(x for x in (listing.get("addressLine1"), unit) if x) or listing.get("formattedAddress", "")
+    title = f"{name} {unit}".strip() if name else short
     price, beds = num(listing.get("price")), num(listing.get("bedrooms"))
     bits = [f"${price:,.0f}/mo" if price else "price n/a"]
     if beds is not None:
@@ -129,17 +138,39 @@ def format_message(listing, building, warnings=()):
     if listing.get("squareFootage"):
         bits.append(f"{listing['squareFootage']:,} sqft")
     dom = days_on_market(listing)
+    bits.append(f"{dom}d on market" if dom is not None else "days on market n/a")
     addr = listing.get("formattedAddress", "")
     link = "https://www.zillow.com/homes/" + urllib.parse.quote(addr.replace(" ", "-")) + "_rb/"
     lines = [
         f"<b>{html.escape(title)}</b>",
         html.escape(" · ".join(bits)),
-        f"Days on market: {dom if dom is not None else 'n/a'} (listed {html.escape(str(listing.get('listedDate', '?'))[:10])})",
-        html.escape(addr),
-        f'<a href="{html.escape(link)}">Search on Zillow</a>',
+        f'<a href="{html.escape(link)}">{html.escape(short if name else "Search on Zillow")}</a>',
     ]
     lines += [f"⚠️ {html.escape(w)}" for w in warnings]
     return "\n".join(lines)
+
+
+def build_digest(sections, limit=3800):
+    """sections: [(header, [(listing, block)])]. Returns [(message_text, [listings])].
+
+    Everything goes in one message; it is split only if it would exceed Telegram's size
+    limit, repeating the section header with "(cont.)". An empty section says so."""
+    msgs, text, group = [], "", []
+    for header, items in sections:
+        first = True
+        for listing, block in items or [(None, "Nothing new today.")]:
+            piece = (header + "\n\n" if first or not text else "") + block
+            if text and len(text) + 2 + len(piece) > limit:
+                msgs.append((text, group))
+                text, group = "", []
+                piece = (header if first else header + " (cont.)") + "\n\n" + block
+            text = text + "\n\n" + piece if text else piece
+            if listing is not None:
+                group.append(listing)
+            first = False
+    if text:
+        msgs.append((text, group))
+    return msgs
 
 
 def send_telegram(token, chat_id, text):
@@ -195,40 +226,54 @@ def main(argv=None):
     if limit and len(listings) >= limit:
         print(f"WARNING: got {len(listings)} listings (limit {limit}); results may be truncated.")
 
-    new, skipped, unmatched, missing, matched = 0, [], [], 0, 0
+    zips = set(config.get("brickell_zips", []))
+    sections = {"tennis": [], "brickell": []}
+    skipped, skipped_brickell, missing, considered = [], 0, 0, 0
     for listing in listings:
         building = match_building(listing, config["buildings"])
-        if not building:
-            if "brickell" in (listing.get("addressLine1") or "").lower():
-                unmatched.append(listing)
+        if not building and zip_of(listing) not in zips:
             continue
-        matched += 1
+        considered += 1
         reason, warnings = check_filters(listing, config)
         missing += bool(warnings)
         if listing["id"] in state["seen"]:
             continue
         if reason:
             # Not marked as seen, so a later change (price drop) still alerts.
-            skipped.append((listing, reason))
+            if building:
+                skipped.append((listing, reason))
+            else:
+                skipped_brickell += 1
             continue
-        msg = format_message(listing, building, warnings)
-        new += 1
+        # A tennis-court building is listed only in the tennis list, never again under Brickell.
+        sections["tennis" if building else "brickell"].append((listing, building, warnings))
+
+    headers = {"tennis": "🎾 <b>Tennis-court buildings: {n} new</b>",
+               "brickell": "🏙 <b>Brickell, other buildings: {n} new</b>"}
+    new, digest_sections = {}, []
+    for key, entries in sections.items():
+        entries.sort(key=lambda e: num(e[0].get("price")) or float("inf"))
+        new[key] = len(entries)
+        items = [(l, format_entry(l, b["name"] if b else None, w)) for l, b, w in entries]
+        digest_sections.append((headers[key].format(n=len(entries)), items))
+    # One message with both lists. An empty list is still shown, so a quiet day is visible
+    # and not mistaken for a broken bot.
+    for text, group in build_digest(digest_sections):
         if args.dry_run:
-            print(msg + "\n")
+            print(text + "\n")
             continue
-        send_telegram(token, chat_id, msg)
-        state["seen"][listing["id"]] = {"first_seen": date.today().isoformat(), "price": listing.get("price")}
+        send_telegram(token, chat_id, text)
+        for l in group:
+            state["seen"][l["id"]] = {"first_seen": date.today().isoformat(), "price": l.get("price")}
         save_state(state)
 
     # Safety nets for parsing problems, all visible in the Actions log.
     for listing, reason in skipped:
         print(f"SKIPPED ({reason}): {describe(listing)}")
-    for listing in unmatched:
-        print(f"UNMATCHED Brickell address (not in buildings.json): {listing.get('formattedAddress')}")
 
     problems = []
-    if matched >= 4 and missing / matched >= 0.5:
-        problems.append(f"{missing} of {matched} matched listings are missing price or bedrooms. RentCast data format may have changed.")
+    if considered >= 4 and missing / considered >= 0.5:
+        problems.append(f"{missing} of {considered} matched listings are missing price or bedrooms. RentCast data format may have changed.")
     for text in problems:
         print("WARNING:", text)
     if not args.dry_run:
@@ -244,8 +289,8 @@ def main(argv=None):
                     reported[l["id"]] = date.today().isoformat()
                 save_state(state)
 
-    print(f"{len(listings)} listings in area, {matched} in tracked buildings, {new} new alerts, "
-          f"{len(skipped)} filtered out, {len(unmatched)} unmatched Brickell addresses. "
+    print(f"{len(listings)} listings in area. Tennis buildings: {new['tennis']} new, {len(skipped)} filtered out. "
+          f"Other Brickell: {new['brickell']} new, {skipped_brickell} filtered out. "
           f"Requests this month: {state['quota']['used']}/{cap}")
     return 0
 
