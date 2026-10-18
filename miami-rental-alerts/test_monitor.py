@@ -196,7 +196,7 @@ class RunTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main(data, tmp)
             self.assertEqual(list(state["seen"]), ["b"])
-            self.assertIn("999 sqft < 1,000", self.texts(send)[1])  # filtered-out digest
+            self.assertIn("999 sqft &lt; 1,000", self.texts(send)[1])  # filtered-out digest
 
     def test_dry_run_does_not_mark_seen(self):
         with tempfile.TemporaryDirectory() as tmp:
