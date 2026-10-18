@@ -9,9 +9,9 @@ import monitor
 BUILDINGS = json.loads(monitor.CONFIG_PATH.read_text())["buildings"]
 
 
-def listing(id_, line1, unit="#1512", price=3200, bedrooms=2, zip_="33129"):
+def listing(id_, line1, unit="#1512", price=3200, bedrooms=2, zip_="33129", sqft=1100):
     return {"id": id_, "addressLine1": line1, "addressLine2": unit, "price": price, "zipCode": zip_,
-            "bedrooms": bedrooms, "bathrooms": 2, "daysOnMarket": 4, "squareFootage": 1100,
+            "bedrooms": bedrooms, "bathrooms": 2, "daysOnMarket": 4, "squareFootage": sqft,
             "formattedAddress": f"{line1}, {unit}, Miami, FL 33129", "listedDate": "2026-10-14T00:00:00.000Z"}
 
 
@@ -43,7 +43,7 @@ class MatchTests(unittest.TestCase):
 
 
 class FilterTests(unittest.TestCase):
-    CFG = {"max_price": 4200, "min_bedrooms": 2}
+    CFG = {"max_price": 4200, "min_bedrooms": 2, "min_sqft": 1000}
 
     def check(self, **kw):
         return monitor.check_filters(listing("a", "2333 Brickell Ave", **kw), self.CFG)
@@ -55,6 +55,13 @@ class FilterTests(unittest.TestCase):
         self.assertIn("price", self.check(price=4201)[0])
         self.assertIn("bedrooms", self.check(bedrooms=1)[0])
         self.assertIn("bedrooms", self.check(bedrooms=0)[0])  # studio is a real 0, not missing
+
+    def test_sqft_filter(self):
+        self.assertEqual(self.check(sqft=1000), (None, []))
+        self.assertIn("999 sqft < 1,000", self.check(sqft=999)[0])
+        reason, warns = self.check(sqft=None)  # often absent in real listings: pass with a warning
+        self.assertIsNone(reason)
+        self.assertEqual(len(warns), 1)
 
     def test_missing_or_garbage_never_filters_out(self):
         for bad in (None, "", "N/A", True):
@@ -174,6 +181,22 @@ class RunTests(unittest.TestCase):
             texts = [c.args[2] for c in send.call_args_list]
             self.assertEqual(len(state["seen"]), 4)  # still alerted, with warnings
             self.assertTrue(any("data format may have changed" in t for t in texts))
+
+    def test_missing_sqft_alerts_with_warning_but_no_schema_alarm(self):
+        data = [listing(str(i), "2333 Brickell Ave", sqft=None) for i in range(4)]
+        with tempfile.TemporaryDirectory() as tmp:
+            send, state = self.run_main(data, tmp)
+            texts = self.texts(send)
+            self.assertEqual(len(state["seen"]), 4)
+            self.assertEqual(texts[0].count("sqft missing"), 4)
+            self.assertFalse(any("data format may have changed" in x for x in texts))
+
+    def test_small_units_filtered(self):
+        data = [listing("a", "2333 Brickell Ave", sqft=999), listing("b", "2333 Brickell Ave", sqft=1000)]
+        with tempfile.TemporaryDirectory() as tmp:
+            send, state = self.run_main(data, tmp)
+            self.assertEqual(list(state["seen"]), ["b"])
+            self.assertIn("999 sqft &lt; 1,000", self.texts(send)[1])  # filtered-out digest
 
     def test_dry_run_does_not_mark_seen(self):
         with tempfile.TemporaryDirectory() as tmp:

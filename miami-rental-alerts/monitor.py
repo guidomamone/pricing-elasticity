@@ -101,7 +101,8 @@ def check_filters(listing, config):
     it passes with a warning, so a parsing problem shows up in the alert instead of hiding it."""
     warnings = []
     price, beds = num(listing.get("price")), num(listing.get("bedrooms"))
-    max_price, min_beds = config.get("max_price"), config.get("min_bedrooms")
+    sqft = num(listing.get("squareFootage"))
+    max_price, min_beds, min_sqft = config.get("max_price"), config.get("min_bedrooms"), config.get("min_sqft")
     if max_price:
         if price is None:
             warnings.append("price missing, could not apply max price filter")
@@ -112,6 +113,11 @@ def check_filters(listing, config):
             warnings.append("bedrooms missing, could not apply bedroom filter")
         elif beds < min_beds:
             return f"{beds:g} bedrooms < {min_beds}", warnings
+    if min_sqft:
+        if sqft is None:
+            warnings.append("sqft missing, could not apply size filter")
+        elif sqft < min_sqft:
+            return f"{sqft:,.0f} sqft < {min_sqft:,}", warnings
     return None, warnings
 
 
@@ -235,7 +241,7 @@ def main(argv=None):
             continue
         considered += 1
         reason, warnings = check_filters(listing, config)
-        missing += bool(warnings)
+        missing += num(listing.get("price")) is None or num(listing.get("bedrooms")) is None
         if listing["id"] in state["seen"]:
             continue
         if reason:
