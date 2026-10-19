@@ -41,7 +41,16 @@ Polígonos: el build de Docker intenta bajar `barrios.geojson` del portal de dat
 
 Tests del modelo: `cd argentina-real-estate/map && npm test`
 
-## Deploy en Coolify
+## Deploy en Netlify (recomendado)
+
+Proyecto: `caba-comprar-vs-alquilar` (https://caba-comprar-vs-alquilar.netlify.app).
+
+1. En Netlify: **Project configuration → Build & deploy → Link repository → GitHub** y elegir `guidomamone/pricing-elasticity`.
+2. **Branch to deploy:** `main` (o la branch donde esté esto).
+3. **Base directory:** `argentina-real-estate/map`. El comando de build y la carpeta a publicar salen de `netlify.toml`.
+4. Deploy. Cada push a esa branch redeploya solo, y el build baja los polígonos de barrios del GCBA.
+
+## Deploy en Coolify (alternativa con servidor propio)
 
 Coolify es open source y gratis, pero se instala en un servidor propio. Necesitás una VPS (Oracle Cloud tiene una VM gratis, Hetzner o DigitalOcean cobran unos pocos dólares por mes). La alternativa es Coolify Cloud, que es pago.
 
