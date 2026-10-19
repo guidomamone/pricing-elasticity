@@ -2,6 +2,8 @@
 
 Mapa de fuentes de datos para analizar inversiones inmobiliarias en Argentina (foco CABA y AMBA).
 
+- [`map/`](map/): mapa por barrio de comprar vs. alquilar, deployable en Coolify.
+
 ## La diferencia con USA
 
 En USA hay MLS, registros públicos de ventas con precio de cierre y APIs como RentCast o ATTOM. En Argentina no existe nada de eso:

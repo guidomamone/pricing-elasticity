@@ -1,0 +1,30 @@
+{
+  "city": "CABA",
+  "updated": "2026-10-19",
+  "notes": "usd_m2 = precio medio de publicacion de departamentos (USD/m2). gross_yield = rentabilidad bruta anual (alquiler anual / precio). Fuente 'zonaprop' = Zonaprop Index; 'terceros' = tabla de terceros que cita Zonaprop; 'estimado' = imputado con una curva rentabilidad-vs-precio ajustada sobre los barrios verificados. Reemplazar con el Zonaprop Index del mes.",
+  "fx_ars_usd": 1537,
+  "center": [-34.6118, -58.4373],
+  "zoom": 12,
+  "barrios": [
+    {"name": "Puerto Madero",    "lat": -34.6118, "lon": -58.3627, "usd_m2": 6148, "gross_yield": 3.21, "src_price": "zonaprop 2026-08", "src_yield": "zonaprop 2026-09"},
+    {"name": "Palermo",          "lat": -34.5781, "lon": -58.4265, "usd_m2": 3437, "gross_yield": 4.60, "src_price": "zonaprop 2026-08", "src_yield": "zonaprop 2026-09"},
+    {"name": "Nuñez",            "lat": -34.5450, "lon": -58.4630, "usd_m2": 3399, "gross_yield": 4.60, "src_price": "zonaprop 2026-08", "src_yield": "zonaprop 2026-09"},
+    {"name": "Belgrano",         "lat": -34.5627, "lon": -58.4583, "usd_m2": 3319, "gross_yield": 4.69, "src_price": "terceros 2026-08", "src_yield": "estimado"},
+    {"name": "Recoleta",         "lat": -34.5875, "lon": -58.3974, "usd_m2": 2780, "gross_yield": 5.23, "src_price": "terceros 2026-03", "src_yield": "estimado"},
+    {"name": "Villa Crespo",     "lat": -34.5990, "lon": -58.4384, "usd_m2": 2607, "gross_yield": 5.44, "src_price": "terceros 2026-03", "src_yield": "estimado"},
+    {"name": "Caballito",        "lat": -34.6186, "lon": -58.4419, "usd_m2": 2525, "gross_yield": 5.55, "src_price": "terceros 2026", "src_yield": "estimado"},
+    {"name": "Colegiales",       "lat": -34.5740, "lon": -58.4490, "usd_m2": 2334, "gross_yield": 5.83, "src_price": "terceros 2026-01", "src_yield": "estimado"},
+    {"name": "Villa Urquiza",    "lat": -34.5726, "lon": -58.4870, "usd_m2": 2212, "gross_yield": 6.02, "src_price": "terceros 2026-01", "src_yield": "estimado"},
+    {"name": "Villa Devoto",     "lat": -34.6010, "lon": -58.5130, "usd_m2": 2151, "gross_yield": 6.13, "src_price": "terceros 2026-01", "src_yield": "estimado"},
+    {"name": "Saavedra",         "lat": -34.5543, "lon": -58.4880, "usd_m2": 1991, "gross_yield": 6.43, "src_price": "terceros 2026-01", "src_yield": "estimado"},
+    {"name": "Coghlan",          "lat": -34.5600, "lon": -58.4750, "usd_m2": 1956, "gross_yield": 6.50, "src_price": "terceros 2026-01", "src_yield": "estimado"},
+    {"name": "San Telmo",        "lat": -34.6215, "lon": -58.3720, "usd_m2": 1831, "gross_yield": 6.77, "src_price": "terceros 2026-01", "src_yield": "estimado"},
+    {"name": "Almagro",          "lat": -34.6060, "lon": -58.4200, "usd_m2": 1818, "gross_yield": 6.80, "src_price": "terceros 2026-01", "src_yield": "estimado"},
+    {"name": "San Nicolas",      "lat": -34.6037, "lon": -58.3816, "usd_m2": 1798, "gross_yield": 6.85, "src_price": "estimado", "src_yield": "zonaprop 2026-08"},
+    {"name": "Parque Avellaneda","lat": -34.6470, "lon": -58.4800, "usd_m2": 1811, "gross_yield": 6.82, "src_price": "estimado", "src_yield": "zonaprop 2026-08"},
+    {"name": "Boca",             "lat": -34.6345, "lon": -58.3631, "usd_m2": 1552, "gross_yield": 7.50, "src_price": "zonaprop 2026-02", "src_yield": "estimado"},
+    {"name": "Parque Patricios", "lat": -34.6370, "lon": -58.4000, "usd_m2": 1495, "gross_yield": 7.68, "src_price": "estimado", "src_yield": "zonaprop 2026-09"},
+    {"name": "Nueva Pompeya",    "lat": -34.6500, "lon": -58.4170, "usd_m2": 1484, "gross_yield": 7.60, "src_price": "zonaprop 2026-02", "src_yield": "zonaprop 2026-09"},
+    {"name": "Villa Lugano",     "lat": -34.6760, "lon": -58.4730, "usd_m2": 1056, "gross_yield": 9.64, "src_price": "zonaprop 2026-08", "src_yield": "zonaprop 2026-09"}
+  ]
+}
