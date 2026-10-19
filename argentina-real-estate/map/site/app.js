@@ -1,4 +1,6 @@
 import { DEFAULTS, ownVsRent, RATIO_BUCKETS, ratioColor } from "./model.js";
+import { DISCOUNT_BUCKETS, propMarker } from "./props.js";
+import { initSheet } from "./sheet.js";
 
 const PARAMS = [
   { key: "m2", label: "Superficie (m²)", step: 5, scale: 1 },
@@ -57,9 +59,15 @@ const isVerified = (b) => !b.src_price.startsWith("estimado") && !b.src_yield.st
 
 const state = { params: { ...DEFAULTS }, layer: "ratio", verifiedOnly: false };
 let data, map, polygons = null, shapes = new Map();
+let props = null, propLayer = null, propMarkers = new Map();
 
 async function main() {
-  data = await (await fetch("data/caba.json")).json();
+  const [caba, ops] = await Promise.all([
+    fetch("data/caba.json").then((r) => r.json()),
+    fetch("data/oportunidades.json").then((r) => (r.ok ? r.json() : null)).catch(() => null),
+  ]);
+  data = caba;
+  props = ops;
   map = L.map("map", { zoomControl: true }).setView(data.center, data.zoom);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 18,
@@ -69,6 +77,60 @@ async function main() {
   polygons = await loadPolygons();
   buildControls();
   render();
+  buildProps();
+  if (props) {
+    initSheet({
+      oportunidades: props,
+      loadAvisos: () => fetch("data/avisos.json").then((r) => r.json()),
+      onShowOnMap: showProp,
+    });
+  }
+  window.addEventListener("hashchange", route);
+  route();
+}
+
+function route() {
+  const view = location.hash === "#planilla" ? "planilla" : "mapa";
+  document.querySelectorAll("#topbar a").forEach((a) => a.classList.toggle("on", a.dataset.view === view));
+  document.getElementById("sheetView").hidden = view !== "planilla";
+  for (const id of ["map", "panel", "togglePanel"]) document.getElementById(id).style.display = view === "mapa" ? "" : "none";
+  if (view === "mapa") map.invalidateSize();
+}
+
+function buildProps() {
+  if (!props) {
+    document.getElementById("propHint").textContent = "No se encontraron datos de propiedades.";
+    return;
+  }
+  propLayer = L.layerGroup();
+  for (const p of props.items) {
+    if (p.lat == null) continue;
+    const m = propMarker(p);
+    propMarkers.set(p.id, m);
+    propLayer.addLayer(m);
+  }
+  propLayer.addTo(map);
+  const approx = props.items.filter((p) => p.approx).length;
+  document.getElementById("propCount").textContent = propMarkers.size;
+  document.getElementById("propLegend").innerHTML = DISCOUNT_BUCKETS
+    .map((b) => `<div class="legend-row"><span class="swatch" style="background:${b.color};border-radius:50%"></span>${b.label}</div>`).join("");
+  document.getElementById("propHint").textContent =
+    "Color = precio por m² vs. la referencia del barrio y tipo. " +
+    (approx ? `${approx} con ubicación aproximada (borde punteado). ` : "") +
+    "La lista completa está en la pestaña Planilla.";
+  document.getElementById("showProps").onchange = (e) => (e.target.checked ? propLayer.addTo(map) : propLayer.remove());
+
+  const bounds = L.latLngBounds(data.barrios.map((b) => [b.lat, b.lon]));
+  propMarkers.forEach((m) => bounds.extend(m.getLatLng()));
+  map.fitBounds(bounds, { padding: [20, 20] });
+}
+
+function showProp(id) {
+  const m = propMarkers.get(id);
+  if (!m) return;
+  location.hash = "#mapa";
+  if (!map.hasLayer(propLayer)) { document.getElementById("showProps").checked = true; propLayer.addTo(map); }
+  setTimeout(() => { map.setView(m.getLatLng(), 16); m.openPopup(); }, 50);
 }
 
 // Barrio polygons are optional: the Docker build tries to download them from the GCBA open data portal.

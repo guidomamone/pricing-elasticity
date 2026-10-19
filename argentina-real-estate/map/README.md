@@ -34,6 +34,18 @@ Los barrios con borde punteado tienen al menos un dato estimado. El check "Solo 
 
 Polígonos: el build de Docker intenta bajar `barrios.geojson` del portal de datos abiertos del GCBA. Si falla, el mapa dibuja círculos. Para fijarlo, poné el archivo en `site/data/barrios.geojson` (propiedad `BARRIO` o `nombre`) y commitealo.
 
+## Propiedades (planilla "Oportunidades Zona Norte")
+
+La pestaña **Planilla** muestra la hoja Oportunidades (100 propiedades curadas) y Todos los avisos (~3.000). Las oportunidades también se marcan en el mapa, coloreadas por cuánto está su USD/m² debajo de la referencia de su barrio y tipo.
+
+Para actualizar cuando cambie la planilla: descargarla como .xlsx y correr
+
+    python3 scripts/import_sheet.py ~/Downloads/Oportunidades_Zona_Norte.xlsx
+
+Eso regenera `site/data/oportunidades.json` y `site/data/avisos.json` (requiere `pip install openpyxl`). Commitear y pushear.
+
+Ubicación: el import pone cada propiedad en el centro de su barrio (borde punteado en el mapa). En el build de Netlify, `scripts/geocode.mjs` busca cada dirección en la API Georef del gobierno y la mueve a su lugar real si el resultado cae a menos de 3 km del barrio. Si Georef no responde, quedan las posiciones aproximadas y el deploy sigue.
+
 ## Correr local
 
     cd argentina-real-estate/map/site && python3 -m http.server 8000
