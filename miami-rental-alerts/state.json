@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-10",
-    "used": 7
+    "used": 8
   },
   "seen": {
     "335-S-Biscayne-Blvd,-Apt-412,-Miami,-FL-33131": {
@@ -43,6 +43,10 @@
     "900-Sw-8th-St,-Apt-504,-Miami,-FL-33130": {
       "first_seen": "2026-10-17",
       "price": 2750
+    },
+    "933-Sw-10th-St,-Miami,-FL-33130": {
+      "first_seen": "2026-10-19",
+      "price": 3950
     }
   },
   "skipped_reported": {
