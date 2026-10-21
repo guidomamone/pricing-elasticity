@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-10",
-    "used": 9
+    "used": 10
   },
   "seen": {
     "10-Sw-South-River-Dr,-Ste-3,-Miami,-FL-33130": {
@@ -11,6 +11,14 @@
     "1010-Sw-2nd-Ave,-Unit-808,-Miami,-FL-33130": {
       "first_seen": "2026-10-20",
       "price": 3850
+    },
+    "135-Sw-6th-Ave,-Unit-207,-Miami,-FL-33130": {
+      "first_seen": "2026-10-21",
+      "price": 1975
+    },
+    "300-S-Biscayne-Blvd,-Unit-T1806,-Miami,-FL-33131": {
+      "first_seen": "2026-10-21",
+      "price": 4100
     },
     "335-S-Biscayne-Blvd,-Apt-412,-Miami,-FL-33131": {
       "first_seen": "2026-10-17",
@@ -35,6 +43,10 @@
     "427-Sw-6th-St,-Apt-6,-Miami,-FL-33130": {
       "first_seen": "2026-10-17",
       "price": 1900
+    },
+    "510-Sw-10th-Ave,-Unit-512,-Miami,-FL-33130": {
+      "first_seen": "2026-10-21",
+      "price": 2500
     },
     "585-Sw-11th-St,-Apt-1,-Miami,-FL-33129": {
       "first_seen": "2026-10-17",
@@ -78,6 +90,7 @@
     "175-Se-25th-Rd,-Apt-2403,-Miami,-FL-33129": "2026-10-20",
     "200-Se-15th-Rd,-Ph-A,-Miami,-FL-33129": "2026-10-17",
     "2101-Brickell-Ave,-Apt-1911,-Miami,-FL-33129": "2026-10-20",
+    "2101-Brickell-Ave,-Apt-2110,-Miami,-FL-33129": "2026-10-21",
     "2101-Brickell-Ave,-Miami,-FL-33129": "2026-10-17",
     "2333-Brickell-Ave,-Miami,-FL-33129": "2026-10-17",
     "540-Brickell-Key-Dr,-Apt-916,-Miami,-FL-33131": "2026-10-16",
@@ -86,9 +99,13 @@
     "701-Brickell-Key-Blvd,-Apt-2404,-Miami,-FL-33131": "2026-10-16",
     "770-Claughton-Island-Dr,-Apt-1007,-Miami,-FL-33131": "2026-10-16",
     "770-Claughton-Island-Dr,-Apt-2116,-Miami,-FL-33131": "2026-10-16",
+    "800-N-Miami-Ave,-Unit-E1507,-Miami,-FL-33136": "2026-10-21",
+    "800-N-Miami-Ave,-Unit-E605,-Miami,-FL-33136": "2026-10-21",
+    "801-Brickell-Key-Blvd,-Apt-808,-Miami,-FL-33131": "2026-10-21",
     "801-S-Miami-Ave,-Unit-3107,-Miami,-FL-33130": "2026-10-16",
     "808-Brickell-Key-Dr,-Apt-1006,-Miami,-FL-33131": "2026-10-16",
     "808-Brickell-Key-Dr,-Apt-2102,-Miami,-FL-33131": "2026-10-16",
+    "851-Ne-1st-Ave,-Unit-1811,-Miami,-FL-33132": "2026-10-21",
     "851-Ne-1st-Ave,-Unit-205,-Miami,-FL-33132": "2026-10-20",
     "851-Ne-1st-Ave,-Unit-2309,-Miami,-FL-33132": "2026-10-16",
     "851-Ne-1st-Ave,-Unit-4306,-Miami,-FL-33132": "2026-10-17"
