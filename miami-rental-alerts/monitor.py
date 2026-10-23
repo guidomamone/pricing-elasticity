@@ -16,8 +16,11 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+import uuid
 from datetime import date
 from pathlib import Path
+
+from mapview import render_map
 
 HERE = Path(__file__).parent
 CONFIG_PATH = HERE / "buildings.json"
@@ -132,11 +135,13 @@ def zip_of(listing):
     return str(listing.get("zipCode") or "").strip()[:5]
 
 
-def format_entry(listing, name, warnings=()):
+def format_entry(listing, name, warnings=(), number=None):
     """Compact 3-line block. name is the tracked building's name, or None for a general Brickell listing."""
     unit = listing.get("addressLine2") or ""
     short = ", ".join(x for x in (listing.get("addressLine1"), unit) if x) or listing.get("formattedAddress", "")
     title = f"{name} {unit}".strip() if name else short
+    if number is not None:
+        title = f"{number}. {title}"
     price, beds = num(listing.get("price")), num(listing.get("bedrooms"))
     bits = [f"${price:,.0f}/mo" if price else "price n/a"]
     if beds is not None:
@@ -186,6 +191,37 @@ def send_telegram(token, chat_id, text):
     req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=data)
     with urllib.request.urlopen(req, timeout=30):
         pass
+
+
+def send_telegram_photo(token, chat_id, png, caption):
+    boundary = "----rentalalerts" + uuid.uuid4().hex
+    body = b""
+    for name, value in (("chat_id", chat_id), ("caption", caption)):
+        body += f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n{value}\r\n'.encode()
+    body += (f'--{boundary}\r\nContent-Disposition: form-data; name="photo"; filename="map.png"\r\n'
+             f"Content-Type: image/png\r\n\r\n").encode() + png + f"\r\n--{boundary}--\r\n".encode()
+    req = urllib.request.Request(
+        f"https://api.telegram.org/bot{token}/sendPhoto", data=body,
+        headers={"Content-Type": f"multipart/form-data; boundary={boundary}"})
+    with urllib.request.urlopen(req, timeout=60):
+        pass
+
+
+def send_map(pins, token, chat_id, dry_run):
+    """The map is a bonus: any failure here is logged and swallowed, never blocking the alerts."""
+    try:
+        png, missing = render_map(pins)
+        if png is None:
+            print(f"MAP skipped: none of the {missing} listings has coordinates")
+            return
+        caption = "Today's options. Numbers match the lists." + (f" {missing} without coordinates." if missing else "")
+        if dry_run:
+            (HERE / "last_map.png").write_bytes(png)
+            print(f"MAP saved to last_map.png ({missing} without coordinates)")
+        else:
+            send_telegram_photo(token, chat_id, png, caption)
+    except Exception as e:
+        print(f"MAP FAILED (alerts unaffected): {type(e).__name__}: {e}")
 
 
 def main(argv=None):
@@ -256,12 +292,18 @@ def main(argv=None):
 
     headers = {"tennis": "🎾 <b>Tennis-court buildings: {n} new</b>",
                "brickell": "🏙 <b>Brickell, other buildings: {n} new</b>"}
-    new, digest_sections = {}, []
+    new, digest_sections, pins, number = {}, [], [], 0
     for key, entries in sections.items():
         entries.sort(key=lambda e: num(e[0].get("price")) or float("inf"))
         new[key] = len(entries)
-        items = [(l, format_entry(l, b["name"] if b else None, w)) for l, b, w in entries]
+        items = []
+        for l, b, w in entries:
+            number += 1  # numbers run across both lists and match the pins on the map
+            items.append((l, format_entry(l, b["name"] if b else None, w, number)))
+            pins.append((number, num(l.get("latitude")), num(l.get("longitude")), key))
         digest_sections.append((headers[key].format(n=len(entries)), items))
+    if pins:
+        send_map(pins, token, chat_id, args.dry_run)
     # One message with both lists. An empty list is still shown, so a quiet day is visible
     # and not mistaken for a broken bot.
     for text, group in build_digest(digest_sections):

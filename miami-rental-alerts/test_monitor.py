@@ -198,6 +198,51 @@ class RunTests(unittest.TestCase):
             self.assertEqual(list(state["seen"]), ["b"])
             self.assertIn("999 sqft &lt; 1,000", self.texts(send)[1])  # filtered-out digest
 
+    def run_with_map(self, listings, tmp, render):
+        env = {"RENTCAST_API_KEY": "k", "TELEGRAM_BOT_TOKEN": "t", "TELEGRAM_CHAT_ID": "c"}
+        with mock.patch.object(monitor, "STATE_PATH", Path(tmp) / "state.json"), \
+             mock.patch.dict("os.environ", env), \
+             mock.patch.object(monitor, "fetch_listings", return_value=listings), \
+             mock.patch.object(monitor, "render_map", render), \
+             mock.patch.object(monitor, "send_telegram_photo") as photo, \
+             mock.patch.object(monitor, "send_telegram") as send:
+            monitor.main([])
+        return photo, send, json.loads((Path(tmp) / "state.json").read_text())
+
+    def test_map_pins_match_list_numbers(self):
+        a = listing("a", "2333 Brickell Ave", price=3000)
+        a.update(latitude=25.7506, longitude=-80.1990)
+        c = listing("c", "1050 Brickell Ave", zip_="33131", price=2500)
+        c.update(latitude=25.7580, longitude=-80.1930)
+        seen_pins = []
+
+        def render(pins):
+            seen_pins.extend(pins)
+            return b"PNG", 0
+        with tempfile.TemporaryDirectory() as tmp:
+            photo, send, _ = self.run_with_map([c, a], tmp, render)
+            # numbers run across lists: tennis first (1), then Brickell (2), whatever the price
+            self.assertEqual(seen_pins, [(1, 25.7506, -80.199, "tennis"), (2, 25.758, -80.193, "brickell")])
+            self.assertEqual(photo.call_count, 1)
+            text = send.call_args_list[0].args[2]
+            self.assertIn("<b>1. Brickell Bay Club #1512</b>", text)
+            self.assertIn("<b>2. 1050 Brickell Ave, #1512</b>", text)
+
+    def test_map_failure_does_not_block_alerts(self):
+        def render(pins):
+            raise RuntimeError("tiles down")
+        with tempfile.TemporaryDirectory() as tmp:
+            photo, send, state = self.run_with_map([listing("a", "2333 Brickell Ave")], tmp, render)
+            self.assertEqual(photo.call_count, 0)
+            self.assertEqual(send.call_count, 1)
+            self.assertEqual(list(state["seen"]), ["a"])
+
+    def test_no_map_when_nothing_new(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            photo, send, _ = self.run_with_map([], tmp, lambda pins: (b"PNG", 0))
+            self.assertEqual(photo.call_count, 0)
+            self.assertEqual(send.call_count, 1)  # empty lists message
+
     def test_dry_run_does_not_mark_seen(self):
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main([listing("a", "2333 Brickell Ave")], tmp, ["--dry-run"])
