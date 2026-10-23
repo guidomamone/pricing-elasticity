@@ -27,6 +27,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - run: pip install pillow
       - name: Run monitor
         env:
           RENTCAST_API_KEY: ${{ secrets.RENTCAST_API_KEY }}
@@ -40,3 +41,10 @@ jobs:
           git config user.email "rental-alerts-bot@users.noreply.github.com"
           git add miami-rental-alerts/state.json
           git diff --cached --quiet || (git commit -m "Update rental alerts state" && git push)
+      - name: Keep the map (dry runs only write it)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: last-map
+          path: miami-rental-alerts/last_map.png
+          if-no-files-found: ignore
