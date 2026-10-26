@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-10",
-    "used": 15
+    "used": 16
   },
   "seen": {
     "10-Sw-South-River-Dr,-Miami,-FL-33130": {
@@ -119,6 +119,10 @@
     "933-Sw-10th-St,-Miami,-FL-33130": {
       "first_seen": "2026-10-19",
       "price": 3950
+    },
+    "984-Sw-9th-St,-Unit-2,-Miami,-FL-33130": {
+      "first_seen": "2026-10-26",
+      "price": 2500
     },
     "999-Sw-1st-Ave,-Apt-2511,-Miami,-FL-33130": {
       "first_seen": "2026-10-25",
