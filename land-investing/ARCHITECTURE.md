@@ -128,3 +128,39 @@ selling cost (agent 6-10% on land or listing sites), time-to-sell (DOR shows day
 - What exactly are Muse and Jev (links/keys)?
 - Budget for paid data (Regrid ~ $ per county or nationwide; Land Insights subscription)?
 - Pilot county? My suggestion: **Marion (Ocala)** or **Sumter/Lake** in FL, which have strong I-75 / Villages growth, lots of vacant land, varied prices. Second: **Baldwin County, AL**.
+
+---
+
+## 7. Decisions (round 3, from Guido)
+
+- **Hold horizon: up to 15 years.** Changes the model: the 5-year "becomes built" label is too short. Use 5/10/15y labels
+  (FL DOR files go back far enough for 10y; 15y may need older county data). Long holds favor
+  *real-option* thinking: cheap carry (low property tax, no HOA) matters as much as upside. Add carry cost to the scorer.
+- **Pilot: Florida, county open.** Default to **Marion County** unless the worker finds a data blocker, then fall back to Sumter or Lake.
+- **Price filter required.** Two different "prices" exist, keep both:
+  1. *Estimated value* (our model, every parcel).
+  2. *Asking price* (only parcels for sale). Needs listing data: LandWatch / Lands of America / Zillow / Realtor
+     have no clean public API and scraping violates ToS. Options: Land Insights or Regrid exports, MLS access via an agent,
+     or Exa searches restricted to listing sites as a light feed. Decide later; build the filter on estimated value first.
+- **Muse** (Meta, Sept 2026): personal AI agent strong at the Meta ecosystem, used for Facebook group rumor search.
+  Open question: is there a developer API, or is it consumer-app only? If app-only, workflow is semi-manual:
+  Guido runs saved Muse prompts per county, pastes/exports results into `inbox/`, the pipeline ingests them.
+- **Jev** (typesafe.ai): non-LLM model for very cheap decisions. Use it for the high-volume, repetitive steps:
+  - signal category + stage classification,
+  - "is this article relevant to land growth in county X?" filter before any LLM call,
+  - dedupe "same event?" decisions.
+  LLM stays for structured extraction (location, dates) and the final per-lot memo.
+  Plan: label ~300 signals with an LLM first, use them to train/configure Jev, compare accuracy and cost.
+
+## 8. Platform recommendation
+
+Don't start with a platform. Start with:
+- **Supabase** (Postgres + PostGIS, auth, REST API, free tier then ~$25/mo). One database for parcels, sales, signals, scores.
+  Price/acreage/score filters become SQL; the map calls it.
+- **Map front end**: MapLibre GL app on **Netlify** (already connected). Filters: price range, acres, score, flood, signal category/stage.
+- **Agents**: scheduled jobs (GitHub Actions cron or Supabase Edge Functions / a small worker) running the scout.
+
+Buy vs build checkpoint after the backtest:
+- If the model doesn't beat random lots, stop and just use Land Insights for flipping-style comps.
+- If it does, this becomes its own repo + app. Felt or ArcGIS Online are options if you want a hosted map without code,
+  but they're weaker at custom scoring.

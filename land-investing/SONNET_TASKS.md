@@ -67,3 +67,13 @@ Output: `model/` notebook or script + `model/REPORT.md`
 - All five outputs exist, or `OPEN_QUESTIONS.md` explains why not.
 - `research/LOG.md` lists every search and its usefulness.
 - A short `STATUS.md` for Guido: what works, what's blocked, what you recommend next, 10 lines max.
+
+## Updates (round 3)
+- Pilot county: **Marion, FL** (fall back to Sumter or Lake on blockers).
+- Hold horizon 15 years: in Task 5 build labels for 5 and 10 years (15 if data allows) and add annual carry cost (property tax, from DOR millage) to the IRR.
+- Add a **price filter** to the map (Task 4): estimated value per parcel and $/acre, range sliders. Asking prices are out of scope until Guido picks a listing source.
+- Task 3 additions:
+  - `classify/jev.py`: implement against Jev docs at https://docs.typesafe.ai/introduction (Opus could not open it from its sandbox, read it yourself). Use Jev for relevance filter + category/stage. Keep an LLM fallback and log accuracy vs LLM labels on the same 50 items.
+  - `sources/muse.py`: check the Meta announcement (https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/) for an API. If none, implement an `inbox/` ingester for text Guido exports from Muse, and write the per-county prompts he should run in `scout/muse_prompts.md`.
+- Database: target **Supabase + PostGIS**. Write `db/schema.sql` from `ARCHITECTURE.md` section 1, but keep GeoJSON files as the working store until Guido creates the project.
+- Exa key: read from env var `EXA_API_KEY`. Never commit it.
