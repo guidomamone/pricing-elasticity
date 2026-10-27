@@ -164,3 +164,49 @@ Buy vs build checkpoint after the backtest:
 - If the model doesn't beat random lots, stop and just use Land Insights for flipping-style comps.
 - If it does, this becomes its own repo + app. Felt or ArcGIS Online are options if you want a hosted map without code,
   but they're weaker at custom scoring.
+
+---
+
+## 9. History & accountability (round 4)
+
+Goal: be able to answer, years from now, "how good were our predictions?" and "which sources (newsletters, FB groups, news sites) were right?".
+This **does need a backend**: Supabase/Postgres from day one, not GeoJSON files. Postgres is the backend; no custom server needed yet.
+
+### Principle: never overwrite, always append
+Every table that changes over time is append-only with `observed_at` (when we learned it). Current state = latest row (a SQL view).
+
+```
+parcel_snapshot   (parcel_id, as_of_year, land_use_code, just_value, zoning, flum, owner, improved_flag)
+                  # one row per parcel per year, straight from FL DOR NAL files. Gives the development track for free.
+sale              (append-only, from DOR SDF + listing data)
+listing_event     (parcel_id, observed_at, asking_price, status [listed|price_cut|pending|sold|withdrawn], source)
+signal_version    (signal_id, observed_at, stage, confidence, summary, source_id)
+                  # a signal moving rumor -> approved -> funded is a sequence of rows, not an edit
+source            (source_id, name, type [newsletter|news|fb_group|reddit|gov|exa_domain], url)
+prediction        (prediction_id, parcel_id, model_version, made_at, horizon_years,
+                   p_developed, est_value_now, est_value_at_horizon, irr_base, inputs_hash)
+                  # FROZEN once written. Never recomputed in place.
+model_version     (model_version, trained_at, git_sha, features, train_window, notes)
+decision          (parcel_id, decided_at, action [watch|offer|buy|pass|sell], price, reason, prediction_id)
+```
+
+### Scorekeeping jobs (scheduled)
+1. **Prediction resolution**: yearly when new DOR files land, join `prediction` to the actual `parcel_snapshot`/`sale` at horizon.
+   Metrics: calibration (did 30% predictions develop 30% of the time?), Brier score, value error, top-decile vs all return.
+   Interim check every year, not only at the 5/10/15y horizon, else we wait 15 years for feedback.
+2. **Signal resolution**: each signal gets an outcome later: `happened` / `happened_late` / `didn't_happen` / `unknown`,
+   checked against gov data (permits, FDOT phase, plats). Agent re-checks open signals every 6 months.
+3. **Source scorecard**: per source, hit rate of resolved signals, average lead time (first_seen vs when it became `funded`/`under_construction`),
+   false-alarm rate, duplicate rate. This is the "which newsletter is worse" view. Lead time matters as much as accuracy:
+   a source that's right but late is worthless for buying.
+4. **Decision journal**: our own buys/passes vs what happened to the parcel. Track the ones we passed on too (regret analysis).
+
+### Map additions
+- Time slider uses `parcel_snapshot` to replay development year by year.
+- Parcel panel shows its prediction history (how our score changed) next to its real price/development track.
+- "Sources" page: leaderboard with hit rate, lead time, false alarms.
+
+### Pitfalls
+- Without frozen predictions, retraining silently rewrites history. Store `inputs_hash` + `model_version`.
+- Backtests (fitting on the past) are not the same as live predictions. Report them separately; trust live ones more.
+- Resolve signals with rules written *before* the outcome is known, else we'll grade ourselves generously.

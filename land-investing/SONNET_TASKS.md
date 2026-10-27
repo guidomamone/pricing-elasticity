@@ -77,3 +77,11 @@ Output: `model/` notebook or script + `model/REPORT.md`
   - `sources/muse.py`: check the Meta announcement (https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/) for an API. If none, implement an `inbox/` ingester for text Guido exports from Muse, and write the per-county prompts he should run in `scout/muse_prompts.md`.
 - Database: target **Supabase + PostGIS**. Write `db/schema.sql` from `ARCHITECTURE.md` section 1, but keep GeoJSON files as the working store until Guido creates the project.
 - Exa key: read from env var `EXA_API_KEY`. Never commit it.
+
+## Updates (round 4): history and scorekeeping
+- The store is **Supabase/Postgres from the start**, not GeoJSON (GeoJSON only as map export). If Guido hasn't created the project, use local Postgres + PostGIS in Docker with the same `db/schema.sql`.
+- Implement the append-only tables in `ARCHITECTURE.md` section 9 in `db/schema.sql`, plus `current_*` views.
+- Task 1: load **multiple years** of FL DOR NAL for Marion into `parcel_snapshot` (as many years as available). This is the development track.
+- Task 3: every signal write goes to `signal_version` with a `source_id`. Seed `source` table with each domain/newsletter/group.
+- Task 5: write model outputs into `prediction` (frozen) with `model_version` and git SHA. Backtest predictions get `model_version` suffixed `-backtest`.
+- New Task 6: `jobs/resolve_predictions.py`, `jobs/resolve_signals.py` (rules defined in code before running), `jobs/source_scorecard.py` -> `reports/source_scorecard.md` (hit rate, median lead time, false alarm rate).
