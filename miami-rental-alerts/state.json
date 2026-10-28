@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-10",
-    "used": 17
+    "used": 18
   },
   "seen": {
     "10-Sw-South-River-Dr,-Miami,-FL-33130": {
@@ -15,6 +15,10 @@
     "1010-Sw-2nd-Ave,-Unit-808,-Miami,-FL-33130": {
       "first_seen": "2026-10-20",
       "price": 3850
+    },
+    "102-Sw-6th-Ave,-Apt-507,-Miami,-FL-33130": {
+      "first_seen": "2026-10-28",
+      "price": 2700
     },
     "1050-Brickell-Ave,-Apt-2414,-Miami,-FL-33131": {
       "first_seen": "2026-10-27",
@@ -55,6 +59,10 @@
     "300-S-Biscayne-Blvd,-Unit-T1806,-Miami,-FL-33131": {
       "first_seen": "2026-10-21",
       "price": 4100
+    },
+    "300-S-Biscayne-Blvd,-Unit-T2104,-Miami,-FL-33131": {
+      "first_seen": "2026-10-28",
+      "price": 3900
     },
     "31-Se-5th-St,-Apt-1608,-Miami,-FL-33131": {
       "first_seen": "2026-10-22",
@@ -171,11 +179,13 @@
     "2101-Brickell-Ave,-Apt-2110,-Miami,-FL-33129": "2026-10-21",
     "2101-Brickell-Ave,-Apt-711,-Miami,-FL-33129": "2026-10-23",
     "2101-Brickell-Ave,-Miami,-FL-33129": "2026-10-17",
+    "2127-Brickell-Ave,-Apt-1604,-Miami,-FL-33129": "2026-10-28",
     "2333-Brickell-Ave,-Apt-1516,-Miami,-FL-33129": "2026-10-24",
     "2333-Brickell-Ave,-Miami,-FL-33129": "2026-10-17",
     "2451-Brickell-Ave,-Apt-18U,-Miami,-FL-33129": "2026-10-24",
     "2475-Brickell-Ave,-Apt-1905,-Miami,-FL-33129": "2026-10-24",
     "540-Brickell-Key-Dr,-Apt-1005,-Miami,-FL-33131": "2026-10-27",
+    "540-Brickell-Key-Dr,-Apt-1426,-Miami,-FL-33131": "2026-10-28",
     "540-Brickell-Key-Dr,-Apt-916,-Miami,-FL-33131": "2026-10-16",
     "540-Brickell-Key-Dr,-Miami,-FL-33131": "2026-10-16",
     "68-Se-6th-St,-Apt-1701,-Miami,-FL-33131": "2026-10-16",
