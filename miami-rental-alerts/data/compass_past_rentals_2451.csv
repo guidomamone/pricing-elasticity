@@ -1,7 +1,7 @@
 building,unit,floor,floor_num,line,view,month,beds,baths,sqft,contract_price,orig_price,contract_vs_orig_pct,app_change_text,status,app_annual_ppsf,rc_last_ask,rc_listed,rc_removed,rc_dom,contract_vs_rc_ask_pct,screenshot,notes
 2451 Brickell Ave,11F,11,11,F,unknown,2026-10,1,1,1001,3450,3850,-10.4,down 10%,Rented,41,3700,2026-08-31,2026-10-17,47,-6.8,5,
 2451 Brickell Ave,17U,17,17,U,unknown,2026-10,1,1,998,2900,3000,-3.3,down 3%,Rented,35,3000,2026-07-31,2026-09-26,57,-3.3,5,
-2451 Brickell Ave,2E,2,2,E,unknown,2026-10,2,2,1188,3850,4200,-8.3,down 8%,Rented,39,3950,2026-05-22,2026-10-02,133,-2.5,5,
+2451 Brickell Ave,2E,2,2,E,water,2026-10,2,2,1188,3850,4200,-8.3,down 8%,Rented,39,3950,2026-05-22,2026-10-02,133,-2.5,5,
 2451 Brickell Ave,5G,5,5,G,water,2026-09,2,2,1357,4200,2500,68.0,up 68%,Rented,37,4200,2026-07-26,2026-08-13,18,0.0,5,orig price looks wrong in the app
 2451 Brickell Ave,6N,6,6,N,unknown,2026-09,1,1,1012,2950,,,,Rented,35,2950,2026-05-18,2026-08-08,82,0.0,5,
 2451 Brickell Ave,16J,16,16,J,water,2026-09,3,3,1703,6000,,,,Rented,42,6000,2026-05-22,2026-06-03,12,0.0,5,
@@ -24,7 +24,7 @@ building,unit,floor,floor_num,line,view,month,beds,baths,sqft,contract_price,ori
 2451 Brickell Ave,16K,16,16,K,unknown,2025-11,1,1,886,2750,,,,Rented,37,2750,2025-11-05,2025-11-22,17,0.0,2,
 2451 Brickell Ave,16S,16,16,S,water,2025-11,2,2,1188,4500,,,,Rented,45,,,,,,2,
 2451 Brickell Ave,11S,11,11,S,water,2025-11,2,2,1188,3800,4200,-9.5,down 10%,Closed,38,4200,2025-11-03,2025-11-18,15,-9.5,2,label: Closed + Virtual Tour
-2451 Brickell Ave,3E,3,3,E,unknown,2025-10,2,2,1188,4200,,,,Rented,42,,,,,,2,
+2451 Brickell Ave,3E,3,3,E,water,2025-10,2,2,1188,4200,,,,Rented,42,,,,,,2,
 2451 Brickell Ave,4L,4,4,L,parking_lot,2025-09,2,2,1188,4000,,,,Rented,40,,,,,,1,
 2451 Brickell Ave,3L,3,3,L,parking_lot,2025-09,2,2,1188,3100,3000,3.3,up 3%,Rented,31,,,,,,1,
 2451 Brickell Ave,7L,7,7,L,parking_lot,2025-09,2,2,1188,3000,,,,Rented,30,,,,,,1,
