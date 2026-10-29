@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marion Growth Map</title>
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+  :root { --bg:#fff; --fg:#1b1f23; --muted:#5f6b76; --line:#d9dee3; --accent:#1f6f4a; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#16191c; --fg:#e8ecef; --muted:#9aa5ae; --line:#2c3238; --accent:#4fbf8a; } }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui, sans-serif; }
+  #map { position:absolute; inset:0; }
+  .panel { position:absolute; z-index:2; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:12px; box-shadow:0 2px 10px #0003; }
+  #controls { top:12px; left:12px; max-width:260px; }
+  #info { top:12px; right:12px; width:290px; max-height:calc(100% - 60px); overflow:auto; display:none; }
+  h1 { font-size:15px; margin:0 0 8px; }
+  label { display:block; color:var(--muted); font-size:12px; margin-bottom:4px; }
+  select { width:100%; padding:6px; background:var(--bg); color:var(--fg); border:1px solid var(--line); border-radius:6px; }
+  #legend { margin-top:10px; font-size:12px; }
+  .ramp { height:10px; border-radius:4px; background:linear-gradient(90deg,#2b5c8a,#f7f7f7,#c0392b); }
+  .ramp.seq { background:linear-gradient(90deg,#f7fbff,#6baed6,#08306b); }
+  .ends { display:flex; justify-content:space-between; color:var(--muted); }
+  table { width:100%; border-collapse:collapse; } td { padding:3px 0; border-bottom:1px solid var(--line); } td:last-child { text-align:right; }
+  .btn { display:inline-block; margin-top:10px; margin-right:6px; padding:7px 10px; border-radius:6px; background:var(--accent); color:#fff; text-decoration:none; border:0; cursor:pointer; font:inherit; }
+  #footer { bottom:8px; left:12px; font-size:11px; color:var(--muted); padding:6px 10px; max-width:60%; }
+  #err { color:#c0392b; font-size:12px; margin-top:8px; }
+  @media (max-width:600px) { #controls { right:12px; max-width:none; } #info { top:auto; bottom:12px; left:12px; right:12px; width:auto; max-height:45%; } #footer { display:none; } }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="controls" class="panel">
+  <h1>Marion County growth</h1>
+  <label for="metric">Color block groups by</label>
+  <select id="metric">
+    <option value="pop_change_pct">Population change % (2020 → ACS)</option>
+    <option value="added_per_km2">People added per km²</option>
+    <option value="density_km2">Density now (per km²)</option>
+    <option value="median_income">Median household income</option>
+    <option value="median_home_value">Median home value</option>
+  </select>
+  <div id="legend"></div>
+  <div id="err"></div>
+</div>
+<div id="info" class="panel"></div>
+<div id="footer" class="panel">Census 2020 PL + ACS 5-year, TIGER 2020 block groups. ACS is a 5-year average, so change vs 2020 understates recent growth.</div>
+<script>
+const METRICS = {
+  pop_change_pct: { stops: [-10, 0, 25], diverging: true, fmt: v => v.toFixed(1) + '%' },
+  added_per_km2:  { stops: [-20, 0, 100], diverging: true, fmt: v => Math.round(v) },
+  density_km2:    { stops: [0, 200, 1500], fmt: v => Math.round(v) },
+  median_income:  { stops: [30000, 60000, 100000], fmt: v => '$' + Math.round(v/1000) + 'k' },
+  median_home_value: { stops: [100000, 250000, 450000], fmt: v => '$' + Math.round(v/1000) + 'k' },
+};
+const money = v => v == null ? 'n/a' : '$' + Number(v).toLocaleString();
+const num = v => v == null ? 'n/a' : Number(v).toLocaleString();
+
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/liberty',
+  center: [-82.14, 29.19], zoom: 9,
+});
+map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
+
+function colorExpr(key) {
+  const m = METRICS[key], [a, b, c] = m.stops;
+  const cols = m.diverging ? ['#2b5c8a', '#f7f7f7', '#c0392b'] : ['#f7fbff', '#6baed6', '#08306b'];
+  return ['case', ['==', ['get', key], null], '#999',
+    ['interpolate', ['linear'], ['get', key], a, cols[0], b, cols[1], c, cols[2]]];
+}
+function legend(key) {
+  const m = METRICS[key];
+  document.getElementById('legend').innerHTML =
+    `<div class="ramp ${m.diverging ? '' : 'seq'}"></div><div class="ends"><span>${m.fmt(m.stops[0])}</span><span>${m.fmt(m.stops[1])}</span><span>${m.fmt(m.stops[2])}+</span></div>`;
+}
+
+map.on('load', async () => {
+  let data;
+  try {
+    const r = await fetch('data/population.geojson');
+    if (!r.ok) throw new Error(r.status);
+    data = await r.json();
+  } catch (e) {
+    document.getElementById('err').textContent = 'No data yet. Run scripts/build_population.py first.';
+    return;
+  }
+  map.addSource('bg', { type: 'geojson', data });
+  const key = document.getElementById('metric').value;
+  map.addLayer({ id: 'bg-fill', type: 'fill', source: 'bg', paint: { 'fill-color': colorExpr(key), 'fill-opacity': 0.6 } });
+  map.addLayer({ id: 'bg-line', type: 'line', source: 'bg', paint: { 'line-color': '#333', 'line-width': 0.4 } });
+  legend(key);
+
+  document.getElementById('metric').onchange = e => {
+    map.setPaintProperty('bg-fill', 'fill-color', colorExpr(e.target.value));
+    legend(e.target.value);
+  };
+  map.on('mouseenter', 'bg-fill', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', 'bg-fill', () => map.getCanvas().style.cursor = '');
+  map.on('click', 'bg-fill', e => {
+    const p = e.features[0].properties, ll = e.lngLat;
+    const coords = `${ll.lat.toFixed(6)}, ${ll.lng.toFixed(6)}`;
+    const info = document.getElementById('info');
+    info.style.display = 'block';
+    info.innerHTML = `
+      <h1>Block group ${p.GEOID}</h1>
+      <table>
+        <tr><td>Population 2020</td><td>${num(p.pop_2020)}</td></tr>
+        <tr><td>Population ACS ${p.acs_year}</td><td>${num(p.pop_acs)}</td></tr>
+        <tr><td>Change</td><td>${num(p.pop_change)} (${p.pop_change_pct ?? 'n/a'}%)</td></tr>
+        <tr><td>Added per km²</td><td>${num(p.added_per_km2)}</td></tr>
+        <tr><td>Density per km²</td><td>${num(p.density_km2)}</td></tr>
+        <tr><td>Median income</td><td>${money(p.median_income)}</td></tr>
+        <tr><td>Median home value</td><td>${money(p.median_home_value)}</td></tr>
+        <tr><td>Clicked point</td><td>${coords}</td></tr>
+      </table>
+      <button class="btn" id="copy">Copy coords</button>
+      <a class="btn" href="https://www.acres.com/" target="_blank" rel="noopener">Open Acres</a>
+      <button class="btn" id="close">Close</button>`;
+    document.getElementById('copy').onclick = () => navigator.clipboard?.writeText(coords);
+    document.getElementById('close').onclick = () => info.style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>
