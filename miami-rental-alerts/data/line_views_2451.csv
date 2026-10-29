@@ -1,0 +1,9 @@
+line,view,basis,applies_to_all_floors
+H,water,owner: 20H faces the water,assumed_yes
+B,water,owner: 20B water,assumed_yes
+J,water,owner: 5J water,assumed_yes
+G,water,owner: 11G water,assumed_yes
+S,water,owner: 5S water,assumed_yes
+M,parking_lot,owner: 20M parking lot; PHM faces like 20M,assumed_yes
+P,parking_lot,owner: 4P parking lot,assumed_yes
+L,parking_lot,owner: 5L parking lot,assumed_yes
