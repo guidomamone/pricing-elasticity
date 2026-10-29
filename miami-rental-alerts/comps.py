@@ -129,6 +129,26 @@ def offline_report(path, lo, hi):
     for number, r in picked:
         if number == 2451 and r.get("bedrooms") == 2 and r.get("status") == "Inactive" and r.get("removedDate"):
             months.setdefault(str(r["removedDate"])[:7], []).append(r.get("addressLine2"))
+    keys = sorted({k for r in rows for k in r})
+    print(f"\n=== Fields present in the listing data: {', '.join(keys)}")
+    hinted = [k for k in keys if any(w in k.lower() for w in ("view", "desc", "remark", "feature", "note"))]
+    print("Fields that could describe the view: " + (", ".join(hinted) if hinted else "none"))
+
+    def line_of(addr2):
+        m = re.search(r"([A-Za-z])\s*$", addr2 or "")
+        return m.group(1).upper() if m else "?"
+
+    lines = {}
+    for number, r in picked:
+        if number == 2451 and r.get("bedrooms") == 2:
+            lines.setdefault(line_of(r.get("addressLine2")), []).append(r)
+    print("\n=== 2451 two-bedroom listings by line (the letter at the end of the unit)")
+    for letter in sorted(lines):
+        items = sorted(lines[letter], key=lambda r: str(r.get("listedDate")))
+        cells = [f"{r.get('addressLine2')} {money(r.get('price'))} {r.get('squareFootage')}sf "
+                 f"{str(r.get('status'))[:3]} {str(r.get('removedDate') or r.get('listedDate'))[:7]}" for r in items]
+        print(f"  line {letter}: " + " | ".join(cells))
+
     print("\n=== 2451 closed 2bd by month the listing left the market")
     for month in sorted(months):
         print(f"  {month}: {', '.join(map(str, months[month]))}")
