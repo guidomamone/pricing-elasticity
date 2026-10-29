@@ -24,6 +24,15 @@
   table { width:100%; border-collapse:collapse; } td { padding:3px 0; border-bottom:1px solid var(--line); } td:last-child { text-align:right; }
   .btn { display:inline-block; margin-top:10px; margin-right:6px; padding:7px 10px; border-radius:6px; background:var(--accent); color:#fff; text-decoration:none; border:0; cursor:pointer; font:inherit; }
   #footer { bottom:8px; left:12px; font-size:11px; color:var(--muted); padding:6px 10px; max-width:60%; }
+  .sect { margin-top:12px; padding-top:10px; border-top:1px solid var(--line); display:grid; gap:6px; }
+  .chk { display:flex; gap:6px; align-items:center; color:var(--fg); font-size:13px; margin:0; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .row input, #year { width:100%; box-sizing:border-box; }
+  input[type=number] { padding:5px; background:var(--bg); color:var(--fg); border:1px solid var(--line); border-radius:6px; }
+  .muted { color:var(--muted); font-size:12px; }
+  .sw { display:inline-block; width:9px; height:9px; border-radius:50%; vertical-align:middle; margin-left:4px; }
+  .sw.new { background:#e8590c; } .sw.old { background:#868e96; }
+  #controls { max-height:calc(100% - 60px); overflow:auto; }
   #err { color:#c0392b; font-size:12px; margin-top:8px; }
   @media (max-width:600px) { #controls { right:12px; max-width:none; } #info { top:auto; bottom:12px; left:12px; right:12px; width:auto; max-height:45%; } #footer { display:none; } }
 </style>
@@ -49,10 +58,31 @@
     <button class="btn" id="play">Play</button>
   </div>
   <div id="legend"></div>
+  <div class="sect">
+    <label class="chk"><input type="checkbox" id="showBg" checked> Block groups</label>
+    <label class="chk"><input type="checkbox" id="showNew" checked> New construction (parcels)</label>
+    <div id="newCtl">
+      <label for="year">Built through <strong id="yearLabel">2025</strong> <span class="sw new"></span> last 3 yrs <span class="sw old"></span> earlier</label>
+      <input type="range" id="year" min="1990" max="2025" step="1" value="2025">
+      <button class="btn" id="playYear">Play 1990 → 2025</button>
+    </div>
+    <label class="chk"><input type="checkbox" id="showVac"> Vacant lots</label>
+    <div id="vacCtl" hidden>
+      <label for="basis">Price</label>
+      <select id="basis"><option value="sale">Last sale price</option><option value="jv">Assessed (just) value</option></select>
+      <div class="row"><div><label for="pmin">Min $</label><input id="pmin" type="number" min="0" step="1000" value="0"></div>
+      <div><label for="pmax">Max $</label><input id="pmax" type="number" min="0" step="1000" value="60000"></div></div>
+      <div class="row"><div><label for="amin">Min acres</label><input id="amin" type="number" min="0" step="0.05" value="0.2"></div>
+      <div><label for="amax">Max acres</label><input id="amax" type="number" min="0" step="0.5" value="5"></div></div>
+      <div class="row"><div><label for="since">Sold since</label><input id="since" type="number" min="1990" max="2026" value="2023"></div>
+      <div><label for="mkt">Market sales only</label><select id="mkt"><option value="1">Yes</option><option value="0">No</option></select></div></div>
+      <div id="vacCount" class="muted"></div>
+    </div>
+  </div>
   <div id="err"></div>
 </div>
 <div id="info" class="panel"></div>
-<div id="footer" class="panel">Census 2020 PL + ACS 5-year, TIGER 2020 block groups. ACS is a 5-year average, so change vs 2020 understates recent growth. Growth front uses ACS B25034 year built (decade level; 2020+ covers about 4 years).</div>
+<div id="footer" class="panel">Census 2020 PL + ACS 5-year, TIGER 2020 block groups. Parcels: FL statewide cadastral, 2026 tax roll (year built, just value, last 2 sales). ACS is a 5-year average, so change vs 2020 understates recent growth. Growth front uses ACS B25034 year built (decade level; 2020+ covers about 4 years).</div>
 <script>
 const DECADES = ['1980', '1990', '2000', '2010', '2020'];
 const METRICS = {
@@ -128,6 +158,7 @@ map.on('load', async () => {
   map.on('mouseenter', 'bg-fill', () => map.getCanvas().style.cursor = 'pointer');
   map.on('mouseleave', 'bg-fill', () => map.getCanvas().style.cursor = '');
   map.on('click', 'bg-fill', e => {
+    if (map.getLayer('vac-pts') && map.queryRenderedFeatures(e.point, { layers: ['vac-pts'] }).length) return;
     const p = e.features[0].properties, ll = e.lngLat;
     const coords = `${ll.lat.toFixed(6)}, ${ll.lng.toFixed(6)}`;
     const info = document.getElementById('info');
@@ -155,6 +186,94 @@ map.on('load', async () => {
       <button class="btn" id="close">Close</button>`;
     document.getElementById('copy').onclick = () => navigator.clipboard?.writeText(coords);
     document.getElementById('close').onclick = () => info.style.display = 'none';
+  });
+});
+
+// ---- Parcel layers (FL statewide cadastral, 2026 tax roll) ----
+const MARKET = new Set(['01', '02']);  // DOR qualification codes treated as arm's-length (verify)
+const USE = { '000': 'Vacant residential', '010': 'Vacant commercial', '040': 'Vacant industrial', '070': 'Vacant institutional' };
+const $ = id => document.getElementById(id);
+map.on('load', async () => {
+  const [growth, vac] = await Promise.all([
+    fetch('data/growth.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch('data/vacant.json').then(r => r.ok ? r.json() : null).catch(() => null),
+  ]);
+  if (growth) {
+    map.addSource('new', { type: 'geojson', data: { type: 'FeatureCollection', features: growth.map(([x, y, yr]) => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [x, y] }, properties: { yr } })) } });
+    map.addLayer({ id: 'new-pts', type: 'circle', source: 'new', paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 0.8, 12, 2.5, 15, 5],
+      'circle-opacity': 0.8 } });
+  }
+  let vfc = null;
+  if (vac) {
+    const c = Object.fromEntries(vac.cols.map((k, i) => [k, i]));
+    vfc = { type: 'FeatureCollection', features: vac.rows.map(r => ({ type: 'Feature', geometry: { type: 'Point', coordinates: [r[c.lon], r[c.lat]] },
+      properties: Object.fromEntries(vac.cols.map((k, i) => [k, r[i]])) })) };
+    map.addSource('vac', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+    map.addLayer({ id: 'vac-pts', type: 'circle', source: 'vac', layout: { visibility: 'none' }, paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 1.5, 12, 4, 16, 8],
+      'circle-color': ['interpolate', ['linear'], ['get', 'ppa'], 20000, '#1a9850', 100000, '#fee08b', 300000, '#d73027'],
+      'circle-stroke-color': '#222', 'circle-stroke-width': 0.3 } });
+  }
+  const paintNew = () => {
+    if (!growth) return;
+    const y = +$('year').value; $('yearLabel').textContent = y;
+    map.setFilter('new-pts', ['<=', ['get', 'yr'], y]);
+    map.setPaintProperty('new-pts', 'circle-color', ['case', ['>', ['get', 'yr'], y - 3], '#e8590c', '#868e96']);
+  };
+  const filterVac = () => {
+    if (!vfc) return;
+    const basis = $('basis').value, pmin = +$('pmin').value || 0, pmax = +$('pmax').value || Infinity,
+      amin = +$('amin').value || 0, amax = +$('amax').value || Infinity, since = +$('since').value || 0, mkt = $('mkt').value === '1';
+    const out = [];
+    for (const f of vfc.features) {
+      const p = f.properties;
+      if (p.acres < amin || p.acres > amax) continue;
+      let price;
+      if (basis === 'sale') {
+        if (p.sale1 <= 1000 || p.sale1_yr < since || (mkt && !MARKET.has(p.qual1))) continue;
+        price = p.sale1;
+      } else price = p.jv;
+      if (price < pmin || price > pmax) continue;
+      p.ppa = Math.round(price / Math.max(p.acres, 0.05));
+      out.push(f);
+    }
+    map.getSource('vac').setData({ type: 'FeatureCollection', features: out });
+    const ppas = out.map(f => f.properties.ppa).sort((a, b) => a - b);
+    $('vacCount').textContent = `${out.length.toLocaleString()} lots` + (ppas.length ? ` · median $${ppas[ppas.length >> 1].toLocaleString()}/acre · color: green < $20k/ac, red > $300k/ac` : '');
+  };
+  const vis = (id, on) => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+  $('showBg').onchange = e => { vis('bg-fill', e.target.checked); vis('bg-line', e.target.checked); };
+  $('showNew').onchange = e => { vis('new-pts', e.target.checked); $('newCtl').hidden = !e.target.checked; };
+  $('showVac').onchange = e => { vis('vac-pts', e.target.checked); $('vacCtl').hidden = !e.target.checked; if (e.target.checked) filterVac(); };
+  $('year').oninput = paintNew;
+  ['basis', 'pmin', 'pmax', 'amin', 'amax', 'since', 'mkt'].forEach(id => $(id).onchange = filterVac);
+  let t = null;
+  $('playYear').onclick = e => {
+    if (t) { clearInterval(t); t = null; e.target.textContent = 'Play 1990 → 2025'; return; }
+    e.target.textContent = 'Stop'; $('year').value = 1990; paintNew();
+    t = setInterval(() => { if (+$('year').value >= 2025) { clearInterval(t); t = null; e.target.textContent = 'Play 1990 → 2025'; return; }
+      $('year').value = +$('year').value + 1; paintNew(); }, 450);
+  };
+  paintNew();
+  map.on('mouseenter', 'vac-pts', () => map.getCanvas().style.cursor = 'pointer');
+  map.on('mouseleave', 'vac-pts', () => map.getCanvas().style.cursor = '');
+  map.on('click', 'vac-pts', e => {
+    const p = e.features[0].properties, [x, y] = e.features[0].geometry.coordinates;
+    const coords = `${y.toFixed(6)}, ${x.toFixed(6)}`, money = v => v ? '$' + Number(v).toLocaleString() : 'n/a';
+    const info = $('info'); info.style.display = 'block';
+    info.innerHTML = `<h1>${USE[p.uc] || p.uc} · ${p.acres} ac</h1><table>
+      <tr><td>Parcel</td><td>${p.parcel_id}</td></tr>
+      <tr><td>Address</td><td>${p.addr || 'n/a'}</td></tr>
+      <tr><td>Assessed (just) value</td><td>${money(p.jv)}</td></tr>
+      <tr><td>Last sale</td><td>${money(p.sale1)} ${p.sale1_yr ? '(' + p.sale1_mo + '/' + p.sale1_yr + ')' : ''}</td></tr>
+      <tr><td>Sale code</td><td>${p.qual1 || 'n/a'} ${MARKET.has(p.qual1) ? '(market)' : '(non-market or unknown)'}</td></tr>
+      <tr><td>Last sale $/acre</td><td>${p.sale1 > 1000 ? money(Math.round(p.sale1 / Math.max(p.acres, 0.05))) : 'n/a'}</td></tr>
+      <tr><td>Previous sale</td><td>${money(p.sale2)} ${p.sale2_yr ? '(' + p.sale2_yr + ')' : ''}</td></tr>
+      <tr><td>Coordinates</td><td>${coords}</td></tr></table>
+      <button class="btn" id="copy2">Copy coords</button><a class="btn" href="https://www.acres.com/" target="_blank" rel="noopener">Open Acres</a><button class="btn" id="close2">Close</button>`;
+    $('copy2').onclick = () => navigator.clipboard?.writeText(coords).catch(() => {});
+    $('close2').onclick = () => info.style.display = 'none';
   });
 });
 </script>
