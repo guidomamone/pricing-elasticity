@@ -85,3 +85,7 @@ Output: `model/` notebook or script + `model/REPORT.md`
 - Task 3: every signal write goes to `signal_version` with a `source_id`. Seed `source` table with each domain/newsletter/group.
 - Task 5: write model outputs into `prediction` (frozen) with `model_version` and git SHA. Backtest predictions get `model_version` suffixed `-backtest`.
 - New Task 6: `jobs/resolve_predictions.py`, `jobs/resolve_signals.py` (rules defined in code before running), `jobs/source_scorecard.py` -> `reports/source_scorecard.md` (hit rate, median lead time, false alarm rate).
+
+## PRIORITY OVERRIDE (round 5): build the MVP first
+Do `MVP.md` steps 1-5 before anything else above. Tasks 0-6 resume after Guido has used the map.
+Task 1 (FL DOR data) overlaps with MVP step 1, reuse the work.
