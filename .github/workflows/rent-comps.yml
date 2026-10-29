@@ -1,0 +1,68 @@
+name: Rent comps
+
+on:
+  workflow_dispatch:
+    inputs:
+      address:
+        description: "Building address"
+        default: "2451 Brickell Ave"
+      unit:
+        description: "Unit"
+        default: "20M"
+      beds:
+        description: "Bedrooms (blank = detect from the unit's listing)"
+        required: false
+      baths:
+        description: "Bathrooms (blank = detect)"
+        required: false
+      sqft:
+        description: "Square feet (blank = detect)"
+        required: false
+      days:
+        description: "Days back for nearby closed rentals"
+        default: "180"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: miami-rental-alerts
+
+jobs:
+  comps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - name: Run comps
+        env:
+          RENTCAST_API_KEY: ${{ secrets.RENTCAST_API_KEY }}
+          ADDRESS: ${{ inputs.address }}
+          UNIT: ${{ inputs.unit }}
+          BEDS: ${{ inputs.beds }}
+          BATHS: ${{ inputs.baths }}
+          SQFT: ${{ inputs.sqft }}
+          DAYS: ${{ inputs.days }}
+        run: |
+          args=(--address "$ADDRESS" --unit "$UNIT" --days "$DAYS")
+          [ -n "$BEDS" ] && args+=(--beds "$BEDS")
+          [ -n "$BATHS" ] && args+=(--baths "$BATHS")
+          [ -n "$SQFT" ] && args+=(--sqft "$SQFT")
+          python miami-rental-alerts/comps.py "${args[@]}"
+      - name: Save state
+        if: always()
+        run: |
+          git config user.name "rental-alerts-bot"
+          git config user.email "rental-alerts-bot@users.noreply.github.com"
+          git add miami-rental-alerts/state.json
+          git diff --cached --quiet || (git commit -m "Update rental alerts state" && git push)
+      - name: Keep the raw data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: comps-raw
+          path: miami-rental-alerts/comps_raw.json
+          if-no-files-found: ignore
