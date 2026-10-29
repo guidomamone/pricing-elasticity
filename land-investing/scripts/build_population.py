@@ -1,17 +1,16 @@
 """Build the population growth layer for Marion County, FL (block groups).
 
-Sources (no API key needed for light use; set CENSUS_API_KEY to raise limits):
-- 2020 Decennial PL 94-171: P1_001N total population
-- ACS 5-year (latest, default 2024): B01003 population, B19013 median household income,
-  B25077 median home value. ACS 2020+ uses 2020 block group boundaries, so it joins cleanly.
+Uses Census bulk files from www2.census.gov (the Census API now requires a key):
+- 2020 Decennial PL 94-171 Florida file: P1 total population.
+- ACS 5-year table-based summary files (default 2024): B01003 population,
+  B19013 median household income, B25077 median home value. ACS 2020+ uses
+  2020 block group boundaries, so it joins cleanly with the decennial data.
 - TIGER/Line 2020 block group shapes for Florida.
 
 Output: map/data/population.geojson
 Run from land-investing/:  python scripts/build_population.py [--acs-year 2024]
 """
 import argparse
-import io
-import os
 import zipfile
 from pathlib import Path
 
@@ -24,35 +23,55 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "map" / "data" / "population.geojson"
 TIGER_URL = "https://www2.census.gov/geo/tiger/TIGER2020/BG/tl_2020_12_bg.zip"
+PL_URL = ("https://www2.census.gov/programs-surveys/decennial/2020/data/"
+          "01-Redistricting_File--PL_94-171/Florida/fl2020.pl.zip")
+ACS_URL = ("https://www2.census.gov/programs-surveys/acs/summary_file/{y}/"
+           "table-based-SF/data/5YRData/acsdt5y{y}-{t}.dat")
+PREFIX = STATE + COUNTY
 
 
-def census(dataset: str, variables: list[str]) -> pd.DataFrame:
-    params = {
-        "get": ",".join(variables),
-        "for": "block group:*",
-        "in": f"state:{STATE} county:{COUNTY} tract:*",
-    }
-    if key := os.environ.get("CENSUS_API_KEY"):
-        params["key"] = key
-    r = requests.get(f"https://api.census.gov/data/{dataset}", params=params, timeout=60)
-    r.raise_for_status()
-    rows = r.json()
-    df = pd.DataFrame(rows[1:], columns=rows[0])
-    df["GEOID"] = df["state"] + df["county"] + df["tract"] + df["block group"]
-    for v in variables:
-        df[v] = pd.to_numeric(df[v], errors="coerce")
-        # Census uses large negative sentinels for "not available"
-        df.loc[df[v] < 0, v] = pd.NA
-    return df[["GEOID", *variables]]
+def download(url: str) -> Path:
+    RAW.mkdir(parents=True, exist_ok=True)
+    path = RAW / url.rsplit("/", 1)[1]
+    if not path.exists():
+        with requests.get(url, stream=True, timeout=600) as r:
+            r.raise_for_status()
+            with open(path, "wb") as f:
+                for chunk in r.iter_content(1 << 20):
+                    f.write(chunk)
+    return path
+
+
+def decennial_pop() -> pd.DataFrame:
+    """P1_001N per Marion block group, joining the PL geo file to segment 1 by LOGRECNO."""
+    logrec = {}
+    with zipfile.ZipFile(download(PL_URL)) as z:
+        with z.open("flgeo2020.pl") as f:
+            for line in f:
+                c = line.decode("latin-1").split("|")
+                if c[2] == "150" and c[9].startswith(PREFIX):  # SUMLEV 150 = block group
+                    logrec[c[7]] = c[9]
+        rows = []
+        with z.open("fl000012020.pl") as f:
+            for line in f:
+                c = line.decode("latin-1").split("|")
+                if c[4] in logrec:
+                    rows.append((logrec[c[4]], int(c[5])))
+    return pd.DataFrame(rows, columns=["GEOID", "pop_2020"])
+
+
+def acs(year: int, table: str, name: str) -> pd.DataFrame:
+    df = pd.read_csv(download(ACS_URL.format(y=year, t=table)), sep="|", dtype=str,
+                     usecols=["GEO_ID", f"{table.upper()}_E001"])
+    df = df[df["GEO_ID"].str.startswith("1500000US" + PREFIX)]
+    df["GEOID"] = df["GEO_ID"].str[9:]
+    v = pd.to_numeric(df[f"{table.upper()}_E001"], errors="coerce")
+    df[name] = v.where(v >= 0)  # negative values are "not available" sentinels
+    return df[["GEOID", name]]
 
 
 def block_groups() -> gpd.GeoDataFrame:
-    RAW.mkdir(parents=True, exist_ok=True)
-    zpath = RAW / "tl_2020_12_bg.zip"
-    if not zpath.exists():
-        r = requests.get(TIGER_URL, timeout=300)
-        r.raise_for_status()
-        zpath.write_bytes(r.content)
+    zpath = download(TIGER_URL)
     gdf = gpd.read_file(f"zip://{zpath}")
     return gdf[gdf["COUNTYFP"] == COUNTY][["GEOID", "ALAND", "geometry"]]
 
@@ -62,17 +81,10 @@ def main() -> None:
     ap.add_argument("--acs-year", type=int, default=2024)
     args = ap.parse_args()
 
-    dec = census("2020/dec/pl", ["P1_001N"]).rename(columns={"P1_001N": "pop_2020"})
-    acs = census(
-        f"{args.acs_year}/acs/acs5",
-        ["B01003_001E", "B19013_001E", "B25077_001E"],
-    ).rename(columns={
-        "B01003_001E": "pop_acs",
-        "B19013_001E": "median_income",
-        "B25077_001E": "median_home_value",
-    })
-
-    gdf = block_groups().merge(dec, on="GEOID", how="left").merge(acs, on="GEOID", how="left")
+    gdf = block_groups().merge(decennial_pop(), on="GEOID", how="left")
+    for table, name in [("b01003", "pop_acs"), ("b19013", "median_income"),
+                        ("b25077", "median_home_value")]:
+        gdf = gdf.merge(acs(args.acs_year, table, name), on="GEOID", how="left")
     km2 = gdf["ALAND"] / 1e6
     gdf["density_km2"] = (gdf["pop_acs"] / km2).round(1)
     gdf["pop_change"] = gdf["pop_acs"] - gdf["pop_2020"]

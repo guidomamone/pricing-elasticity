@@ -9,4 +9,4 @@ pip install -r requirements.txt
 python scripts/build_population.py        # writes map/data/population.geojson
 python -m http.server -d map 8000         # open http://localhost:8000
 ```
-Needs internet access to api.census.gov, www2.census.gov, unpkg.com, tiles.openfreemap.org.
+Needs internet access to www2.census.gov, unpkg.com, tiles.openfreemap.org.

@@ -67,7 +67,7 @@ function colorExpr(key) {
   const m = METRICS[key], [a, b, c] = m.stops;
   const cols = m.diverging ? ['#2b5c8a', '#f7f7f7', '#c0392b'] : ['#f7fbff', '#6baed6', '#08306b'];
   return ['case', ['==', ['get', key], null], '#999',
-    ['interpolate', ['linear'], ['get', key], a, cols[0], b, cols[1], c, cols[2]]];
+    ['interpolate', ['linear'], ['coalesce', ['get', key], 0], a, cols[0], b, cols[1], c, cols[2]]];
 }
 function legend(key) {
   const m = METRICS[key];
