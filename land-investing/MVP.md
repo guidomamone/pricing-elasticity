@@ -71,4 +71,4 @@ Shown as its own layer with the components visible on click. Weights in a config
 
 ## Open questions for Guido
 - Acres+ subscribed? Does its Export give CSV of sold land? If yes, we can pull sold comps into our price layer instead of DOR.
-- County-only for MVP is fine, or whole Central FL corridor (Marion, Sumter, Lake, Citrus, Levy) from the start? Population layer is cheap statewide.
+- ~~County scope~~ DECIDED: Marion County only for MVP.
