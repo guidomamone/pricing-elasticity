@@ -89,3 +89,6 @@ Output: `model/` notebook or script + `model/REPORT.md`
 ## PRIORITY OVERRIDE (round 5): build the MVP first
 Do `MVP.md` steps 1-5 before anything else above. Tasks 0-6 resume after Guido has used the map.
 Task 1 (FL DOR data) overlaps with MVP step 1, reuse the work.
+
+## PRIORITY OVERRIDE (round 6): MVP changed
+Guido will use Acres.com for parcels/prices. Build **MVP v2 Growth Insights Map** in `MVP.md` (population, growth front, FDOT, permits, hex score, "Open in Acres" link). Ignore the round-5 parcel-price MVP.
