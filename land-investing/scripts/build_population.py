@@ -70,6 +70,20 @@ def acs(year: int, table: str, name: str) -> pd.DataFrame:
     return df[["GEOID", name]]
 
 
+# B25034 year structure built (ACS 2022+ layout): E002 = 2020 or later, E003 = 2010s, ...
+DECADES = {"2020": "E002", "2010": "E003", "2000": "E004", "1990": "E005", "1980": "E006"}
+
+
+def year_built(year: int) -> pd.DataFrame:
+    df = pd.read_csv(download(ACS_URL.format(y=year, t="b25034")), sep="|", dtype=str)
+    df = df[df["GEO_ID"].str.startswith("1500000US" + PREFIX)].copy()
+    out = pd.DataFrame({"GEOID": df["GEO_ID"].str[9:]})
+    out["units"] = pd.to_numeric(df["B25034_E001"]).values
+    for dec, col in DECADES.items():
+        out[f"built_{dec}"] = pd.to_numeric(df[f"B25034_{col}"]).values
+    return out
+
+
 def block_groups() -> gpd.GeoDataFrame:
     zpath = download(TIGER_URL)
     gdf = gpd.read_file(f"zip://{zpath}")
@@ -85,7 +99,11 @@ def main() -> None:
     for table, name in [("b01003", "pop_acs"), ("b19013", "median_income"),
                         ("b25077", "median_home_value")]:
         gdf = gdf.merge(acs(args.acs_year, table, name), on="GEOID", how="left")
+    gdf = gdf.merge(year_built(args.acs_year), on="GEOID", how="left")
     km2 = gdf["ALAND"] / 1e6
+    for dec in DECADES:
+        gdf[f"built_{dec}_km2"] = (gdf[f"built_{dec}"] / km2).round(1)
+    gdf["pct_built_2010plus"] = (100 * (gdf["built_2020"] + gdf["built_2010"]) / gdf["units"]).round(1)
     gdf["density_km2"] = (gdf["pop_acs"] / km2).round(1)
     gdf["pop_change"] = gdf["pop_acs"] - gdf["pop_2020"]
     gdf["pop_change_pct"] = (100 * gdf["pop_change"] / gdf["pop_2020"]).round(1)
