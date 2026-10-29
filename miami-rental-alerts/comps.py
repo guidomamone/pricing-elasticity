@@ -97,8 +97,48 @@ def building_key(row):
     return f"{number} {' '.join(street)}"
 
 
+def offline_report(path, lo, hi):
+    """Re-reads a saved comps_raw.json: no API requests, no quota. Lists, building by building,
+    every closed or active listing on the street between two street numbers."""
+    raw = json.loads(Path(path).read_text())
+    rows, seen = [], set()
+    for key in ("building_past", "building_active", "nearby_past"):
+        for r in raw.get(key) or []:
+            if r.get("id") not in seen:
+                seen.add(r.get("id"))
+                rows.append(r)
+    street_ref = monitor.normalize_street("Brickell Ave")
+    picked = []
+    for r in rows:
+        number, street = monitor.split_address(r.get("addressLine1"))
+        if number is not None and street == street_ref and lo <= number <= hi:
+            picked.append((number, r))
+    print(f"=== Brickell Ave {lo} to {hi}: {len(picked)} listings in the saved data "
+          f"(closed 2bd within 0.5 mi for {raw.get('nearby_days', 180)} days, plus the building area's closed/active of any size)")
+    by_number = {}
+    for number, r in picked:
+        by_number.setdefault(number, []).append(r)
+    for number in sorted(by_number):
+        group = sorted(by_number[number], key=lambda r: str(r.get("removedDate") or r.get("listedDate")), reverse=True)
+        two = [r for r in group if r.get("bedrooms") == 2 and r.get("status") == "Inactive"]
+        print(f"\n--- {number} Brickell Ave: {len(group)} listings, closed 2bd n={len(two)} "
+              f"median {money(median([r.get('price') for r in two]))}")
+        for r in group:
+            print("  " + line(r))
+    months = {}
+    for number, r in picked:
+        if number == 2451 and r.get("bedrooms") == 2 and r.get("status") == "Inactive" and r.get("removedDate"):
+            months.setdefault(str(r["removedDate"])[:7], []).append(r.get("addressLine2"))
+    print("\n=== 2451 closed 2bd by month the listing left the market")
+    for month in sorted(months):
+        print(f"  {month}: {', '.join(map(str, months[month]))}")
+
+
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument("--offline", help="path to a saved comps_raw.json: analyse it without any API request")
+    ap.add_argument("--from-number", type=int, default=2000)
+    ap.add_argument("--to-number", type=int, default=2500)
     ap.add_argument("--address", default="2451 Brickell Ave")
     ap.add_argument("--unit", default="20M")
     ap.add_argument("--city-state-zip", default="Miami, FL 33129")
@@ -109,6 +149,8 @@ def main():
     ap.add_argument("--nearby-radius", type=float, default=0.5)
     args = ap.parse_args()
 
+    if args.offline:
+        return offline_report(args.offline, args.from_number, args.to_number)
     key = os.environ.get("RENTCAST_API_KEY")
     if not key:
         sys.exit("RENTCAST_API_KEY is not set")
@@ -178,6 +220,7 @@ def main():
     wide = budget.listings({"latitude": lat, "longitude": lon, "radius": args.nearby_radius, "status": "Inactive",
                             "bedrooms": beds, "propertyType": "Condo", "daysOld": args.days, "limit": 500})
     raw["nearby_past"] = wide
+    raw["nearby_days"] = args.days
     by_building = {}
     for r in wide:
         by_building.setdefault(building_key(r), []).append(r)
