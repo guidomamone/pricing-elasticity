@@ -1,6 +1,0 @@
-# Netlify: set the site's Base directory to argentina-real-estate/map.
-# The build adds barrio polygons and geocodes the properties. Both steps are optional:
-# if the GCBA portal or Georef are down the map uses circles and approximate positions.
-[build]
-  publish = "site"
-  command = "(curl -fsSL --max-time 30 -o site/data/barrios.geojson https://cdn.buenosaires.gob.ar/datosabiertos/datasets/ministerio-de-educacion/barrios/barrios.geojson && grep -q FeatureCollection site/data/barrios.geojson || rm -f site/data/barrios.geojson); node scripts/geocode.mjs"

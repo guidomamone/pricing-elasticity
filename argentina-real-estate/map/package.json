@@ -1,9 +1,0 @@
-{
-  "name": "caba-own-vs-rent-map",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "test": "node --test test/*.test.mjs",
-    "geocode": "node scripts/geocode.mjs"
-  }
-}
