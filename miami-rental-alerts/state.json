@@ -1,7 +1,7 @@
 {
   "quota": {
-    "month": "2026-10",
-    "used": 25
+    "month": "2026-11",
+    "used": 1
   },
   "seen": {
     "10-Sw-South-River-Dr,-Miami,-FL-33130": {
@@ -80,9 +80,17 @@
       "first_seen": "2026-10-28",
       "price": 3900
     },
+    "3001-Sw-1st-Ave,-Apt-203,-Miami,-FL-33129": {
+      "first_seen": "2026-11-01",
+      "price": 2700
+    },
     "31-Se-5th-St,-Apt-1608,-Miami,-FL-33131": {
       "first_seen": "2026-10-22",
       "price": 3700
+    },
+    "325-S-Biscayne-Blvd,-Apt-1622,-Miami,-FL-33131": {
+      "first_seen": "2026-11-01",
+      "price": 3500
     },
     "335-S-Biscayne-Blvd,-Apt-412,-Miami,-FL-33131": {
       "first_seen": "2026-10-17",
@@ -201,6 +209,7 @@
     "175-Se-25th-Rd,-Apt-904,-Miami,-FL-33129": "2026-10-30",
     "1865-Brickell-Ave,-Apt-A603,-Miami,-FL-33129": "2026-10-27",
     "1901-Brickell-Ave,-Apt-B1006,-Miami,-FL-33129": "2026-10-30",
+    "1915-Brickell-Ave,-Apt-C709,-Miami,-FL-33129": "2026-11-01",
     "1915-Brickell-Ave,-Apt-C812,-Miami,-FL-33129": "2026-10-22",
     "200-Se-15th-Rd,-Ph-A,-Miami,-FL-33129": "2026-10-17",
     "2101-Brickell-Ave,-Apt-1909,-Miami,-FL-33129": "2026-10-24",
