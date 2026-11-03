@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-11",
-    "used": 2
+    "used": 3
   },
   "seen": {
     "10-Sw-South-River-Dr,-Miami,-FL-33130": {
@@ -152,6 +152,10 @@
       "first_seen": "2026-10-27",
       "price": 2300
     },
+    "79-Sw-12th-St,-Apt-2409,-Miami,-FL-33130": {
+      "first_seen": "2026-11-03",
+      "price": 4000
+    },
     "79-Sw-12th-St,-Apt-3703,-Miami,-FL-33130": {
       "first_seen": "2026-10-29",
       "price": 3950
@@ -203,6 +207,7 @@
   },
   "skipped_reported": {
     "1155-Brickell-Bay-Dr,-Apt-1008,-Miami,-FL-33131": "2026-10-24",
+    "1155-Brickell-Bay-Dr,-Apt-3101,-Miami,-FL-33131": "2026-11-03",
     "1155-Brickell-Bay-Dr,-Ph-109,-Miami,-FL-33131": "2026-10-24",
     "175-Se-25th-Rd,-Apt-2303,-Miami,-FL-33129": "2026-10-20",
     "175-Se-25th-Rd,-Apt-2403,-Miami,-FL-33129": "2026-10-20",
@@ -256,6 +261,7 @@
     "851-Ne-1st-Ave,-Unit-205,-Miami,-FL-33132": "2026-10-20",
     "851-Ne-1st-Ave,-Unit-2309,-Miami,-FL-33132": "2026-10-16",
     "851-Ne-1st-Ave,-Unit-3001,-Miami,-FL-33132": "2026-10-27",
+    "851-Ne-1st-Ave,-Unit-4208,-Miami,-FL-33132": "2026-11-03",
     "851-Ne-1st-Ave,-Unit-4306,-Miami,-FL-33132": "2026-10-17",
     "901-Brickell-Key-Blvd,-Apt-501,-Miami,-FL-33131": "2026-10-23"
   }
