@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-11",
-    "used": 3
+    "used": 4
   },
   "seen": {
     "10-Sw-South-River-Dr,-Miami,-FL-33130": {
@@ -20,9 +20,21 @@
       "first_seen": "2026-10-28",
       "price": 2700
     },
+    "1027-Sw-11th-Ave,-Unit-1027,-Miami,-FL-33130": {
+      "first_seen": "2026-11-04",
+      "price": 3450
+    },
     "1050-Brickell-Ave,-Apt-2414,-Miami,-FL-33131": {
       "first_seen": "2026-10-27",
       "price": 3950
+    },
+    "1060-Brickell-Ave,-Apt-2507,-Miami,-FL-33131": {
+      "first_seen": "2026-11-04",
+      "price": 4000
+    },
+    "1060-Brickell-Ave,-Apt-2701,-Miami,-FL-33131": {
+      "first_seen": "2026-11-04",
+      "price": 4000
     },
     "1111-Sw-1st-Ave,-Unit-2223N,-Miami,-FL-33130": {
       "first_seen": "2026-10-23",
@@ -132,6 +144,10 @@
       "first_seen": "2026-10-21",
       "price": 2500
     },
+    "55-Se-6th-St,-Apt-2107,-Miami,-FL-33131": {
+      "first_seen": "2026-11-04",
+      "price": 4100
+    },
     "55-Se-6th-St,-Apt-3910,-Miami,-FL-33131": {
       "first_seen": "2026-10-23",
       "price": 4200
@@ -221,6 +237,7 @@
     "2101-Brickell-Ave,-Apt-1911,-Miami,-FL-33129": "2026-10-20",
     "2101-Brickell-Ave,-Apt-2109,-Miami,-FL-33129": "2026-10-25",
     "2101-Brickell-Ave,-Apt-2110,-Miami,-FL-33129": "2026-10-21",
+    "2101-Brickell-Ave,-Apt-2903,-Miami,-FL-33129": "2026-11-04",
     "2101-Brickell-Ave,-Apt-601,-Miami,-FL-33129": "2026-10-30",
     "2101-Brickell-Ave,-Apt-711,-Miami,-FL-33129": "2026-10-23",
     "2101-Brickell-Ave,-Miami,-FL-33129": "2026-10-17",
@@ -261,6 +278,7 @@
     "851-Ne-1st-Ave,-Unit-205,-Miami,-FL-33132": "2026-10-20",
     "851-Ne-1st-Ave,-Unit-2309,-Miami,-FL-33132": "2026-10-16",
     "851-Ne-1st-Ave,-Unit-3001,-Miami,-FL-33132": "2026-10-27",
+    "851-Ne-1st-Ave,-Unit-3702,-Miami,-FL-33132": "2026-11-04",
     "851-Ne-1st-Ave,-Unit-4208,-Miami,-FL-33132": "2026-11-03",
     "851-Ne-1st-Ave,-Unit-4306,-Miami,-FL-33132": "2026-10-17",
     "901-Brickell-Key-Blvd,-Apt-501,-Miami,-FL-33131": "2026-10-23"
