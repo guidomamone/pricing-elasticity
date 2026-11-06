@@ -261,6 +261,32 @@ class RunTests(unittest.TestCase):
             self.assertEqual(photo.call_count, 0)
             self.assertEqual(send.call_count, 1)  # empty lists message
 
+    def test_full_page_triggers_a_second_request(self):
+        page1 = [listing(f"p{i}", "10 Other St", zip_="33140") for i in range(3)]
+        page2 = [listing("late", "2333 Brickell Ave")]
+        env = {"RENTCAST_API_KEY": "k", "TELEGRAM_BOT_TOKEN": "t", "TELEGRAM_CHAT_ID": "c"}
+        config = json.loads(monitor.CONFIG_PATH.read_text())
+        config["search"]["limit"] = 3
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = Path(tmp) / "cfg.json"
+            cfg.write_text(json.dumps(config))
+            with mock.patch.object(monitor, "STATE_PATH", Path(tmp) / "state.json"), \
+                 mock.patch.object(monitor, "CONFIG_PATH", cfg), \
+                 mock.patch.dict("os.environ", env), \
+                 mock.patch.object(monitor, "fetch_listings", side_effect=[page1, page2]) as fetch, \
+                 mock.patch.object(monitor, "send_telegram") as send:
+                monitor.main([])
+            state = json.loads((Path(tmp) / "state.json").read_text())
+        self.assertEqual(fetch.call_count, 2)
+        self.assertEqual(fetch.call_args_list[1].args[1]["offset"], 3)
+        self.assertEqual(state["quota"]["used"], 2)
+        self.assertIn("late", state["seen"])  # the listing that was only on page 2 is not lost
+
+    def test_short_page_is_one_request(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            send, state = self.run_main([listing("a", "2333 Brickell Ave")], tmp)
+        self.assertEqual(state["quota"]["used"], 1)
+
     def test_dry_run_does_not_mark_seen(self):
         with tempfile.TemporaryDirectory() as tmp:
             send, state = self.run_main([listing("a", "2333 Brickell Ave")], tmp, ["--dry-run"])
