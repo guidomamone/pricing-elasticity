@@ -27,7 +27,8 @@ CONFIG_PATH = HERE / "buildings.json"
 STATE_PATH = HERE / "state.json"
 RENTCAST_URL = "https://api.rentcast.io/v1/listings/rental/long-term"
 
-SUFFIXES = {"avenue": "ave", "boulevard": "blvd", "drive": "dr", "street": "st", "road": "rd"}
+SUFFIXES = {"avenue": "ave", "boulevard": "blvd", "drive": "dr", "street": "st", "road": "rd",
+            "terrace": "ter", "place": "pl", "court": "ct", "lane": "ln"}
 DIRECTIONS = {"n", "s", "e", "w", "ne", "nw", "se", "sw"}
 
 
@@ -49,7 +50,8 @@ def match_building(listing, buildings):
     if number is None:
         return None
     for b in buildings:
-        if street != normalize_street(b["street"]):
+        # "streets" lists spelling variants when the source of an address is unsure (e.g. St vs Ave)
+        if street not in [normalize_street(x) for x in (b.get("streets") or [b["street"]])]:
             continue
         if number in b.get("numbers", []):
             return b

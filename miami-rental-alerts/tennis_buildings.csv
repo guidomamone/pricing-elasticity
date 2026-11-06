@@ -15,13 +15,13 @@ Bal Harbour 101,10155 Collins Ave,Bal Harbour,Bal Harbour,1977,1,excluded,"Bal H
 Bal Harbour Tower,9999 Collins Ave,Bal Harbour,Bal Harbour,1990,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
 Balmoral,9801 Collins Ave,Bal Harbour,Bal Harbour,1977,3,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
 Bath Club,5959 Collins Ave,Mid-Beach,Miami Beach,2005,2,excluded,"Mid-Beach, Miami Beach: far from Brickell"
-Bay Park Towers,3301 NE 5th Ave,Edgewater,Miami,1961,1,excluded,Edgewater: excluded by owner
+Bay Park Towers,3301 NE 5th Ave,Edgewater,Miami,1961,1,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 Bayshore Yacht & Tennis,7904 West,North Bay Village,North Bay Village,1963,3,excluded,"North Bay Village, North Bay Village: far from Brickell"
 Bayside Village,2031 Fisher Island Dr,Fisher Island,Fisher Island,1988,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
 Belle Plaza,20 Island Ave,South Beach,Miami Beach,1962,1,excluded,"South Beach, Miami Beach: far from Brickell"
 Bellini Williams Island,4100 Island Blvd,Aventura,Aventura,2013,4,excluded,"Aventura, Aventura: far from Brickell"
-Biscayne 21,2121 N Bayshore Dr,Edgewater,Miami,1964,2,excluded,Edgewater: excluded by owner
-Biscayne Beach,2900 NE 7 Ave,Edgewater,Miami,2017,2,excluded,Edgewater: excluded by owner
+Biscayne 21,2121 N Bayshore Dr,Edgewater,Miami,1964,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
+Biscayne Beach,2900 NE 7 Ave,Edgewater,Miami,2017,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 Biscayne Cove,18181 NE 31st Ct,Aventura,Aventura,1981,3,excluded,"Aventura, Aventura: far from Brickell"
 Blue Diamond,4779 Collins Ave,Mid-Beach,Miami Beach,2000,2,excluded,"Mid-Beach, Miami Beach: far from Brickell"
 Brickell Bay Club,2333 Brickell Ave,Brickell,Miami,1974,5,tracked,
@@ -62,7 +62,7 @@ Eloquence on the Bay,7930 East Dr,North Bay Village,North Bay Village,2009,1,exc
 Floridian,650 West Ave,South Beach,Miami Beach,1997,1,excluded,"South Beach, Miami Beach: far from Brickell"
 G B Resort Hotel,455 Grand Bay Dr,Key Biscayne,Key Biscayne,2001,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
 Garden View,1530 Island Blvd,Aventura,Aventura,2007,,excluded,"Aventura, Aventura: far from Brickell"
-Gran Paraiso,480 NE 31 St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
+Gran Paraiso,480 NE 31 St,Edgewater,Miami,2018,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 Grand Bay Residences,445 Grand Bay Dr,Key Biscayne,Key Biscayne,1996,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
 Grand Bay Ritz Carlton,455 Grand Bay Dr,Key Biscayne,Key Biscayne,2001,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
 Grand Bay Tower,430 Grand Bay Dr,Key Biscayne,Key Biscayne,1999,11,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
@@ -77,8 +77,8 @@ Harbor Towers,3598 Yacht Club Dr,Aventura,Aventura,1993,,excluded,"Aventura, Ave
 Harborside,3640 Yacht Club Dr,Aventura,Aventura,1991,2,excluded,"Aventura, Aventura: far from Brickell"
 Harborview,4631 Fisher Island Dr,Fisher Island,Fisher Island,1989,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
 Hidden Bay,3370 Hidden Bay Dr,Aventura,Aventura,2000,3,excluded,"Aventura, Aventura: far from Brickell"
-Hyde Midtown,3401 NE 1 Ave,Midtown Miami,Miami,2018,1,excluded,"Midtown Miami, Miami: far from Brickell"
-Icon Bay,460 NE 28 St,Edgewater,Miami,2015,2,excluded,Edgewater: excluded by owner
+Hyde Midtown,3401 NE 1 Ave,Midtown Miami,Miami,2018,1,tracked,Edgewater/Midtown (zip 33137): added on owner's request
+Icon Bay,460 NE 28 St,Edgewater,Miami,2015,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 ICON South Beach,450 Alton Rd,South Beach,Miami Beach,2005,1,excluded,"South Beach, Miami Beach: far from Brickell"
 Imperial at Brickell,1627 Brickell Ave,Brickell,Miami,1983,1,tracked,
 Isola,770 Claughton Island Dr,Brickell,Miami,1990,1,tracked,
@@ -106,7 +106,7 @@ Mediterranean Village,3700 Island Blvd,Aventura,Aventura,1989,4,excluded,"Aventu
 Metropolitan at Brickell,2475 Brickell Ave,Brickell,Miami,2001,2,tracked,
 Milano Condo at Deering Bay,13621 Deering Bay Dr,Coral Gables,Coral Gables,2003,7,excluded,"Coral Gables, Coral Gables: far from Brickell"
 Millenium,18671 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1999,1,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
-Missoni Baia,700 NE 26 Ter,Edgewater,Miami,2020,1,excluded,Edgewater: excluded by owner
+Missoni Baia,700 NE 26 Ter,Edgewater,Miami,2020,1,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 Murano at Portofino,1000 S Pointe Dr,South Beach,Miami Beach,2002,1,excluded,"South Beach, Miami Beach: far from Brickell"
 Murano Grande,400 Alton Rd,South Beach,Miami Beach,2003,1,excluded,"South Beach, Miami Beach: far from Brickell"
 Mystic Pointe Tower 100,19195 Mystic Pointe Dr,Aventura,Aventura,1989,8,excluded,"Aventura, Aventura: far from Brickell"
@@ -140,9 +140,9 @@ Oceanview,19390 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1971,,excluded,"
 One Fifty One at Biscayne,14951 Royal Oaks,North Miami Beach,North Miami Beach,2007,,excluded,"North Miami Beach, North Miami Beach: far from Brickell"
 One Grove Isle Condo,1 Grove Isle Dr,Coconut Grove,Miami,1979,12,excluded,Coconut Grove: excluded by owner
 One Island Place,3801 NE 207th St,Aventura,Aventura,1990,2,excluded,"Aventura, Aventura: far from Brickell"
-One Paraiso,3131 NE 7th St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
+One Paraiso,3131 NE 7th St,Edgewater,Miami,2018,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 One Tequesta Point,888 Brickell Key Dr,Brickell,Miami,1995,5,tracked,
-Opera Tower,1750 N Bayshore Dr,Edgewater,Miami,2008,2,excluded,Edgewater: excluded by owner
+Opera Tower,1750 N Bayshore Dr,Edgewater,Miami,2008,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 Palace at Bal Harbour,10101 Collins Ave,Bal Harbour,Bal Harbour,1994,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
 Palazzo Del Mar,7122 Fisher Island Dr,Fisher Island,Fisher Island,2007,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
 Palazzo Del Sol,7091 Fisher Island Dr,Fisher Island,Fisher Island,2016,16,excluded,"Fisher Island, Fisher Island: far from Brickell"
@@ -150,8 +150,8 @@ Palazzo Del Mare,19144 Fisher Island Dr,Fisher Island,Fisher Island,2007,16,excl
 Palm Bay Condo,770 NE 69th St,Upper East Side,Miami,1965,4,excluded,"Upper East Side, Miami: far from Brickell"
 Palm Bay Towers,720 NE 69th St,Upper East Side,Miami,1972,1,excluded,"Upper East Side, Miami: far from Brickell"
 Palm Bay Yacht Club,780 NE 69th St,Upper East Side,Miami,1982,1,excluded,"Upper East Side, Miami: far from Brickell"
-Paraiso Bay,650 NE 32 St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
-Paraiso Bay Views,501 NE 31 St,Edgewater,Miami,2018,2,excluded,Edgewater: excluded by owner
+Paraiso Bay,650 NE 32 St,Edgewater,Miami,2018,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
+Paraiso Bay Views,501 NE 31 St,Edgewater,Miami,2018,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 Paramount Miami Worldcenter,851 NE 1st Ave,Downtown Miami,Miami,2019,2,tracked,
 Peninsula I,3201 NE 183,Aventura,Aventura,2003,3,excluded,"Aventura, Aventura: far from Brickell"
 Pinnacle,17555 Collins Ave,Sunny Isles Beach,Sunny Isles Beach,1998,1,excluded,"Sunny Isles Beach, Sunny Isles Beach: far from Brickell"
@@ -181,11 +181,11 @@ Spinnaker Bay,21062 NE 34th Ct,Aventura,Aventura,1993,5,excluded,"Aventura, Aven
 St Regis Residences,9705 Collins Ave,Bal Harbour,Bal Harbour,2011,1,excluded,"Bal Harbour, Bal Harbour: far from Brickell"
 St. Tropez,7330 Ocean Ter,North Beach,Miami Beach,1999,1,excluded,"North Beach, Miami Beach: far from Brickell"
 Terraces At Turnberry,20191 E Country Club Dr,Aventura,Aventura,1983,4,excluded,"Aventura, Aventura: far from Brickell"
-The Charter Club,600 NE 36th St,Edgewater,Miami,1973,5,excluded,Edgewater: excluded by owner
+The Charter Club,600 NE 36th St,Edgewater,Miami,1973,5,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 The Emerald Bay,151 Crandon Blvd,Key Biscayne,Key Biscayne,1980,12,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
 The Four Seasons Residences (Millenium Residences),1425 Brickell Ave,Brickell,Miami,2003,2,tracked,
 The Gables Club,10 Edgewater Dr,Coral Gables,Coral Gables,1996,4,excluded,"Coral Gables, Coral Gables: far from Brickell"
-The Grand,1717 N Bayshore Dr,Edgewater,Miami,1986,,excluded,Edgewater: excluded by owner
+The Grand,1717 N Bayshore Dr,Edgewater,Miami,1986,,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 The Harbour,16385 Biscayne Blvd,North Miami Beach,North Miami Beach,2018,,excluded,"North Miami Beach, North Miami Beach: far from Brickell"
 The Landmark,20185 E Country Club Dr,Aventura,Aventura,1990,7,excluded,"Aventura, Aventura: far from Brickell"
 The Mark,1155 Brickell Bay Dr,Brickell,Miami,2001,,tracked,
@@ -193,7 +193,7 @@ The Mutiny,2951 S Bayshore Dr,Coconut Grove,Miami,1998,2,excluded,Coconut Grove:
 The Ocean Club,765 Crandon Blvd,Key Biscayne,Key Biscayne,2002,8,excluded,"Key Biscayne, Key Biscayne: far from Brickell"
 The Palace Condo,1541 Brickell Ave,Brickell,Miami,1981,3,tracked,
 The Townhomes of Quayside,3002 NE Quayside Ln,Biscayne Corridor North,Miami,2003,2,excluded,"Biscayne Corridor North, Miami: far from Brickell"
-The Venetia,555 NE 15th St,Edgewater,Miami,1980,2,excluded,Edgewater: excluded by owner
+The Venetia,555 NE 15th St,Edgewater,Miami,1980,2,tracked,Edgewater/Midtown (zip 33137): added on owner's request
 The Yacht Club at Aventura,19999 E Country Club Dr,Aventura,Aventura,1994,,excluded,"Aventura, Aventura: far from Brickell"
 The Yatch Club,19555 E Country Club Dr,Aventura,Aventura,1994,,excluded,"Aventura, Aventura: far from Brickell"
 Three Grove Isle Condo,3 Grove Isle Dr,Coconut Grove,Miami,1981,12,excluded,Coconut Grove: excluded by owner
