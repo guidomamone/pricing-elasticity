@@ -2,7 +2,7 @@ name: Miami rental alerts
 
 on:
   schedule:
-    - cron: "17 13 * * 1-6"  # Monday to Saturday, 13:17 UTC (9:17am EDT, 8:17am EST); skips Sundays to save requests
+    - cron: "17 13 * * 1,2,4,5,6"  # Mon, Tue, Thu, Fri, Sat at 13:17 UTC (9:17am EDT, 8:17am EST); skips Wed and Sun to save requests
   workflow_dispatch:
     inputs:
       dry_run:
