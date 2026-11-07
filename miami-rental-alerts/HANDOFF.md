@@ -1,7 +1,7 @@
 # Handoff (state as of 2026-11-07)
 
 ## What this is
-Daily RentCast check of Brickell rentals, sent to Telegram as ONE message with two lists (tennis-court buildings, then other Brickell zips 33129/33130/33131) plus a numbered map photo. Runs from GitHub Actions Monday to Saturday (no Sundays). Repo: guidomamone/pricing-elasticity. Work branch: claude/kind-pascal-7a6gcy.
+Daily RentCast check of Brickell rentals, sent to Telegram as ONE message with two lists (tennis-court buildings, then other Brickell zips 33129/33130/33131) plus a numbered map photo. Runs from GitHub Actions Mon, Tue, Thu, Fri, Sat (no Wednesdays or Sundays). Repo: guidomamone/pricing-elasticity. Work branch: claude/kind-pascal-7a6gcy.
 
 ## Pending, needs the owner
 - Branch has UNMERGED commits (Edgewater/Downtown/Midtown tennis buildings, 3.5 mi circle, 2nd page when the first is full, comps tool offline mode, 2451 CSV data and offer analysis, no-Sunday cron). Nothing here is live until merged to main. Merge with a PR (squash); the owner approves each merge.
