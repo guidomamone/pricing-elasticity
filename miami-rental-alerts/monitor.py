@@ -26,8 +26,10 @@ HERE = Path(__file__).parent
 CONFIG_PATH = HERE / "buildings.json"
 STATE_PATH = HERE / "state.json"
 RENTCAST_URL = "https://api.rentcast.io/v1/listings/rental/long-term"
+MAX_PAGES = 2  # a full page means there may be more; each extra page costs one request
 
-SUFFIXES = {"avenue": "ave", "boulevard": "blvd", "drive": "dr", "street": "st", "road": "rd"}
+SUFFIXES = {"avenue": "ave", "boulevard": "blvd", "drive": "dr", "street": "st", "road": "rd",
+            "terrace": "ter", "place": "pl", "court": "ct", "lane": "ln"}
 DIRECTIONS = {"n", "s", "e", "w", "ne", "nw", "se", "sw"}
 
 
@@ -49,7 +51,8 @@ def match_building(listing, buildings):
     if number is None:
         return None
     for b in buildings:
-        if street != normalize_street(b["street"]):
+        # "streets" lists spelling variants when the source of an address is unsure (e.g. St vs Ave)
+        if street not in [normalize_street(x) for x in (b.get("streets") or [b["street"]])]:
             continue
         if number in b.get("numbers", []):
             return b
@@ -253,20 +256,28 @@ def main(argv=None):
             save_state(state)
         return 0
 
-    # Count before calling so a crash mid-request still counts against the cap.
-    state["quota"]["used"] += 1
-    save_state(state)
     search = dict(config["search"])
     if args.days:
         search["daysOld"] = args.days
-    try:
-        listings = fetch_listings(api_key, search)
-    except urllib.error.HTTPError as e:
-        sys.exit(f"RentCast error {e.code}: {e.read().decode(errors='replace')[:300]}")
-
-    limit = config["search"].get("limit")
-    if limit and len(listings) >= limit:
-        print(f"WARNING: got {len(listings)} listings (limit {limit}); results may be truncated.")
+    limit = search.get("limit")
+    listings = []
+    for page in range(MAX_PAGES):
+        if page and state["quota"]["used"] >= cap:
+            print(f"WARNING: monthly request cap reached; skipping page {page + 1}, results are truncated.")
+            break
+        # Count before calling so a crash mid-request still counts against the cap.
+        state["quota"]["used"] += 1
+        save_state(state)
+        try:
+            batch = fetch_listings(api_key, dict(search, offset=len(listings)) if page else search)
+        except urllib.error.HTTPError as e:
+            sys.exit(f"RentCast error {e.code}: {e.read().decode(errors='replace')[:300]}")
+        listings += batch
+        if not limit or len(batch) < limit:
+            break
+        print(f"Page {page + 1} was full ({limit} listings); " + ("fetching the next page." if page + 1 < MAX_PAGES else "stopping here."))
+    if limit and len(listings) >= limit * MAX_PAGES:
+        print(f"WARNING: got {len(listings)} listings ({MAX_PAGES} full pages); results may still be truncated.")
 
     zips = set(config.get("brickell_zips", []))
     sections = {"tennis": [], "brickell": []}

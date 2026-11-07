@@ -65,5 +65,28 @@ class EndToEnd(unittest.TestCase):
         self.assertIn("Closed 2bd rentals within 0.5 mi", text.replace("=== ", ""))
 
 
+class OfflineTests(unittest.TestCase):
+    def test_offline_report_groups_by_building_and_makes_no_requests(self):
+        raw = {"building_past": [row("Apt 12G", "Inactive", 4300, removed="2026-10-22"),
+                                 row("Apt 1", "Inactive", 2000, line1="2451 Park Ave")],
+               "nearby_past": [row("Apt 5", "Inactive", 4950, line1="2025 Brickell Ave", removed="2026-09-01"),
+                               row("Apt 6", "Inactive", 3000, line1="1901 Brickell Ave"),   # out of range
+                               row("Apt 9", "Inactive", 5000, line1="2101 S Brickell Avenue")]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "raw.json"
+            path.write_text(json.dumps(raw))
+            out = io.StringIO()
+            with mock.patch.object(comps.Budget, "call", side_effect=AssertionError("no API in offline mode")), \
+                 contextlib.redirect_stdout(out), mock.patch.object(sys, "argv", ["comps.py", "--offline", str(path)]):
+                comps.main()
+        text = out.getvalue()
+        self.assertIn("--- 2025 Brickell Ave", text)
+        self.assertIn("--- 2101 Brickell Ave", text)
+        self.assertIn("--- 2451 Brickell Ave", text)
+        self.assertNotIn("1901 Brickell Ave:", text)
+        self.assertNotIn("Park Ave", text)
+        self.assertIn("2026-10: Apt 12G", text)
+
+
 if __name__ == "__main__":
     unittest.main()

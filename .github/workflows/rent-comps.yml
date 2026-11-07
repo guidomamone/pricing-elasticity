@@ -21,6 +21,9 @@ on:
       days:
         description: "Days back for nearby closed rentals"
         default: "180"
+      from_run:
+        description: "Run id of an earlier comps run to re-analyse offline (no RentCast requests)"
+        required: false
 
 permissions:
   contents: write
@@ -37,6 +40,14 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pillow
+      - name: Fetch the earlier run's raw data
+        if: ${{ inputs.from_run != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: comps-raw
+          path: miami-rental-alerts
+          run-id: ${{ inputs.from_run }}
+          github-token: ${{ github.token }}
       - name: Run comps
         env:
           RENTCAST_API_KEY: ${{ secrets.RENTCAST_API_KEY }}
@@ -46,11 +57,13 @@ jobs:
           BATHS: ${{ inputs.baths }}
           SQFT: ${{ inputs.sqft }}
           DAYS: ${{ inputs.days }}
+          FROM_RUN: ${{ inputs.from_run }}
         run: |
           args=(--address "$ADDRESS" --unit "$UNIT" --days "$DAYS")
           [ -n "$BEDS" ] && args+=(--beds "$BEDS")
           [ -n "$BATHS" ] && args+=(--baths "$BATHS")
           [ -n "$SQFT" ] && args+=(--sqft "$SQFT")
+          [ -n "$FROM_RUN" ] && args+=(--offline miami-rental-alerts/comps_raw.json)
           python miami-rental-alerts/comps.py "${args[@]}"
       - name: Save state
         if: always()
@@ -60,7 +73,7 @@ jobs:
           git add miami-rental-alerts/state.json
           git diff --cached --quiet || (git commit -m "Update rental alerts state" && git push)
       - name: Keep the raw data
-        if: always()
+        if: ${{ always() && inputs.from_run == '' }}
         uses: actions/upload-artifact@v4
         with:
           name: comps-raw
