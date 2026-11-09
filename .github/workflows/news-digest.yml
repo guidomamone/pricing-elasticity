@@ -48,9 +48,9 @@ jobs:
       - name: Discover Monitor Argy API (temporary, for building the adapter)
         continue-on-error: true
         run: |
-          for p in /api/v1/series /api/v1/openapi.json /openapi.json /api/v1/calendar; do
+          for p in /api/v1 /api/v1/series; do
             echo "=== https://monitorargy.com$p"
-            curl -sS -m 20 -L -w '\nHTTP %{http_code}\n' "https://monitorargy.com$p" | head -c 3500 || true
+            curl -sS -m 20 -H 'Accept: application/json' -w '\nHTTP %{http_code}\n' "https://monitorargy.com$p" | head -c 3500 || true
             echo
           done
 

@@ -72,7 +72,7 @@
       "key": "miami_florida",
       "label": "🌴 Miami & Florida",
       "feeds": [
-        {"name": "WLRN", "url": "https://www.wlrn.org/index.rss"},
+        {"name": "Miami outlets", "gnews": "(site:miamiherald.com OR site:local10.com OR site:wlrn.org OR site:nbcmiami.com) when:1d"},
         {"name": "Google News", "gnews": "(Miami OR Florida) when:1d"}
       ]
     }

@@ -12,6 +12,7 @@ import os
 import re
 import sqlite3
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -43,10 +44,16 @@ CREATE INDEX IF NOT EXISTS items_sent ON items (sent_at, topic);
 
 # ---------- fetching and parsing ----------
 
-def http_get(url, timeout=25):
+def http_get(url, timeout=25, attempts=3):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+    for i in range(attempts):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.read()
+        except (urllib.error.URLError, OSError):
+            if i == attempts - 1:
+                raise
+            time.sleep(2 * (i + 1))
 
 
 def gnews_url(query, lang="en-US", country="US"):
@@ -200,8 +207,12 @@ def send_telegram(token, chat_id, text):
         "chat_id": chat_id, "text": text, "parse_mode": "HTML",
         "disable_web_page_preview": "true"}).encode()
     req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=data)
-    with urllib.request.urlopen(req, timeout=30) as r:
-        r.read()
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            r.read()
+    except urllib.error.HTTPError as e:
+        # Telegram explains the failure in the body (e.g. "chat not found", "can't parse entities").
+        raise RuntimeError(f"Telegram HTTP {e.code}: {e.read().decode(errors='replace')[:500]}") from None
 
 
 # ---------- main ----------
