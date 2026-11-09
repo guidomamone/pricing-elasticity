@@ -3,77 +3,115 @@
     "max_age_hours": 48,
     "per_feed_limit": 30,
     "per_topic": 2,
-    "max_total": 14
+    "max_total": 30,
+    "min_score": 5,
+    "candidates_per_topic": 12,
+    "max_candidates": 100,
+    "llm_batch_size": 30
   },
   "topics": [
     {
       "key": "geopolitics",
       "label": "🌍 Geopolitics",
+      "describe": "Wars, diplomacy, sanctions, elections and power politics between countries, and major international crises.",
       "feeds": [
         {"name": "Al Jazeera", "url": "https://www.aljazeera.com/xml/rss/all.xml"},
         {"name": "BBC World", "url": "http://feeds.bbci.co.uk/news/world/rss.xml"},
-        {"name": "Google News", "gnews": "geopolitics OR \"foreign policy\" OR sanctions OR NATO when:1d"}
+        {"name": "The Guardian", "url": "https://www.theguardian.com/world/rss"},
+        {"name": "NPR", "url": "https://feeds.npr.org/1004/rss.xml"}
       ]
     },
     {
       "key": "us_economy",
       "label": "🇺🇸 US economy",
+      "describe": "US macro economy and policy: inflation, the Fed and interest rates, GDP, trade and tariffs, and markets only when they reflect macro news.",
       "feeds": [
-        {"name": "Google News", "gnews": "(US economy OR inflation OR CPI OR GDP OR \"Federal Reserve\") when:1d"}
-      ]
-    },
-    {
-      "key": "argentina_economy",
-      "label": "🇦🇷 Argentina economy",
-      "feeds": [
-        {"name": "Google News AR", "gnews": "Argentina (inflación OR dólar OR BCRA OR reservas OR riesgo país) when:1d", "lang": "es-419", "country": "AR"}
-      ]
-    },
-    {
-      "key": "ai",
-      "label": "🤖 AI",
-      "feeds": [
-        {"name": "The Verge AI", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"},
-        {"name": "Hacker News", "url": "https://hnrss.org/newest?q=AI+OR+LLM+OR+Anthropic+OR+OpenAI&points=150"},
-        {"name": "Google News", "gnews": "(Anthropic OR OpenAI OR Gemini OR \"AI model\") when:1d"}
-      ]
-    },
-    {
-      "key": "videogames",
-      "label": "🎮 Videogames",
-      "feeds": [
-        {"name": "IGN", "url": "https://feeds.feedburner.com/ign/all"},
-        {"name": "Eurogamer", "url": "https://www.eurogamer.net/feed"}
-      ]
-    },
-    {
-      "key": "movies",
-      "label": "🎬 Movies",
-      "feeds": [
-        {"name": "Variety", "url": "https://variety.com/feed/"},
-        {"name": "Deadline", "url": "https://deadline.com/feed/"}
+        {"name": "CNBC", "url": "https://www.cnbc.com/id/20910258/device/rss/rss.html"},
+        {"name": "MarketWatch", "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories"},
+        {"name": "Federal Reserve", "url": "https://www.federalreserve.gov/feeds/press_all.xml"}
       ]
     },
     {
       "key": "us_jobs",
       "label": "💼 US job market",
+      "describe": "US labor market only: jobs reports and payrolls, unemployment and jobless claims, layoffs, hiring trends, wages, job openings. Not general economy news.",
       "feeds": [
-        {"name": "Google News", "gnews": "(\"jobs report\" OR unemployment OR layoffs OR \"labor market\" OR payrolls) when:1d"}
+        {"name": "CNBC Jobs", "url": "https://www.cnbc.com/id/10000113/device/rss/rss.html"},
+        {"name": "HR Dive", "url": "https://www.hrdive.com/feeds/news/"},
+        {"name": "Google News", "gnews": "(\"jobs report\" OR \"jobless claims\" OR payrolls OR layoffs OR \"job openings\" OR JOLTS OR \"unemployment rate\") US when:2d"}
+      ]
+    },
+    {
+      "key": "argentina_data",
+      "label": "📊 Argentina data (Monitor Argy)",
+      "per_topic": 4,
+      "feeds": []
+    },
+    {
+      "key": "argentina_economy",
+      "label": "🇦🇷 Argentina economy",
+      "describe": "Argentina's economy and economic policy: inflation, exchange rate, reserves, country risk, BCRA, IMF, fiscal and government economic measures.",
+      "feeds": [
+        {"name": "Ámbito", "url": "https://www.ambito.com/rss/pages/economia.xml"},
+        {"name": "Infobae", "url": "https://www.infobae.com/arc/outboundfeeds/rss/category/economia/"},
+        {"name": "Clarín", "url": "https://www.clarin.com/rss/economia/"},
+        {"name": "La Nación", "url": "https://www.lanacion.com.ar/arcio/rss/category/economia/"},
+        {"name": "Buenos Aires Times", "url": "https://www.batimes.com.ar/feed"}
+      ]
+    },
+    {
+      "key": "ai",
+      "label": "🤖 AI",
+      "describe": "Artificial intelligence: new models and products, major lab news (Anthropic, OpenAI, Google, Meta), research breakthroughs, regulation, AI business deals.",
+      "feeds": [
+        {"name": "The Verge AI", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"},
+        {"name": "TechCrunch AI", "url": "https://techcrunch.com/category/artificial-intelligence/feed/"},
+        {"name": "Ars Technica AI", "url": "https://arstechnica.com/ai/feed/"},
+        {"name": "OpenAI", "url": "https://openai.com/news/rss.xml"}
+      ]
+    },
+    {
+      "key": "videogames",
+      "label": "🎮 Videogames",
+      "describe": "Video game releases, industry news, major studio and platform news, notable reviews and announcements.",
+      "feeds": [
+        {"name": "IGN", "url": "https://feeds.feedburner.com/ign/all"},
+        {"name": "Eurogamer", "url": "https://www.eurogamer.net/feed"},
+        {"name": "Polygon", "url": "https://www.polygon.com/rss/index.xml"},
+        {"name": "Rock Paper Shotgun", "url": "https://www.rockpapershotgun.com/feed"},
+        {"name": "Kotaku", "url": "https://kotaku.com/rss"}
+      ]
+    },
+    {
+      "key": "movies",
+      "label": "🎬 Movies",
+      "describe": "Film: releases, box office, casting and production news, festival and awards news, notable trailers.",
+      "feeds": [
+        {"name": "Variety", "url": "https://variety.com/feed/"},
+        {"name": "Deadline", "url": "https://deadline.com/feed/"},
+        {"name": "The Hollywood Reporter", "url": "https://www.hollywoodreporter.com/feed/"},
+        {"name": "IndieWire", "url": "https://www.indiewire.com/feed/"}
       ]
     },
     {
       "key": "us_real_estate",
       "label": "🏠 US real estate",
+      "describe": "US housing and real estate: home prices, sales, mortgage rates, rents, housing policy, commercial real estate.",
       "feeds": [
-        {"name": "Google News", "gnews": "(\"housing market\" OR \"mortgage rates\" OR \"home prices\" OR \"home sales\") when:1d"}
+        {"name": "HousingWire", "url": "https://www.housingwire.com/feed/"},
+        {"name": "Redfin", "url": "https://www.redfin.com/news/feed/"},
+        {"name": "Realtor.com", "url": "https://www.realtor.com/news/feed/"}
       ]
     },
     {
       "key": "miami_florida",
       "label": "🌴 Miami & Florida",
+      "describe": "Miami and Florida local news: city and state politics, development and real estate, economy, weather and hurricanes, crime and safety, culture and events.",
       "feeds": [
-        {"name": "Miami outlets", "gnews": "(site:miamiherald.com OR site:local10.com OR site:wlrn.org OR site:nbcmiami.com) when:1d"},
-        {"name": "Google News", "gnews": "(Miami OR Florida) when:1d"}
+        {"name": "Miami New Times", "url": "https://www.miaminewtimes.com/miami/Rss.xml"},
+        {"name": "Florida Phoenix", "url": "https://floridaphoenix.com/feed/"},
+        {"name": "Miami outlets", "gnews": "(site:miamiherald.com OR site:local10.com OR site:wlrn.org OR site:nbcmiami.com) when:2d"},
+        {"name": "Google News", "gnews": "(Miami OR Florida OR \"Miami-Dade\" OR DeSantis) when:2d"}
       ]
     }
   ]

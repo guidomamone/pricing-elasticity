@@ -45,23 +45,11 @@ jobs:
             mkdir -p news-digest/data
           fi
 
-      - name: Discover Monitor Argy API (temporary, for building the adapter)
-        continue-on-error: true
-        run: |
-          for p in /api/v1 /api/v1/series; do
-            echo "=== https://monitorargy.com$p"
-            curl -sS -m 20 -H 'Accept: application/json' -w '\nHTTP %{http_code}\n' "https://monitorargy.com$p" | head -c 3500 || true
-            echo
-          done
-
-      - name: Probe candidate feeds (temporary)
-        continue-on-error: true
-        run: cd news-digest && python probe.py
-
       - name: Build and send the digest
         env:
           NEWS_TELEGRAM_BOT_TOKEN: ${{ secrets.NEWS_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           FORCE: ${{ github.event_name != 'schedule' && '1' || '' }}
         # A push whose commit message contains [dry] only prints the digest.
         run: python news-digest/digest.py ${{ (inputs.dry_run || contains(github.event.head_commit.message, '[dry]')) && '--dry-run' || '' }}
