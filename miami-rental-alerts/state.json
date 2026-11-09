@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-11",
-    "used": 9
+    "used": 10
   },
   "seen": {
     "10-Sw-South-River-Dr,-Miami,-FL-33130": {
@@ -35,6 +35,10 @@
     "1060-Brickell-Ave,-Apt-2701,-Miami,-FL-33131": {
       "first_seen": "2026-11-04",
       "price": 4000
+    },
+    "1100-S-Miami-Ave,-Apt-701,-Miami,-FL-33130": {
+      "first_seen": "2026-11-09",
+      "price": 4200
     },
     "1111-Sw-1st-Ave,-Unit-2223N,-Miami,-FL-33130": {
       "first_seen": "2026-10-23",
@@ -96,6 +100,10 @@
       "first_seen": "2026-11-05",
       "price": 3950
     },
+    "185-Sw-7th-St,-Apt-2909,-Miami,-FL-33130": {
+      "first_seen": "2026-11-09",
+      "price": 4200
+    },
     "185-Sw-7th-St,-Apt-3502,-Miami,-FL-33130": {
       "first_seen": "2026-11-07",
       "price": 3700
@@ -131,6 +139,10 @@
     "325-S-Biscayne-Blvd,-Apt-619,-Miami,-FL-33131": {
       "first_seen": "2026-11-05",
       "price": 3750
+    },
+    "329-Sw-9th-Ave,-Apt-3,-Miami,-FL-33130": {
+      "first_seen": "2026-11-09",
+      "price": 2250
     },
     "335-S-Biscayne-Blvd,-Apt-412,-Miami,-FL-33131": {
       "first_seen": "2026-10-17",
@@ -301,6 +313,7 @@
     "501-Ne-31st-St,-Unit-1209,-Miami,-FL-33137": "2026-11-07",
     "501-Ne-31st-St,-Unit-1509,-Miami,-FL-33137": "2026-11-07",
     "501-Ne-31st-St,-Unit-3108,-Miami,-FL-33137": "2026-11-07",
+    "501-Ne-31st-St,-Unit-907,-Miami,-FL-33137": "2026-11-09",
     "520-Brickell-Key-Dr,-Apt-A1421,-Miami,-FL-33131": "2026-11-06",
     "540-Brickell-Key-Dr,-Apt-1000,-Miami,-FL-33131": "2026-11-06",
     "540-Brickell-Key-Dr,-Apt-1005,-Miami,-FL-33131": "2026-10-27",
@@ -342,6 +355,7 @@
     "851-Ne-1st-Ave,-Unit-205,-Miami,-FL-33132": "2026-10-20",
     "851-Ne-1st-Ave,-Unit-2309,-Miami,-FL-33132": "2026-10-16",
     "851-Ne-1st-Ave,-Unit-3001,-Miami,-FL-33132": "2026-10-27",
+    "851-Ne-1st-Ave,-Unit-3508,-Miami,-FL-33132": "2026-11-09",
     "851-Ne-1st-Ave,-Unit-3702,-Miami,-FL-33132": "2026-11-04",
     "851-Ne-1st-Ave,-Unit-4208,-Miami,-FL-33132": "2026-11-03",
     "851-Ne-1st-Ave,-Unit-4306,-Miami,-FL-33132": "2026-10-17",
