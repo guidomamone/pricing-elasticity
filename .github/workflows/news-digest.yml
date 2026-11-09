@@ -1,0 +1,78 @@
+name: News digest
+
+on:
+  schedule:
+    # Two UTC times so one of them is 8am Eastern in both EST and EDT.
+    # digest.py skips the run that is not 8am Eastern.
+    - cron: "0 12 * * *"
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Print the digest instead of sending it (items are not marked as sent)"
+        type: boolean
+        default: false
+  # TEMPORARY: lets me test from the feature branch. Remove before merging.
+  push:
+    branches: [claude/quirky-thompson-carnu3]
+    paths: ["news-digest/**", ".github/workflows/news-digest.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: news-digest
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    env:
+      DATA_REMOTE: https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run tests
+        run: python -m unittest discover -s news-digest
+
+      - name: Load state from the news-data branch
+        run: |
+          if git ls-remote --exit-code --heads "$DATA_REMOTE" news-data >/dev/null 2>&1; then
+            git clone --depth 1 --branch news-data "$DATA_REMOTE" news-digest/data
+          else
+            mkdir -p news-digest/data
+          fi
+
+      - name: Discover Monitor Argy API (temporary, for building the adapter)
+        continue-on-error: true
+        run: |
+          for p in /api/v1/series /api/v1/openapi.json /openapi.json /api/v1/calendar; do
+            echo "=== https://monitorargy.com$p"
+            curl -sS -m 20 -L -w '\nHTTP %{http_code}\n' "https://monitorargy.com$p" | head -c 3500 || true
+            echo
+          done
+
+      - name: Build and send the digest
+        env:
+          NEWS_TELEGRAM_BOT_TOKEN: ${{ secrets.NEWS_TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          FORCE: ${{ github.event_name != 'schedule' && '1' || '' }}
+        run: python news-digest/digest.py ${{ inputs.dry_run && '--dry-run' || '' }}
+
+      - name: Save state to the news-data branch
+        if: always()
+        run: |
+          cd news-digest/data
+          [ -f news.db ] || exit 0
+          if [ ! -d .git ]; then
+            git init -q -b news-data
+            git remote add origin "$DATA_REMOTE"
+          fi
+          git config user.name "news-digest-bot"
+          git config user.email "news-digest-bot@users.noreply.github.com"
+          git add news.db
+          git diff --cached --quiet && exit 0
+          git commit -qm "Update news state"
+          git push origin news-data
