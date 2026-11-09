@@ -117,6 +117,18 @@ class SelectTests(unittest.TestCase):
         self.assertEqual(len(picked), 3)
         self.assertIn("4", [r["id"] for _, r in picked])  # lowest scores are dropped, not the last topic
 
+    def test_topic_overrides_for_window_and_threshold(self):
+        c = db()
+        cfg = {"settings": SETTINGS,
+               "topics": [dict(CONFIG["topics"][0], max_age_hours=96, min_score=4), CONFIG["topics"][1]]}
+        classified(c, 1, "t1", "t1", 80, 4.5)   # old and low, but inside this topic's own limits
+        classified(c, 2, "t2", "t2", 80, 4.5)   # same numbers, default limits: excluded
+        picked = digest.select(c, cfg, NOW)
+        self.assertEqual([r["id"] for _, r in picked], ["1"])
+        lines = digest.report(c, cfg, NOW)
+        self.assertIn("t1", lines[0])
+        self.assertIn("unsent=  1", lines[0])
+
     def test_candidates_interleave_sources_and_skip_classified(self):
         c = db()
         add(c, 1, "t1", "A", 1)

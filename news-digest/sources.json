@@ -34,11 +34,12 @@
     {
       "key": "us_jobs",
       "label": "💼 US job market",
+      "max_age_hours": 96,
+      "min_score": 4,
       "describe": "US labor market only: jobs reports and payrolls, unemployment and jobless claims, layoffs, hiring trends, wages, job openings. Not general economy news.",
       "feeds": [
-        {"name": "CNBC Jobs", "url": "https://www.cnbc.com/id/10000113/device/rss/rss.html"},
         {"name": "HR Dive", "url": "https://www.hrdive.com/feeds/news/"},
-        {"name": "Google News", "gnews": "(\"jobs report\" OR \"jobless claims\" OR payrolls OR layoffs OR \"job openings\" OR JOLTS OR \"unemployment rate\") US when:2d"}
+        {"name": "Google News", "gnews": "(\"jobs report\" OR \"jobless claims\" OR payrolls OR layoffs OR \"job openings\" OR JOLTS OR \"unemployment rate\" OR \"hiring freeze\") US when:4d"}
       ]
     },
     {
@@ -106,6 +107,8 @@
     {
       "key": "miami_florida",
       "label": "🌴 Miami & Florida",
+      "max_age_hours": 72,
+      "min_score": 4,
       "describe": "Miami and Florida local news: city and state politics, development and real estate, economy, weather and hurricanes, crime and safety, culture and events.",
       "feeds": [
         {"name": "Miami New Times", "url": "https://www.miaminewtimes.com/miami/Rss.xml"},

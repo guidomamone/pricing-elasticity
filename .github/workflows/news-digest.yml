@@ -51,8 +51,8 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           FORCE: ${{ github.event_name != 'schedule' && '1' || '' }}
-        # A push whose commit message contains [dry] only prints the digest.
-        run: python news-digest/digest.py ${{ (inputs.dry_run || contains(github.event.head_commit.message, '[dry]')) && '--dry-run' || '' }}
+        # A push whose commit message contains [dry] only prints the digest; [reclassify] redoes the LLM pass.
+        run: python news-digest/digest.py ${{ (inputs.dry_run || contains(github.event.head_commit.message, '[dry]')) && '--dry-run' || '' }} ${{ contains(github.event.head_commit.message, '[reclassify]') && '--reclassify' || '' }}
 
       - name: Save state to the news-data branch
         if: always()
