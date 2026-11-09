@@ -107,6 +107,7 @@
     {
       "key": "miami_florida",
       "label": "🌴 Miami & Florida",
+      "debug": true,
       "max_age_hours": 72,
       "min_score": 4,
       "describe": "Miami and Florida local news: city and state politics, development and real estate, economy, weather and hurricanes, crime and safety, culture and events.",

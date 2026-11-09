@@ -449,6 +449,14 @@ def report(conn, config, now):
     return lines
 
 
+def debug_rows(conn, topic):
+    """What the model did with the candidates whose feed topic is `topic`, for tuning thin topics."""
+    rows = conn.execute(
+        "SELECT source, assigned_topic, score, title FROM items WHERE topic = ? AND classified_at IS NOT NULL "
+        "AND sent_at IS NULL ORDER BY COALESCE(published, first_seen) DESC LIMIT 25", (topic,)).fetchall()
+    return [f"  {r['source'][:14]:14s} -> {str(r['assigned_topic']):18s} {r['score']} | {r['title'][:80]}" for r in rows]
+
+
 # ---------- main ----------
 
 def main(argv=None):
@@ -502,6 +510,12 @@ def main(argv=None):
     print("Unsent items per topic after classification:")
     for line in report(conn, config, now):
         print(line)
+
+    for topic in config["topics"]:
+        if topic.get("debug"):
+            print(f"Debug: items from {topic['key']} feeds, and where the model put them:")
+            for line in debug_rows(conn, topic["key"]):
+                print(line)
 
     picked = select(conn, config, now, include_unclassified=not llm_ok)
     messages = build_messages(picked, now_local)
