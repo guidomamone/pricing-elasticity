@@ -7,7 +7,7 @@
     "min_score": 5,
     "candidates_per_topic": 12,
     "max_candidates": 100,
-    "llm_batch_size": 30
+    "llm_batch_size": 20
   },
   "topics": [
     {

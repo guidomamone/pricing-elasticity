@@ -145,6 +145,12 @@ class LlmTests(unittest.TestCase):
         self.assertEqual(res["2"]["topic"], "none")    # unknown topic becomes none
         self.assertEqual(len(res), 2)
 
+    def test_parse_salvages_a_truncated_reply(self):
+        _, rows = self.rows()
+        text = '[{"i":1,"topic":"t1","score":8,"story":"a","summary":"Done."},\n{"i":2,"topic":"t2","score":7,"sto'
+        res = digest.parse_llm_json(text, rows, {"t1", "t2"})
+        self.assertEqual(list(res), ["1"])
+
     def test_parse_rejects_garbage(self):
         _, rows = self.rows()
         with self.assertRaises(ValueError):

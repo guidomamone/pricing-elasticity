@@ -228,7 +228,7 @@ def ingest_monitor_argy(conn, now):
 
 # ---------- LLM classification and summaries ----------
 
-def anthropic_call(api_key, system, user, max_tokens=4096):
+def anthropic_call(api_key, system, user, max_tokens=8192):
     body = json.dumps({"model": LLM_MODEL, "max_tokens": max_tokens, "system": system,
                        "messages": [{"role": "user", "content": user}]}).encode()
     req = urllib.request.Request(
@@ -273,11 +273,28 @@ def build_user(rows):
 
 
 def parse_llm_json(text, rows, valid_topics):
-    start, end = text.find("["), text.rfind("]")
-    if start < 0 or end < 0:
-        raise ValueError("no JSON array in model output")
+    """Pull every complete {"i": ...} object out of the model reply.
+
+    Works on a clean JSON array, on text wrapped around one, and on a reply cut off mid-array.
+    """
+    decoder = json.JSONDecoder()
+    objs, pos = [], 0
+    while True:
+        pos = text.find("{", pos)
+        if pos < 0:
+            break
+        try:
+            obj, end = decoder.raw_decode(text, pos)
+        except ValueError:
+            pos += 1
+            continue
+        if isinstance(obj, dict) and "i" in obj:
+            objs.append(obj)
+        pos = end
+    if not objs:
+        raise ValueError(f"no items in model output: {text[:200]!r}")
     results = {}
-    for obj in json.loads(text[start:end + 1]):
+    for obj in objs:
         try:
             i = int(obj["i"])
             topic = obj["topic"]
