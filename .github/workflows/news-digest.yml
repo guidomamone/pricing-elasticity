@@ -54,12 +54,17 @@ jobs:
             echo
           done
 
+      - name: Probe candidate feeds (temporary)
+        continue-on-error: true
+        run: cd news-digest && python probe.py
+
       - name: Build and send the digest
         env:
           NEWS_TELEGRAM_BOT_TOKEN: ${{ secrets.NEWS_TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           FORCE: ${{ github.event_name != 'schedule' && '1' || '' }}
-        run: python news-digest/digest.py ${{ inputs.dry_run && '--dry-run' || '' }}
+        # A push whose commit message contains [dry] only prints the digest.
+        run: python news-digest/digest.py ${{ (inputs.dry_run || contains(github.event.head_commit.message, '[dry]')) && '--dry-run' || '' }}
 
       - name: Save state to the news-data branch
         if: always()
