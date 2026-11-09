@@ -114,7 +114,7 @@
       "feeds": [
         {"name": "Miami New Times", "url": "https://www.miaminewtimes.com/miami/Rss.xml"},
         {"name": "Florida Phoenix", "url": "https://floridaphoenix.com/feed/"},
-        {"name": "Miami outlets", "gnews": "(site:miamiherald.com OR site:local10.com OR site:wlrn.org OR site:nbcmiami.com) when:2d"},
+        {"name": "Miami news", "gnews": "(Miami OR \"Miami-Dade\" OR Brickell OR \"South Florida\") (mayor OR county OR condo OR hurricane OR development OR crime OR \"real estate\" OR council OR police) -NBA -NFL -Dolphins -Heat -Hurricanes when:3d"},
         {"name": "Google News", "gnews": "(Miami OR Florida OR \"Miami-Dade\" OR DeSantis) when:2d"}
       ]
     }

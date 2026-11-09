@@ -239,6 +239,16 @@ class FormatTests(unittest.TestCase):
         self.assertGreater(len(msgs), 1)
         self.assertTrue(all(len(m) <= 4096 for m in msgs))
 
+    def test_sections_are_not_split_from_their_header(self):
+        topics = CONFIG["topics"]
+        long_a = [(topics[0], {"title": "a" * 280, "url": f"https://x/a{i}", "source": "S"}) for i in range(10)]
+        long_b = [(topics[1], {"title": "b" * 280, "url": f"https://x/b{i}", "source": "S"}) for i in range(10)]
+        msgs = digest.build_messages(long_a + long_b, NOW)
+        self.assertGreater(len(msgs), 1)
+        for m in msgs[1:]:
+            self.assertTrue(m.startswith("<b>"), m[:40])  # a new message opens with a section header
+        self.assertTrue(all(len(m) <= 4096 for m in msgs))
+
     def test_empty(self):
         self.assertIn("Nothing new", digest.build_messages([], NOW)[0])
 

@@ -410,14 +410,24 @@ def build_messages(picked, now_local):
         text = html.escape(item_text(r))
         url = html.escape(r["url"], quote=True)
         current[1].append(f'• <a href="{url}">{text} <i>({html.escape(r["source"])})</i></a>')
+    # Keep each topic section whole; only split inside a section if it alone is too long.
     messages, text = [], header
     for _, lines in blocks:
+        chunk = "\n".join(lines)
+        if len(text) + len(chunk) + 1 <= TG_LIMIT:
+            text += "\n" + chunk
+            continue
+        messages.append(text)
+        if len(chunk) <= TG_LIMIT:
+            text = chunk.lstrip("\n")
+            continue
+        text = ""
         for line in lines:
-            if len(text) + len(line) + 1 > TG_LIMIT:
+            if text and len(text) + len(line) + 1 > TG_LIMIT:
                 messages.append(text)
                 text = line.lstrip("\n")
             else:
-                text += "\n" + line
+                text = text + "\n" + line if text else line.lstrip("\n")
     messages.append(text)
     return messages
 
