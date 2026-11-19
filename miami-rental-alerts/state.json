@@ -1,7 +1,7 @@
 {
   "quota": {
     "month": "2026-11",
-    "used": 16
+    "used": 17
   },
   "seen": {
     "10-Sw-South-River-Dr,-Miami,-FL-33130": {
@@ -144,6 +144,10 @@
       "first_seen": "2026-10-24",
       "price": 3750
     },
+    "240-Sw-15th-Rd,-Apt-109,-Miami,-FL-33129": {
+      "first_seen": "2026-11-19",
+      "price": 3490
+    },
     "300-S-Biscayne-Blvd,-Unit-T1806,-Miami,-FL-33131": {
       "first_seen": "2026-10-21",
       "price": 4100
@@ -252,6 +256,10 @@
       "first_seen": "2026-10-17",
       "price": 3750
     },
+    "600-Ne-36th-St,-Apt-804,-Miami,-FL-33137": {
+      "first_seen": "2026-11-19",
+      "price": 4100
+    },
     "637-Sw-10th-Ave,-Apt-3,-Miami,-FL-33130": {
       "first_seen": "2026-11-14",
       "price": 2000
@@ -295,6 +303,10 @@
     "90-Sw-3rd-St,-Apt-2401,-Miami,-FL-33130": {
       "first_seen": "2026-10-20",
       "price": 3800
+    },
+    "90-Sw-3rd-St,-Apt-2809,-Miami,-FL-33130": {
+      "first_seen": "2026-11-19",
+      "price": 3950
     },
     "900-Sw-8th-St,-Apt-504,-Miami,-FL-33130": {
       "first_seen": "2026-10-17",
@@ -367,8 +379,10 @@
     "1915-Brickell-Ave,-Apt-C709,-Miami,-FL-33129": "2026-11-01",
     "1915-Brickell-Ave,-Apt-C806,-Miami,-FL-33129": "2026-11-17",
     "1915-Brickell-Ave,-Apt-C812,-Miami,-FL-33129": "2026-10-22",
+    "1925-Brickell-Ave,-Ste-D211,-Miami,-FL-33129": "2026-11-19",
     "200-Se-15th-Rd,-Apt-6F,-Miami,-FL-33129": "2026-11-10",
     "200-Se-15th-Rd,-Ph-A,-Miami,-FL-33129": "2026-10-17",
+    "2025-Brickell-Ave,-Apt-1105,-Miami,-FL-33129": "2026-11-19",
     "2101-Brickell-Ave,-Apt-1010,-Miami,-FL-33129": "2026-11-07",
     "2101-Brickell-Ave,-Apt-1708,-Miami,-FL-33129": "2026-11-13",
     "2101-Brickell-Ave,-Apt-1808,-Miami,-FL-33129": "2026-11-10",
@@ -392,6 +406,7 @@
     "2900-Ne-7th-Ave,-Unit-3608,-Miami,-FL-33137": "2026-11-16",
     "3131-Ne-7th-Ave,-Unit-4103,-Miami,-FL-33137": "2026-11-10",
     "3301-Ne-5th-Ave,-Apt-109,-Miami,-FL-33137": "2026-11-13",
+    "460-Ne-28th-St,-Apt-1106,-Miami,-FL-33137": "2026-11-19",
     "460-Ne-28th-St,-Apt-1207,-Miami,-FL-33137": "2026-11-07",
     "460-Ne-28th-St,-Apt-1902,-Miami,-FL-33137": "2026-11-14",
     "480-Ne-31st-St,-Unit-4005,-Miami,-FL-33137": "2026-11-12",
@@ -401,6 +416,7 @@
     "501-Ne-31st-St,-Unit-1509,-Miami,-FL-33137": "2026-11-07",
     "501-Ne-31st-St,-Unit-2507,-Miami,-FL-33137": "2026-11-10",
     "501-Ne-31st-St,-Unit-3108,-Miami,-FL-33137": "2026-11-07",
+    "501-Ne-31st-St,-Unit-404,-Miami,-FL-33137": "2026-11-19",
     "501-Ne-31st-St,-Unit-604,-Miami,-FL-33137": "2026-11-14",
     "501-Ne-31st-St,-Unit-907,-Miami,-FL-33137": "2026-11-09",
     "520-Brickell-Key-Dr,-Apt-A1421,-Miami,-FL-33131": "2026-11-06",
@@ -418,6 +434,7 @@
     "540-Brickell-Key-Dr,-Apt-916,-Miami,-FL-33131": "2026-10-16",
     "540-Brickell-Key-Dr,-Miami,-FL-33131": "2026-10-16",
     "600-Ne-36th-St,-Apt-701,-Miami,-FL-33137": "2026-11-17",
+    "650-Ne-32nd-St,-Unit-2305,-Miami,-FL-33137": "2026-11-19",
     "650-Ne-32nd-St,-Unit-3004,-Miami,-FL-33137": "2026-11-17",
     "650-Ne-32nd-St,-Unit-3106,-Miami,-FL-33137": "2026-11-07",
     "650-Ne-32nd-St,-Unit-3302,-Miami,-FL-33137": "2026-11-13",
@@ -469,9 +486,11 @@
     "851-Ne-1st-Ave,-Unit-3811,-Miami,-FL-33132": "2026-11-14",
     "851-Ne-1st-Ave,-Unit-4208,-Miami,-FL-33132": "2026-11-03",
     "851-Ne-1st-Ave,-Unit-4306,-Miami,-FL-33132": "2026-10-17",
+    "851-Ne-1st-Ave,-Unit-4610,-Miami,-FL-33132": "2026-11-19",
     "851-Ne-1st-Ave,-Unit-910,-Miami,-FL-33132": "2026-11-14",
     "888-Brickell-Key-Dr,-Apt-1507,-Miami,-FL-33131": "2026-11-06",
     "888-Brickell-Key-Dr,-Apt-2412,-Miami,-FL-33131": "2026-11-12",
+    "901-Brickell-Key-Blvd,-Apt-2702,-Miami,-FL-33131": "2026-11-19",
     "901-Brickell-Key-Blvd,-Apt-501,-Miami,-FL-33131": "2026-10-23"
   }
 }
