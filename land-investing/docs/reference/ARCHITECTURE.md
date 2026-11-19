@@ -1,3 +1,5 @@
+> **REFERENCE ONLY.** Background material. The current plan is `PLAN.md` and the current work list is `TASKS.md` at the top of `land-investing/`. Where this file disagrees with them, they win.
+
 # Architecture (Brainstorm v2)
 
 Three products, built in this order:

@@ -1,1 +1,6 @@
 data/raw/
+__pycache__/
+.netlify/
+*.pyc
+data/processed/*
+!data/processed/.gitkeep

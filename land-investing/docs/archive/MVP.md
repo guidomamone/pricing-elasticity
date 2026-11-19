@@ -1,3 +1,5 @@
+> **ARCHIVED. DO NOT EXECUTE.** Superseded by `PLAN.md` and `TASKS.md` at the top of `land-investing/`. Kept only for history.
+
 # MVP v2: Growth Insights Map (pairs with Acres.com)
 
 ## Decision (round 6)

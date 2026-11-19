@@ -1,12 +1,33 @@
 # land-investing
 
-Brainstorm + MVP for a Florida land hold-and-sell model. Start with `BRAINSTORM.md`, `ARCHITECTURE.md`, `MVP.md`.
+A model and map for finding vacant land in the path of growth. Florida first, pilot in Marion County.
 
-## Run the MVP map (population layer)
+## Where things are
+| File | What it is | Status |
+|---|---|---|
+| `PLAN.md` | Strategy, phases and pass/fail gates | **Current. Source of truth** |
+| `TASKS.md` | Step-by-step work list for the current phase | **Current. Execute this** |
+| `STATUS.md` | What is done, what is next | **Current. Update every session** |
+| `docs/BACKTEST.md` | How the model is trained and tested, and the tech stack | Current |
+| `CLAUDE.md` | Rules for Claude sessions | Current |
+| `docs/reference/` | Literature, existing tools, later-phase design (search agent, database) | Background only |
+| `docs/archive/` | Old MVP plan and old task list | Dead. Do not execute |
+
+## Folders
+- `scripts/`: data download and map-layer builders.
+- `model/`: backtest code (created in Phase 1).
+- `map/`: static MapLibre map. `map/data/` holds the small committed layers.
+- `data/raw/`: downloads, not committed. `data/processed/`: model tables, not committed unless small.
+- `reports/`: backtest reports and charts.
+
+## Run
 ```
 cd land-investing
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python scripts/build_population.py        # writes map/data/population.geojson
-python -m http.server -d map 8000         # open http://localhost:8000
+python scripts/build_population.py      # Census -> map/data/population.geojson
+python scripts/fetch_parcels.py         # 286k Marion parcels -> data/raw/marion_parcels.parquet (about 10 min)
+python scripts/build_parcel_layers.py   # -> map/data/growth.json, vacant.json
+python -m http.server -d map 8000       # open http://localhost:8000
 ```
-Needs internet access to www2.census.gov, unpkg.com, tiles.openfreemap.org.
+Needs internet access to www2.census.gov, services9.arcgis.com, unpkg.com, tiles.openfreemap.org.

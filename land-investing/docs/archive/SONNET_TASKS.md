@@ -1,3 +1,5 @@
+> **ARCHIVED. DO NOT EXECUTE.** Superseded by `PLAN.md` and `TASKS.md` at the top of `land-investing/`. Kept only for history.
+
 # Instructions for a Sonnet worker
 
 You are picking up a brainstorm-stage project. Read `BRAINSTORM.md` and `ARCHITECTURE.md` in this folder first.
