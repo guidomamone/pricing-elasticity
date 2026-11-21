@@ -28,6 +28,12 @@ pip install -r requirements.txt
 python scripts/build_population.py      # Census -> map/data/population.geojson
 python scripts/fetch_parcels.py         # 286k Marion parcels -> data/raw/marion_parcels.parquet (about 10 min)
 python scripts/build_parcel_layers.py   # -> map/data/growth.json, vacant.json
+python -m model.audit                   # T1 -> reports/01_audit.md
+python -m model.build_panel             # T2 -> data/processed/panel.parquet
+python -m model.features                # T3 (needs TIGER zips in data/raw/tiger/)
+python -m pytest model/test_asof.py     # T3 leakage test
+python -m model.train                   # T4 -> predictions/v1-backtest.parquet
+python -m model.evaluate                # T5 -> reports/05_backtest.md
 python -m http.server -d map 8000       # open http://localhost:8000
 ```
 Needs internet access to www2.census.gov, services9.arcgis.com, unpkg.com, tiles.openfreemap.org.
