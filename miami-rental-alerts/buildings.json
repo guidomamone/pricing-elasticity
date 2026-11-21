@@ -1,8 +1,8 @@
 {
   "search": {
-    "latitude": 25.758,
-    "longitude": -80.195,
-    "radius": 2.5,
+    "latitude": 25.776,
+    "longitude": -80.192,
+    "radius": 3.5,
     "status": "Active",
     "daysOld": 3,
     "limit": 500
@@ -236,6 +236,108 @@
       "street": "NE 1st Ave",
       "numbers": [
         851
+      ]
+    },
+    {
+      "name": "Bay Park Towers",
+      "street": "NE 5th Ave",
+      "numbers": [
+        3301
+      ]
+    },
+    {
+      "name": "Biscayne 21",
+      "street": "N Bayshore Dr",
+      "numbers": [
+        2121
+      ]
+    },
+    {
+      "name": "Biscayne Beach",
+      "street": "NE 7th Ave",
+      "numbers": [
+        2900
+      ]
+    },
+    {
+      "name": "Gran Paraiso",
+      "street": "NE 31st St",
+      "numbers": [
+        480
+      ]
+    },
+    {
+      "name": "Icon Bay",
+      "street": "NE 28th St",
+      "numbers": [
+        460
+      ]
+    },
+    {
+      "name": "Missoni Baia",
+      "street": "NE 26th Ter",
+      "numbers": [
+        700
+      ]
+    },
+    {
+      "name": "Opera Tower",
+      "street": "N Bayshore Dr",
+      "numbers": [
+        1750
+      ]
+    },
+    {
+      "name": "Paraiso Bay",
+      "street": "NE 32nd St",
+      "numbers": [
+        650
+      ]
+    },
+    {
+      "name": "Paraiso Bay Views",
+      "street": "NE 31st St",
+      "numbers": [
+        501
+      ]
+    },
+    {
+      "name": "The Charter Club",
+      "street": "NE 36th St",
+      "numbers": [
+        600
+      ]
+    },
+    {
+      "name": "The Grand",
+      "street": "N Bayshore Dr",
+      "numbers": [
+        1717
+      ]
+    },
+    {
+      "name": "The Venetia",
+      "street": "NE 15th St",
+      "numbers": [
+        555
+      ]
+    },
+    {
+      "name": "Hyde Midtown",
+      "street": "NE 1st Ave",
+      "numbers": [
+        3401
+      ]
+    },
+    {
+      "name": "One Paraiso",
+      "street": "NE 7th Ave",
+      "streets": [
+        "NE 7th Ave",
+        "NE 7th St"
+      ],
+      "numbers": [
+        3131
       ]
     }
   ]

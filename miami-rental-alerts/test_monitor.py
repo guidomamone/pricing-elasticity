@@ -31,8 +31,26 @@ class MatchTests(unittest.TestCase):
                             ("901 Brickell Key Blvd", "Carbonell"), ("1450 Brickell Bay Dr", "Costa Bella")]:
             self.assertEqual(monitor.match_building(listing("a", line1), BUILDINGS)["name"], name, line1)
 
+    def test_edgewater_downtown_and_midtown_tennis_buildings(self):
+        for line1, name in [("2121 N Bayshore Dr", "Biscayne 21"), ("1750 N Bayshore Drive", "Opera Tower"),
+                            ("3301 NE 5th Ave", "Bay Park Towers"), ("480 NE 31st St", "Gran Paraiso"),
+                            ("501 NE 31 St", "Paraiso Bay Views"), ("700 NE 26th Terrace", "Missoni Baia"),
+                            ("3131 NE 7th Ave", "One Paraiso"), ("3131 NE 7th St", "One Paraiso"),
+                            ("3401 NE 1st Ave", "Hyde Midtown"), ("600 NE 36th St", "The Charter Club")]:
+            self.assertEqual(monitor.match_building(listing("a", line1), BUILDINGS)["name"], name, line1)
+
+    def test_edgewater_listing_is_tennis_but_not_brickell_zip(self):
+        """A tennis building in Edgewater (zip 33137) is listed; a non-tennis one there is not."""
+        data = [listing("a", "2121 N Bayshore Dr", zip_="33137"), listing("b", "2000 N Bayshore Dr", zip_="33137")]
+        with tempfile.TemporaryDirectory() as tmp:
+            send, _ = RunTests().run_main(data, tmp)
+            text = send.call_args_list[0].args[2]
+            self.assertIn("Tennis-court buildings: 1 new", text)
+            self.assertIn("Brickell, other buildings: 0 new", text)
+
     def test_no_duplicate_buildings(self):
-        keys = [(tuple(monitor.normalize_street(b["street"])), n) for b in BUILDINGS for n in b.get("numbers", [])]
+        keys = [(tuple(monitor.normalize_street(x)), n)
+                for b in BUILDINGS for x in (b.get("streets") or [b["street"]]) for n in b.get("numbers", [])]
         self.assertEqual(len(keys), len(set(keys)))
 
     def test_no_match(self):
@@ -242,6 +260,32 @@ class RunTests(unittest.TestCase):
             photo, send, _ = self.run_with_map([], tmp, lambda pins: (b"PNG", 0))
             self.assertEqual(photo.call_count, 0)
             self.assertEqual(send.call_count, 1)  # empty lists message
+
+    def test_full_page_triggers_a_second_request(self):
+        page1 = [listing(f"p{i}", "10 Other St", zip_="33140") for i in range(3)]
+        page2 = [listing("late", "2333 Brickell Ave")]
+        env = {"RENTCAST_API_KEY": "k", "TELEGRAM_BOT_TOKEN": "t", "TELEGRAM_CHAT_ID": "c"}
+        config = json.loads(monitor.CONFIG_PATH.read_text())
+        config["search"]["limit"] = 3
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = Path(tmp) / "cfg.json"
+            cfg.write_text(json.dumps(config))
+            with mock.patch.object(monitor, "STATE_PATH", Path(tmp) / "state.json"), \
+                 mock.patch.object(monitor, "CONFIG_PATH", cfg), \
+                 mock.patch.dict("os.environ", env), \
+                 mock.patch.object(monitor, "fetch_listings", side_effect=[page1, page2]) as fetch, \
+                 mock.patch.object(monitor, "send_telegram") as send:
+                monitor.main([])
+            state = json.loads((Path(tmp) / "state.json").read_text())
+        self.assertEqual(fetch.call_count, 2)
+        self.assertEqual(fetch.call_args_list[1].args[1]["offset"], 3)
+        self.assertEqual(state["quota"]["used"], 2)
+        self.assertIn("late", state["seen"])  # the listing that was only on page 2 is not lost
+
+    def test_short_page_is_one_request(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            send, state = self.run_main([listing("a", "2333 Brickell Ave")], tmp)
+        self.assertEqual(state["quota"]["used"], 1)
 
     def test_dry_run_does_not_mark_seen(self):
         with tempfile.TemporaryDirectory() as tmp:
