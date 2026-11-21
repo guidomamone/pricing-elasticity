@@ -1,0 +1,7 @@
+h,model,max_depth,num_leaves,min_child_samples,reg_lambda,rounds,cv_logloss
+5,lgbm,4,15,100,10.0,214,0.1363
+5,lgbm_noroads,6,31,100,10.0,134,0.1361
+10,lgbm,4,31,100,1.0,154,0.2355
+10,lgbm_noroads,4,31,100,1.0,149,0.2354
+15,lgbm,6,15,100,10.0,182,0.2937
+15,lgbm_noroads,4,31,30,10.0,191,0.2973
