@@ -2,7 +2,7 @@
 
 Update this file at the end of every work session. Keep it under 40 lines.
 
-**Current phase:** 1, Prove it in Marion. **Next task:** T1 in `TASKS.md`.
+**Current phase:** 1, Prove it in Marion. **Next task:** T2 in `TASKS.md`.
 
 ## Done
 - Phase 0: Marion map (`map/index.html`) with population by block group, new construction by year (1980+), and 82,147 vacant lots with price filters.
@@ -11,13 +11,13 @@ Update this file at the end of every work session. Keep it under 40 lines.
 
 ## Known issues
 - Netlify site `marion-growth-map` exists but is empty. The account is out of credits.
-- "Market sales only" assumes sale codes 01 and 02 are arm's-length. Not verified.
-- Only the last two sales per parcel are in the data.
+- Sale codes 01 and 02 verified as arm's length in the DOR 2026 guide (see `reports/01_audit.md`).
+- The roll's sale fields only hold 2025 and 2026 sales. No historical prices until past SDF files are loaded (T7).
 
 ## Task log
 | Task | Status | Date | Notes |
 |---|---|---|---|
-| T1 | todo | | |
+| T1 | done | 2026-11-21 | Codes from DOR 2026 guide, 100% acre coverage. 285,947 unique parcels (layer now 286,216 rows). LAST_FULL_YEAR 2024. Roll holds 2025+ sales only |
 | T2 | todo | | |
 | T3 | todo | | |
 | T4 | todo | | |
